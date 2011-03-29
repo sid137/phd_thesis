@@ -1,12 +1,14 @@
 figures/*
 master.ps
 master.pdf
-master.d*
+master.dvi
 master.fls
 master.m*
 *.aux*
 *.lof*
+*.make
 *.out*
+*.temp
 *.toc*
 *.bbl*
 *.blg*

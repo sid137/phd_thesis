@@ -1,4 +1,25 @@
 #!/bin/bash
 touch master.tex
+
+# Compile using Chris Monson's Makefile
 make
-cp master.pdf  "Towards a Quantum Memory For Non-Classical Light With Cold Atomic Ensembles, Ph. D Thesis - Sidney Burks.pdf"
+
+# Cleanup heavy unneeded files
+rm -f figures/*.eps
+rm -f master.ps
+rm -f master.dvi
+rm -f master.fls
+rm -f master.m*
+rm -f tex/*.aux
+rm -f *.aux*
+rm -f *.lof*
+rm -f *.log
+rm -f *.make
+rm -f *.out*
+rm -f *.temp
+rm -f *.toc*
+rm -f *.bbl*
+rm -f *.blg*
+
+# Rename Final Output file
+mv master.pdf  "Towards a Quantum Memory For Non-Classical Light With Cold Atomic Ensembles, Ph. D Thesis - Sidney Burks.pdf"
