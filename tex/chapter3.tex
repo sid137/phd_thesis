@@ -1,0 +1,572 @@
+\chapter{Squeezed Light Production With Nonlinear Optics}
+\label{ch:3}
+% 14+1/10 pgs
+\minitoc
+
+In order to create a Cesium based atomic memory, we first need to produce a source of squeezed light at 852 nm resonant with the Cesium $D_2$ line.  In this section, we will develop the theory behind the degenerate optical parametric oscillator, and show how its below-threshold operation can lead to the creation of squeezed vacuum states.  As we typically create quantum states of light with the aid of materials having nonlinear optical properties, we will begin by studying the classical interaction of an electric field passing through such a material.
+
+
+\section{Nonlinear Optics}
+\label{nonlinear_optics}
+
+\subsection{Propagation Equations} 
+\label{propagation_equations}
+
+
+\noindent
+Typically, when a light beam passing through a medium interacts with it, the
+medium counter-reacts to the light field in a fashion that is linear with the
+polarization.  However, if we can supply intense enough electric fields, we can
+begin to see effects that are due to a nonlinear polarization response
+$P^{NL}$.  We can show this by expressing the polarization as a power series in $E$ where $\chi^{(n)}$ represents the $n_{th}$ order susceptibility of the material.  When we expand this expression in the form of a power series, we can describe the polarization as a sum of a linear first-order term, and nonlinear higher order terms 
+   
+\begin{equation}
+  \label{eq:full_polarization}
+  P = \underbrace{\chi^{(1)} E}_{\text{Linear part}} + \underbrace{\chi^{(2)}
+E^2 + \chi^{(3)} E^3 + \ldots}_{\text{Nonlinear part}}.
+\end{equation}
+
+\noindent
+We can then explore the interaction of light passing through a nonlinear medium
+by inserting the nonlinear component of the polarization into the optical wave equation for a series of plane waves \cite{boyd}
+
+\begin{equation}
+  \label{eq:optical_wave_equation}
+    \dd{E_n}{z} + \frac{1}{c^2} \cdot
+\frac{\partial^2E_n}{\partial t^2}  =  - \frac{1}{c^2} \frac{\partial^2
+P^{NL}_n}{\partial t^2}. 
+\end{equation}
+
+       
+\section{Nonlinear Processes} 
+\label{nonlinear_processes} 
+
+If we send two optical beams of frequencies $\omega_1$ and $\omega_2$ into a
+material having a nonlinear response, we can write the electric field as 
+
+\begin{equation}
+  \label{eq:two_component_field}
+  E(t) = E_1 ^{-i \omega_1 t} + E_2 e^{-i \omega_2 t} + c.c.
+\end{equation}
+
+\noindent
+With this expression for the electric field, we can examine the polarization components produced by the second-order polarization
+
+\begin{equation}
+  \label{eq:second_order_polar}
+  P^{(2)}  = \chi^{(2)}E^2,
+\end{equation}
+
+\noindent
+and we see that we obtain the following components
+ 
+\begin{eqnarray}
+  \label{eq:full_p2}
+  \lefteqn{P^{(2)} = } \nonumber \\
+  & & \chi^{(2)} [ E^2_1e^{-i 2 \omega_1 t} +  E^2_2e^{-i 2 \omega_2^2 t} + 2E_1E_2 e^{-i (\omega_1 +\omega_2) t} \nonumber  \\ 
+  & &    +2E_1E^*_2  e^{-i (\omega_1 -\omega_2) t}+ c.c] + 2\chi^{(2)}[E_1E^*_1 + E_2E^*_2] .
+\end{eqnarray}
+
+\noindent
+We can express the second-order polarization as the following sum of complex frequency components
+
+\begin{equation}
+  \label{eq:polzarization_components}
+  P^{(2)}(t) = \sum_n{P(\omega_n) e^{-i \omega_n t}}. 
+\end{equation}
+
+\noindent
+Due to \req{eq:optical_wave_equation}, we see that the time-dependent polarization components lead to the production of electromagnetic waves at new frequencies.  Using the $\chi^{(2)}$ non-linearity, we are able to produce the following second-order effects with their respective complex amplitudes \cite{boyd}.
+
+\begin{eqnarray}
+  \label{eq:second_components}
+  P(2 \omega_1 ) & =  \chi^{(2)} E^2_1    &  SHG \\
+  P(2 \omega_2 ) & =  \chi^{(2)} E^2_2    &  SHG \\
+  P(\omega_1 + \omega_2 ) & =  2\chi^{(2)} E_1E_2    &  SFG \\
+  P(\omega_1 - \omega_2 ) & =  2\chi^{(2)} E_1E^*_2    &  DFG \\
+  P(0) & =  2\chi^{(2)} ( E_1E^*_1 + E_2E^*_2)   &  OR
+\end{eqnarray}
+
+\noindent
+These components show how by using a $\chi^{(2)}$ non-linearity, we can observe the effects of Second Harmonic Generation, Sum Frequency Generation, Difference Frequency Generation (or Parametric Amplification), and Optical Rectification.  The processes of second-harmonic generation and parametric amplification play the most central role in our work of generating squeezed states.
+
+
+
+
+\subsection{Coupled Wave Equations}
+\label{coupled_wave_equations} 
+
+We can now make the slowly-varying envelope approximation for the field $E_i$, which assumes that the wavelength of the light is much shorter than the length scale over which the electric field amplitude varies \cite{fox2006quantum}
+
+\begin{equation}
+  \label{eq:paraxial_approximation}
+  \abs{k_i \d{E_i}{z} } \gg  \abs{\dd{E_i}{z} }.
+\end{equation}
+
+\noindent
+By using this approximation along with the propagation equation \ref{eq:optical_wave_equation}, we can express the propagation of an electric field through the non-linear medium using the expression \cite{shen1984principles} 
+
+\begin{equation}
+  \label{eq:general_coupled_wave}
+  \frac{\partial E_i}{\partial z} = \frac{i \omega }{2n_i \epsilon_0 c} P^{(NL)}_i e^{-ik_iz}.
+\end{equation}
+
+\noindent
+Once we calculate the appropriate non-linear polarization vector, we can use this expression to derive a system of coupled equations expressing the propagation of several light waves through a non-linear medium.
+
+
+\subsection{Second-Harmonic Generation}
+\label{second_harmonic_generation} 
+
+The first nonlinear process that will prove useful in the generation of squeezed
+states is Second Harmonic Generation (SHG).  We can visualize this process using the photon picture, where two photons of a fundamental frequency combine their energy to produce a single photon of the second-harmonic frequency, as illustrated in Figure  \ref{fig:shg_photon}.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.35\textwidth]{figures/shg} 
+ \caption[Photon model of second-harmonic generation]{Second-harmonic
+generation uses a second-order nonlinearity to convert two pump photons at the fundamental frequency into one photon at the second-harmonic.  Energy and momentum are conserved in the process.} 
+ \label{fig:shg_photon} 
+\end{figure}
+
+
+To analyze the SHG process, we will consider the case where there are 2 interacting electric fields that propagate through a nonlinear crystal with a high $\chi^{(2)}$  coefficient - one at the fundamental frequency $E_1(\omega ) $ and the other at the second-harmonic $E_2(2\omega )$.  We can begin by expressing our beams as a set of infinite plane waves where 
+
+    
+\begin{equation}
+  \label{eq:plane_wave_approximation}
+  E_i = A_i  e^{ik(\omega_i) z}.
+\end{equation}
+
+\noindent
+If we now suppose that we have a beam $E_1(\omega)$ propagating through our crystal, we can use \req{eq:second_components} and obtain the following expressions for the nonlinear polarization, as shown in \cite{boyd} 
+
+\begin{eqnarray}
+  \label{eq:polar_shg}
+  P^{(2)}_1 & = & \epsilon_0 \chi^{(2)} A_2(z) A^*_1(z) e^{i(k_2-k_1)z} \\
+  P^{(2)}_2 & = & \frac{\epsilon_0 \chi^{(2)}}{2} A^2_1(z) e^{2ik_1 z}.
+\end{eqnarray}
+
+\noindent 
+With these nonlinear polarizations, we can use \req{eq:general_coupled_wave} to derive a set of coupled propagation equations for our system \cite{joffre} 
+
+\begin{eqnarray}
+  \label{eq:shg_coupled_wave}
+  \frac{\partial E_1}{\partial z} & = & \frac{i \omega_1 \chi^{(2)}}{n_1 c} A_2(z) A^*_1(z) e^{-i\Delta k z}  \\
+  \frac{\partial E_2}{\partial z} & = & \frac{i \omega_2 \chi^{(2)}}{2n_2 c}
+  A^2_1(z) e^{i\Delta k z}  .
+\end{eqnarray}
+
+\noindent
+Chromatic dispersion present in the crystal leads to a \emph{phase mismatch} between
+the co-propagating waves, which is represented by $\Delta k = 2k_1-k_2$.  These equations can be solved by assuming that our pump beam $E_1$ remains constant, and undepleted by its propagation through the crystal, and that the second harmonic amplitude $E_2$ at the crystal input is zero.  These assumptions allow us to obtain the solution \cite{shen1984principles}
+
+\begin{equation}
+  \label{eq:shg_amplitude}
+  A_2(z) = \frac{i \omega_2 \chi^{(2)}}{4n_2 c} A_1^2 \frac{e^{i\Delta k z} - 1}{i \Delta k } .
+\end{equation}
+
+\noindent
+This expression shows us the amount of second-harmonic light produced as a function of the input fundamental light.  
+
+\subsubsection{Nonlinear Efficiency} 
+\label{nonlinear_efficiency} 
+
+We can quantify the single-pass efficiency of our nonlinear interaction by defining a nonlinear efficiency coefficient $E_{NL}$, where
+
+\begin{equation}
+  \label{eq:nonlinear_eff}
+  P_2(z) = E_{NL} P^2_1(0),
+\end{equation}
+
+\noindent
+and where $P_1(0)$ is the power of our fundamental beam at the crystal input, and $P_2(z)$ is the power of our second-harmonic at position $z$ in the crystal.  If we take the time averaged expression for the power $P$ with the beam having a surface area $S$, and $P = \abs{I} \cdot S = \frac{1}{2} c \epsilon_0 n S \abs{E}^2$, then we can use \req{eq:shg_amplitude}  to obtain
+
+\begin{equation}
+  \label{eq:enl}
+  E_{NL} = \frac{\omega^2_2 \chi^{(2)2}}{8 n_1^2 n_2 \epsilon_0 c^3 S} z^2 sinc^2 \left(\frac{\Delta k z}{2} \right).
+\end{equation}
+
+\noindent
+This shows us that the conversion efficiency is periodic in z and depends on the phase mismatch $\Delta k$.
+
+\subsubsection{Cavity-Enhanced SHG} 
+\label{cavity_enhanced_shg} 
+
+While we see that the propagation through our crystal leads to the production of a field at the second-harmonic frequency, we are working in the regime of weak conversion efficiency.  In order to provide a useful amount of light, we need to greatly increase the overall second-harmonic output power.  We can accomplish this by placing our crystal inside of an optical cavity that is resonant for the pumping field.  We can consider the case of a ring cavity with the crystal placed on the inside, and one mirror serves as an input coupler for our pump beam which has power $P_1$, as shown in Figure \ref{fig:shg_cavity}.
+
+\begin{figure}[ht] 
+ \centering   
+ \includegraphics[width=0.45\textwidth]{figures/shg_cavity_l}  
+ \caption[Cavity-enhanced SHG]{Second-harmonic generation enhanced by placing
+the crystal in a ring cavity resonant for the pumping field.}
+ \label{fig:shg_cavity}    
+\end{figure}
+
+The mirrors have reflection and transmission coefficients $r_i$ and $t_i$
+where $r_i^2 + t_i^2 = R_i + T_i = 1$.  We can represent linear losses in the
+cavity by $L_c = 1-T_c = 1-t^2_c$, and the losses due to the nonlinear
+conversion can be represented by the coefficient $\Gamma$, which is expressed in
+$W^{-1}$.  If we then use the cavity round trip condition to determine the electric field inside the cavity $E_c$
+
+\begin{equation}
+  \label{eq:e_intracavity}
+  E_c = E_1 \frac{t_1}{1-r_1r_2r_3t_c\sqrt{1-\Gamma E_c^2} }  ,
+\end{equation}
+
+\noindent
+we can then calculate the pump power circulating within the cavity \cite{letargat2005} to be  
+
+\begin{equation}
+  \label{eq:p_intracavity}
+  P_c = P_1 \frac{T_1}{[1-\sqrt{(1-T_1)(1-L_c)(1-\Gamma P_c)}]^2} .
+\end{equation}
+
+\noindent
+If we now assume that the reflectivities of our mirrors 2 and 3 are high for the pump, and that we have low cavity losses $L_c$ and our nonlinear losses are only due to the frequency conversion, $\Gamma = E_{NL}$, we can express the circulating power in the simpler form
+ 
+\begin{equation}
+  \label{eq:p_inner_simp}
+  P_C = P_1 \frac{4T_1}{(T_1 + L + E_{NL}P_c)^2} .
+\end{equation}
+
+\noindent
+Now that we have an expression for the intracavity power, we can use it to determine the total output power of the second-harmonic generated by the cavity as a function of our input coupler and input power by substituting $P_c$ in for $P_1(0)$ in \req{eq:nonlinear_eff}.  We can make the variable substitution $\lambda = T_1 + L$ and $\rho = 4T_1 P_1 E_{NL}$ as outlined in \cite{SoerensenPhD}, which gives us the following expression of the second-harmonic output  
+
+\begin{equation}
+  P_2 = \frac{\lambda^2}{9 E_{NL}} \left[\left[1+\frac{27}{2}
+\frac{\rho}{\lambda^3}\left(1+\sqrt{1+\frac{4}{27}\frac{\lambda^3}{\rho}}\right)\right]^{\frac{1}{6}}-\left[
+1+\frac{27}{2}
+\frac{\rho}{\lambda^3}\left(1+\sqrt{1+\frac{4}{27}\frac{\lambda^3}{\rho}}\right)\right]^{-\frac{1}{6}}\right]^4
+.
+\label{eq:sorenson}
+\end{equation}
+
+\noindent
+With this expression, we can determine an optimal transmission for the input
+coupler for our doubling cavity that we need to maximize our SHG conversion
+efficiency, as well as estimate a second-harmonic output that we should expect
+to observe experimentally.  
+
+
+
+\subsection{Parametric Down-Conversion}
+\label{parametric_down_conversion} 
+
+The next non-linear effect that we will analyze is Parametric Down-Conversion,
+which allows us to directly create squeezed states of light.  We can again
+visualize this effect using photon interactions, as shown in Figure
+\ref{fig:pdc_photon}, as a process which splits a single pump photon into two lower frequency photons in such a way that the energy and momentum are conserved.
+    
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.35\textwidth]{figures/pdc} 
+ \caption[Photon model of parametric down-conversion]{Conversion of one second-harmonic pump photon into two lower-frequency photons where $\omega_1 = \omega_2 + \omega_3 $, using a $\chi^2$ material }  
+ \label{fig:pdc_photon}  
+\end{figure}
+
+We can begin to understand this effect by first using a classical approach.  Here we can consider the case where we have three optical waves of distinct frequencies $E_1$, $E_2$, and $E_3$ present in our non-linear crystal, which we will respectively call the \emph{pump}, \emph{signal}, and \emph{idler}.  We find that our expression for the non-linear polarization becomes \cite{boyd} 
+
+\begin{equation}
+  \label{eq:dfg_pnl}
+  P^{(2)}_2 = \frac{\epsilon_0 \chi^{(2)}}{2} \left( E_1 E^*_2 + E_1E^*_3 + E_2E_3 \right) . 
+\end{equation}
+
+\noindent
+As with the case of second-harmonic generation, we can insert our expression for the nonlinear polarization into \req{eq:general_coupled_wave}, and obtain a set of coupled wave equations for our system \cite{Fabre90} 
+
+\begin{eqnarray}
+  \label{eq:pdc_coupled_equations}
+  \frac{\partial E_1}{\partial z} &=& \frac{i \omega_1 \chi^{(2)}}{2n_2 c} E_2 E_3 e^{-i\Delta k z} \\
+  \frac{\partial E_2}{\partial z} &=& \frac{i \omega_2 \chi^{(2)}}{2n_2 c} E_1 E^*_3 e^{i\Delta k z} \\
+  \frac{\partial E_3}{\partial z} &=& \frac{i \omega_3 \chi^{(2)}}{2n_2 c} E_1 E^*_2e^{i\Delta k z}  .
+\end{eqnarray}
+
+\noindent
+Here, $\Delta k = k_1 - k_2 - k_3$ represents the phase mismatch between the waves.  We can now make a substitution which allows us to express these equations in a simpler form
+
+\begin{align}
+  \label{eq:pdc_substitutations}
+  \alpha_i(z) = \sqrt{\frac{n_i c \epsilon_0}{2 \hbar \omega_i}} E_i(z)  \\
+  \xi =  \chi^{(2)} \sqrt{\frac{\hbar \omega_1 \omega_2 \omega_3}{2 \epsilon_0 c^3 n_1 n_2 n_3} } .
+\end{align}
+
+\noindent
+We can remark that the quantity $\abs{\alpha_i(z)}^2 = \frac{n_i c \epsilon_0 \abs{E_i(z)}^2}{2 \hbar \omega_i } = \Phi_i $ gives us the photon flux through the crystal.  Carrying out these substitutions gives us the following set of coupled equations
+
+\begin{eqnarray}
+  \label{eq:lkb_coupled_wave}
+  \frac{\partial \alpha_1}{\partial z} &=& i \xi \alpha_2 \alpha_3  e^{-i \Delta k z} \\
+  \frac{\partial \alpha_2}{\partial z} &=& i \xi \alpha_1 \alpha^*_3  e^{i \Delta k z} \\
+  \frac{\partial \alpha_3}{\partial z} &=& i \xi \alpha_1 \alpha^*_2  e^{i \Delta k z} 
+\end{eqnarray}
+
+\noindent
+By looking at these equations, we see that the fields $\alpha_2 $ and $\alpha_3$ change as a function of $\alpha_1$, thus we can define a gain coefficient g, where $g = i \xi \abs{\alpha_1} $.  If we consider that our pump $\alpha_1$ has constant intensity, our coupled equations have the solution given by \cite{joffre}
+
+\begin{eqnarray}
+  \label{eq:pdc_solution}
+  \alpha_2(z) = \alpha_2(0) cosh(gz) + \alpha^*_3(0) sinh(gz) \\
+  \alpha_3(z) = \alpha_3(0) cosh(gz) + \alpha^*_2(0) sinh(gz) .
+\end{eqnarray}
+
+\noindent
+If we consider the special case of degenerate beams, where $\omega_2 = \omega_3$, then the solution reduces to
+
+\begin{eqnarray}
+  \alpha_2(z) & = & \alpha_2(0) cosh(gz) + \alpha^*_2(0) sinh(gz) \\  
+  \label{eq:degen}
+  \; & = & \text{Re} \left( \alpha_2(0) \right) e^{gz} + i \text{Im} \left( \alpha_2(0) \right) e^{-gz} .
+\end{eqnarray}
+
+\noindent
+We now recall that we can decompose the electric field into quadratures, which have a 90\textdegree phase difference between them
+
+\begin{equation}
+  \label{eq:e_quad}
+  E_2(z) = E_X + i E_P.
+\end{equation}
+
+\noindent
+If we inject a signal beam into our crystal while it is being pumped, we see by substituting this decomposition into \req{eq:degen} that the quadrature components are amplified and deamplified depending on the beam's phase relation with the pump.
+
+\begin{equation}
+  \label{eq:quad_amp}
+  E_2(z) = E_X(0) e^{gz} + i E_P(0) e^{-gz}.
+\end{equation}
+
+\noindent
+This shows us that our crystal undergoing parametric down-conversion can function as a phase-sensitive amplifier for an injected signal beam.  
+
+
+\subsection{Phase Matching} 
+\label{phase_matching} 
+
+For the processes that we have reviewed up until now, the major results have been derived by assuming that the phase matching condition $\Delta k = 0$ holds true.  We can interpret this phase matching condition as a requirement that the energy and momentum conservation is conserved between the pump photons and generated photons, such that
+ 
+\begin{equation}
+  \label{eq:phase_matching_condition} 
+  \omega_1 + \omega_2 = \omega_3  \quad \text{and} \quad k_1 + k_2 = k_3  .
+\end{equation}
+  
+
+As stated earlier, the dispersion in the crystal introduces the potential for a phase-mismatch
+between the propagating waves.  In order to satisfy the phase-matching
+condition, one technique is to use birefringent materials which have different refraction indices for their ordinary and extraordinary axes.  In this case, it is possible to have a wave propagation in the crystal where their dispersion can compensate for the phase mismatch \cite{BourzeixPhD}.  There are two main classes of this birefringent phase matching.  Type I phase matching involves two waves of the same polarization generating a third wave of the opposite polarization.  Type II phase matching involves two waves of different polarizations generating a third wave that may have either polarization.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|l | c |r |}
+    \hline
+    Type I & e + e $\rightarrow$  o & o + o $\rightarrow$ e \\
+    Type II & o + e $\rightarrow$  o & e + o $\rightarrow$  e\\
+    \hline
+  \end{tabular}
+\caption{Birefringent phase matching for ordinary (o) and extraordinary (e) polarizations. Type I phase matching converts two equal polarizations to the opposite polarization.  Type II converts two opposite polarizations into one of the input polarizations.}
+\label{pm_types}
+\end{table}
+ 
+\noindent
+By satisfying the phase-matching condition throughout the beam's propagation in
+the crystal, we manage to achieve the most efficient transfer of power between
+the beams.
+
+\section{Optical Parametric Amplification and Oscillation}
+\label{optical_parametric_amplification_and_oscillation} 
+
+
+Whereas for second-harmonic generation we inserted our crystal in a cavity
+resonant for the pump, here we can place our crystal in a cavity resonant for
+the signal and idler beams that are generated.  We can begin analyzing this
+case by first supposing that a beam passing through a crystal of length $l$ experiences a very small gain.  This allows us to linearize the variations of our fields $\alpha_i$ over the length of the crystal with the expression \cite{fabre1989noise} 
+
+\begin{equation}
+  \label{eq:field_lin}
+  \alpha_i(l) = \alpha_i(0) + l \d{\alpha_i}{z}
+\end{equation}
+
+\noindent
+where $\alpha_i(0)$ represents the field amplitude at the entrance of the crystal, $\alpha_i(l)$ represents it at the exit, and $\alpha_i$ at the midpoint $l/2$.  We can now place the system in an optical cavity, as shown in Figure \ref{fig:pdc_cavity},  where the mirrors are transparent for the second-harmonic pump beam, and have reflectivities $r_i$ for our signal and idler beams, where $1-r_i \approx \frac{T_i}{2} \ll 1$, and after one cavity round-trip, the beams experience a phase shift $\phi_i$ where $e^{i \phi_i} \approx 1 + i \delta_i$, with $\abs{\delta_i} \ll 2\pi$.  Furthermore, we will assume that the pump beam $\alpha_1$ has a high transmissivity for the mirrors, and remains undepleted in its propagation through the crystal.  We can now apply the cavity condition which states that the round-trip phase must equal the original phase
+
+\begin{equation}
+  \label{eq:cavity_cond}
+  \alpha_i(l) r_1 r_2 e^{i \phi_i} = \alpha_i(0) .
+\end{equation}
+
+\begin{figure}[ht] 
+ \centering 
+ \includegraphics[width=0.45\textwidth]{figures/pdc_cavity_l} 
+ \caption[Optical parametric amplification]{We achieve optical parametric amplification by carrying out parametric down-conversion in a cavity resonant with the signal and idler beams.  The pump beam is not resonant with the cavity.} 
+ \label{fig:pdc_cavity} 
+\end{figure}
+
+\noindent
+By using this condition along with Equations \ref{eq:lkb_coupled_wave} and \ref{eq:field_lin}, we can derive the following relations for the signal and idler beams \cite{joffre}
+
+\begin{eqnarray}
+  \label{eq:cav_pdc}
+  i \xi \frac{l}{2} \alpha_1 \alpha^*_3 + \alpha_2  (i \delta_2 - \frac{T_2}{2}) = 0 \\
+  i \xi \frac{l}{2} \alpha_1 \alpha^*_2 + \alpha_3  (i \delta_3 -
+\frac{T_2}{2}) = 0  .
+\end{eqnarray}
+
+\noindent
+In order to obtain non-trivial solutions for this system, we must satisfy the relation
+
+\begin{equation}
+  \label{eq:non_triv}
+  \delta_2 \delta_3 + \frac{T^2_2}{4} - \xi^2l^2 \abs{\alpha_1}^2 - \frac{iT_2}{2}(\delta_2 - \delta_3) = 0.
+\end{equation}
+
+\noindent
+We can now assume that the signal and idler undergo the same relative phase shifts in their propagation through the cavity, such that  $\delta_2 = \delta_3 = \delta$, and we obtain as a solution the following relation \cite{joffre} 
+
+\begin{equation}
+  \label{eq:pdc_gain}
+  \abs{\alpha_1}^2 = \frac{\delta^2 + T^2_2/4}{\xi^2 l^2} .
+\end{equation}
+
+\noindent
+This shows us that there exists a threshold condition in our cavity, and when we supply a pump power greater than this threshold, the cavity begins to oscillate and spontaneously produce down-converted photon pairs.  We can describe this threshold as a function of the nonlinear efficiency and total cavity losses L, with the expression
+
+\begin{equation}
+  \label{eq:threshold_enl}
+  P_{th} = \frac{(T+L)^2}{4E_{NL}} .
+\end{equation}
+
+
+
+\subsection{Below Threshold Parametric Gain} 
+\label{below_threshold_parametric_gain} 
+
+Given that our nonlinear crystal amplifies or deamplifies our signal sent through the cavity, we can define the parametric gain G for our cavity with the expression
+
+\begin{equation}
+  \label{eq:pg_cav}
+  G = \frac{P^{out}_{signal}}{P^{out}_{\text{signal w/o pump}}} ,
+\end{equation}
+
+\noindent
+where $P^{out}_{\text{signal w/o pump}}$ is the power of our injected signal beam that is output from the OPO when no pump is present, and $P^{out}_{signal}$ is the amplified output power of our signal beam when the pump beam is present and applying a gain.  We can also define a pump parameter $\sigma$, where
+
+\begin{equation}
+  \label{eq:pump_param}
+  \sigma = \sqrt{\frac{P_{pump}}{P_{th}} }.
+\end{equation}
+
+\noindent
+To evaluate this gain, we first determine the baseline amount of light power
+produced for our cavity output when we just send in a signal beam.  We can
+assume that we have a low nonlinear efficiency $E_{NL}$, and by using
+\req{eq:p_inner_simp} which gives us an expression for the power circulating in the cavity, we obtain
+
+\begin{equation}
+  \label{eq:p_sig}
+  P^{out}_S = \frac{4T_1T_2}{(T_1+L)^2} P^{in}_S.
+\end{equation}
+
+\noindent
+We can then obtain an expression for the signal power when the pump is present, where $\theta$ is the relative phase difference between the pump and the signal beams \cite{ortalo}
+
+\begin{equation}
+  \label{eq:p_pump_sig}
+  P^{out}_S = \frac{4T_1T_2}{(T_1+L)^2} \frac{1}{1+\sigma^2-2\sigma cos(\theta)} P^{in}_S.
+\end{equation}
+
+\noindent
+When we reinsert these equations into \req{eq:pg_cav}, we obtain the following expression for the parametric gain of the cavity as a function of the relative phase shift $\theta$
+
+\begin{equation}
+  \label{eq:gain_final}
+  G = \frac{1}{1+\sigma^2-2\sigma cos(\theta)} .
+\end{equation}
+
+\noindent
+As our relative phase shift can assume a maximum difference of $\theta = \pi$, we see that the parametric gain can take on maximum and minimum values given by 
+
+\begin{eqnarray}
+  \label{eq:pg_max_min}
+  G_{max} = \frac{1}{(1-\sigma)^2} & \text{and} & G_{min} = \frac{1}{(1+\sigma)^2}.
+\end{eqnarray}
+
+\noindent
+As we increase our pump power and approach the threshold sending $\sigma \rightarrow 1$, we see in Figure \ref{fig:pg_theory} that the maximum gain diverges at the threshold, and the minimum gain approaches the value $\frac{1}{4}$.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/parametric_gain_theory} 
+ \caption[Parametric gain vs. pump parameter]{Parametric amplification and deamplification as the pump power approaches threshold.  The maximum gain diverges as we approach the threshold, while the deamplification minimum approaches 1/4.} 
+ \label{fig:pg_theory} 
+\end{figure}
+
+
+\subsection{Quantum Noise Below Threshold}
+\label{quantum_noise_below_threshold} 
+
+Up until now, we have analyzed the OPO in the classical domain.  Now we will show how an OPO pumped below threshold will produce squeezed states.  We can begin by describing the parametric process with the following Hamiltonian
+
+\begin{equation}
+  \label{eq:pdc_hamilton}
+  H = E (\hat{a^{\dagger 2}} - \hat{a^2}),
+\end{equation}
+
+\noindent
+where E is a complex function of the pump intensity and crystal nonlinearity, and $\ani$ and $\crea$ are the annihilation and creation operators.  We can then express the dynamic equations of the OPO as \cite{LamPhD}
+
+\begin{eqnarray}
+  \label{eq:opo_dyn}
+  \d{\ani}{t} &=& E \crea - \gamma \ani + \sqrt{2 \gamma_b} \delta A_b + \sqrt{2 \gamma_l} \delta A_l + \sqrt{2 \gamma_c} \delta A_c  \\
+\d{\crea}{t} &=& E^* \ani - \gamma \crea + \sqrt{2 \gamma_b} \delta
+A_b^\dagger + \sqrt{2 \gamma_l} \delta A_l^\dagger + \sqrt{2 \gamma_c} \delta
+A_c^\dagger  ,
+\end{eqnarray}
+
+\noindent
+where $\gamma_i = 1 - r_i$, and $r_i$ represents the input and output mirror reflectivities, $\gamma_b$ and $\gamma_c$ are the decay rates due to the input and output mirror reflectivities, $\gamma_l$ the intracavity losses, and $\gamma = \gamma_b + \gamma_c + \gamma_l$.  $A_b$ represents our signal beam, where $\delta A_c$ and $\delta A_l$  represent the vacuum fluctuations associated with the losses. We can now take the Fourier transform of these equations and use the expressions for the quadrature fluctuations
+
+\begin{eqnarray}
+  \label{eq:quad}
+  \delta X = \ani + \crea & and & \delta Y = i(\ani - \crea),
+\end{eqnarray}
+
+\noindent
+which give us the following set of expressions
+
+\begin{eqnarray}
+  \label{eq:quant_opo}
+  i \Omega \delta \hat{X} \!\!&=&\!\! \left(Re(E) - \gamma \right) \delta \hat{X} + Im(E) \delta \hat{Y} + \sqrt{2 \gamma_b} \delta \hat{X}_b + \sqrt{2 \gamma_l} \delta \hat{X}_l + \sqrt{2 \gamma_c} \delta \hat{X}_c \\
+  i \Omega \delta \hat{Y} \!\!&=&\!\! Im(E) \delta \hat{X} + \left( Re(E) + \gamma \right) \delta \hat{Y} + \sqrt{2 \gamma_b} \delta \hat{Y}_b + \sqrt{2 \gamma_l} \delta \hat{Y}_l + \sqrt{2 \gamma_c} \delta \hat{Y}_c 
+\end{eqnarray}
+
+\noindent
+where $\Omega $ represents the detection frequency.  We can then calculate the noise spectral density of our noise quadratures using 
+
+
+\begin{eqnarray}
+  \label{eq:noise_spec}
+  S^+(\Omega ) & = & \avg{\delta \hat{X}_1(\Omega)\delta \hat{X}^{\dagger}_1(\Omega)} \\
+  S^-(\Omega ) & = & \avg{\delta \hat{Y}_1(\Omega)\delta \hat{Y}^{\dagger}_1(\Omega)} 
+\end{eqnarray}
+  
+\noindent
+where $\delta X^+_1(\Omega ) = \sqrt{2 \gamma _c}  X^+  - \delta X^+_c(\Omega )$ \cite{LamPhD}.  We thus obtain the following expressions for the quadrature noise variances on the OPO output
+
+\begin{eqnarray}
+  \label{eq:opo_var_out}
+  S^+(\Omega ) = 1 + \frac{T}{T+L} \frac{4 \sigma}{ (\frac{\Omega}{\gamma})^2  + (1 - \sigma)^2 } \\
+  S^-(\Omega ) = 1 - \frac{T}{T+L} \frac{4 \sigma}{ (\frac{\Omega}{\gamma})^2  + (1 - \sigma)^2 } 
+\end{eqnarray}
+
+\noindent
+where $\sigma$ is given by \req{eq:pump_param}, and $\frac{\Omega}{\gamma}$ is the detection frequency normalized to the cavity bandwidth.  As we have asymmetric variances in our state's output fluctuations with the variance in one of the quadratures falling below the standard quantum limit, the OPO produces squeezed states when pumped below threshold.  Figure \ref{fig:sqz_theo} shows a plot of this behavior for a cavity with a T=7\% output coupler and 2\% internal losses.
+
+
+\begin{figure}[!htb] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/sqz_theo} 
+ \caption[OPO squeezing]{Quadrature noise a) amplification and b) deamplification for an OPO using a T=7\% output coupler, L=2\% intracavity losses, at 90\% of threshold with a perfect detection efficiency.} 
+ \label{fig:sqz_theo} 
+\end{figure}
+
+\noindent
+In the next section, we will look at the experimental setup that we used to produce these states.

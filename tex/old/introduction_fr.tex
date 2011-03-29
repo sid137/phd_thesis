@@ -1,0 +1,130 @@
+\chapter*{Introduction}
+\addstarredchapter{Introduction}
+\markboth{Introduction}{}
+\label{introduction} 
+\end
+
+\subsection*{Quantum Information vs. Classical Information}
+
+The field of Quantum Information has developed rapidly over the last few
+decades.  Quantum Mechanics has allowed us to manipulate light and matter in new ways, permitting us to observe phenomenon that have no classical parallel.  Many of
+these phenomenon arise due to core quantum principles such as the Heisenberg
+Uncertainty Principle, and the superposition of states.  As a result, this has led to a shift from our classical definitions of information towards the concept of quantum information.  The fundamental element at the core of quantum information is the quantum bit, or \emph{qubit}.  While classical bits
+allow us to represent information as discrete values of 1 or 0, qubits take
+advantage of quantum superposition, which allows them to represent information as 1, 0, or a superposition of both values.
+
+Le domaine d'informations quantique a développé rapidement pendant le dernier peu décennies. La mécanique quantique nous a permis de manipuler la lumière et la matière de nouvelles façons, nous permettant d'observer le phénomène qui n'a aucun equivalent classique.  Beaucoup de ces phénomène apparaissent grace aux principes centrals quantiques principaux comme le Heisenberg
+Principe d'Incertitude et la superposition d'états. En conséquence, cela a mené à un changement de nos définitions classiques d'informations vers le concept d'informations quantiques. L'élément fondamental au cœur d'informations quantiques est le morceau(bit) quantique, ou \emph{qubit}. Tandis que morceaux(bits) classiques
+Permettez-nous de représenter des informations comme les valeurs discrètes de 1 ou 0, qubits prennent
+L'avantage de superposition quantique, qui leur permet de représenter des informations comme 1, 0, ou une superposition des deux valeurs.
+
+
+
+
+
+
+
+ 
+This characteristic of qubits has led to the development of novel protocols
+concerning information transfer, calculation, and computation that are
+impossible to implement when only considering classical bits of information.  One of the first insights on ways to benefit from using quantum information was proposed by Feynman in 1981, when he suggested that we use a quantum computer to simulate the evolution of quantum systems \cite{feynman1982simulating}.
+Shortly afterwards in 1984, Bennett and Brassard developed a protocol to use
+secure quantum channels for the distribution of cryptographic keys
+\cite{Bennett84}.  This was quickly followed by the work of Deutsch, who
+developed the first model of a quantum Turing machine, thus giving us a means to
+analyze quantum algorithms using quantum logic gates \cite{Deutsch85}.
+In 1991, Ekert continued the exploration of quantum information transfer by
+developing a protocol for secure communication based on quantum entanglement
+\cite{Ekert91}.  Research concerning the usage of quantum information for
+calculations continued throughout the 1990s with the development of Shor's
+algorithm in 1994, which provided a means to rapidly factor large numbers
+using a quantum computer \cite{Shor94}, and Grover's algorithm, which provided a
+means of using quantum information to search an unsorted database
+\cite{Grover96}. 
+
+
+Cette caractéristique de qubits a mené au développement de nouveaux protocoles
+Concernant le transfert de l'information, le calcul et le calcul qui est
+Impossible de mettre en oeuvre en seulement considérant les morceaux(bits) classiques d'informations. Feynman a proposé un des premiers aperçus(perspicacité) sur des façons de profiter d'utiliser des informations quantiques en 1981, quand il a suggéré que nous utilisions un ordinateur quantique pour simuler l'évolution de systèmes quantiques \cite {feynman1982simulating}.
+Peu après en 1984, Bennett et Brassard ont développé un protocole pour utiliser
+Garantissez(Sécurisez) des chaînes(canaux) quantiques pour la distribution de clés(touches) cryptographiques
+\cite {Bennett84}. C'a été rapidement suivi par le travail de Deutsch, qui
+Développé le premier modèle d'un quantum Turing machine, nous donnant ainsi moyen à
+Analysez des algorithmes quantiques utilisant des portes quantiques de logique \cite {Deutsch85}.
+En 1991, Ekert a continué l'exploration de transfert quantique de l'information par
+Développement d'un protocole pour communication sécurisée(sûre) basée sur enchevêtrement quantique
+\cite {Ekert91}.    Recherche concernant l'utilisation d'informations quantiques pour
+Calculs continus pendant les années 1990 avec le développement de Shor
+L'algorithme en 1994, qui a fourni le moyen à rapidement le facteur de grands numéros(nombres)
+L'utilisation d'un ordinateur quantique \cite {Shor94} et l'algorithme de Grover, qui a fourni a
+Les moyens d'utiliser des informations quantiques pour fouiller(rechercher) dans une base de données non triée
+\cite {Grover96}. 
+
+
+All of these protocols concerning the manipulation of quantum information rest
+on the premise that we preserve the quantum superposition of our qubits.  Preserving the quantum superposition requires us to avoid measuring the value of a qubit, which would force it to take on a well-defined value and destroy its quantum characteristics.  This poses a problem if we approach these protocols with our classical treatment of information, as quantum mechanics imposes a no-cloning theorem which forbids us from making exact copies of unknown quantum states.  This limitation has sparked the need to develop a new means of preserving quantum information for long-term manipulation and storage.
+
+
+ Tous ces protocoles concernant la manipulation de repos quantique de l'information
+Sur la prémisse que nous préservions la superposition quantique de notre qubits. La préservation de la superposition quantique exige que nous évitions de mesurer la valeur d'un qubit, qui le forcerait de prendre une valeur bien définie et détruirait ses caractéristiques quantiques. Cela pose un problème si nous nous approchons de ces protocoles avec notre traitement classique d'informations, comme la mécanique(les mécaniciens) quantique impose sans clonage(multiplication) le théorème qui nous interdit de faire les copies exactes d'états quantiques inconnus. Cette limitation a suscité le besoin de développer les nouveaux moyens de préserver des informations quantiques pour la manipulation à long terme et le stockage.
+
+
+
+
+\subsection*{Des mémoires quantiques}
+
+A reversible quantum memory allowing us to store and retrieve quantum
+information serves as a key necessity for implementing many of these quantum
+information protocols.  We could for example, use a quantum memory as a
+deterministic single-photon source, which would serve as an important element
+in optical quantum computing.  Quantum memories would also resolve a critical
+problem with the long-distance transfer of quantum information.  The optical
+propagation of photons in fiber optic cables is subject to losses, which limits the
+distance over which we can transfer optical qubits.  Quantum repeaters could
+be developed to bypass this limitation by entangling photons at both ends of
+our communications chain, but this is only possible if quantum memories are
+used to temporarily store quantum states.  It is this context that has
+motivated our group to work towards the development of a quantum memory.
+
+Une mémoire(Un souvenir) quantique réversible nous permettant pour stocker et récupérer le quantum
+Les informations servent d'une nécessité clé de mettre en oeuvre beaucoup de ce quantum
+Protocoles de l'information. Nous pourrions par exemple, utiliser une mémoire(un souvenir) quantique comme a
+La source de photon seul déterminée, qui servirait d'un élément important
+Dans calcul quantique optique. Des mémoires quantiques résoudraient aussi un critique
+Problème avec le transfert de fond d'informations quantiques. L'optique
+La propagation de photons dans des câbles en fibre optique est soumise aux pertes, qui limitent le
+La distance sur lequel nous pouvons transférer qubits optique. Des répéteurs quantiques pourraient
+Être développé pour contourner cette limitation en empêtrant des photons aux deux fins de
+Notre chaîne de communications, mais c'est seulement possible si des mémoires quantiques sont
+Utilisé pour temporairement stocker des états quantiques. C'est ce contexte qui a
+Motivé notre groupe pour travailler au développement d'une mémoire(un souvenir) quantique.
+
+
+
+
+
+
+\subsection*{Research at the Laboratoire Kastler-Brossel}
+
+Over the last 20 years, the Quantum Optics group at the Laboratoire Kastler-Brossel has focused on studying the quantum-optical effects of light-matter interactions in Cesium atoms.  There have been a variety of experiments carried out to study the quantum noise reduction in cavities and with cold atoms by Laurent Hilico \cite{HilicoPhD}, Astrid Lambrecht \cite{LambrechtPhD}, Thomas Coudreau \cite{CoudreauPhD}, and Vincent Josse \cite{JossePhD}.  The theses of Laurent Vernac \cite{VernacPhD} and Aurelien Dantan \cite{DantanPhD} have developed the theoretical work concerning quantum electromagnetic fluctuations and their transfer towards atoms via light-matter interactions.  Most recently, the work of Jean Cviklinski \cite{CviklinskiPhD} and Jeremie Ortalo \cite{ortalo} has yielded the development and characterization of an atomic memory for coherent states with warm atoms, and an experimental study of electromagnetically-induced transparency in Cesium.
+
+
+Pendant les 20 dernières années, le groupe d'Optique Quantique au Laboratoire Kastler-Brossel s'est concentré sur l'étude des effets quantiques-optiques dans les interactions de la lumiere et matière dans des atomes de Césium. Nous avons étudié la réduction du bruit quantique avec des atomes froides dans les cavités par Laurent Hilico \cite {HilicoPhD}, Astrid Lambrecht \cite {LambrechtPhD}, Thomas Coudreau \cite {CoudreauPhD} et Vincent Josse \cite {JossePhD}. Les thèses de Laurent Vernac \cite {VernacPhD} et Aurelien Dantan \cite {DantanPhD} ont développé le travail théorique concernant des fluctuations électromagnétiques quantiques et comment les transferer vers des atomes via des interactions de lumiere-matière. Le plus récemment, le travail de Jean Cviklinski \cite {CviklinskiPhD} et Jeremie Ortalo \cite {ortalo} a rapporté le développement et la caractérisation d'une mémoire(un souvenir) atomique pour des états cohérents avec des atomes chauds et une étude expérimentale de transparence électromagnétiquement induite dans le Césium.
+
+ 
+
+\newpage
+\section*{Thesis Outline}
+
+Part \ref{part:1} of this thesis begins with a theoretical overview of the general quantum optic concepts used to carry out the experimental work shown here.  We define the quantum states of the electromagnetic field, and show how we can represent those states using the density matrix and Wigner function.  We then proceed to discuss the nonlinear optics of light as it passes through a nonlinear material, and show how we can use these interactions to generate squeezed states.
+
+In Part \ref{part:2}, we look at the experimental setup used to create an optical parametric oscillator, which allows us to generate squeezed vacuum states resonant with the Cesium D2 line at 852 nm.  We then look at the techniques used to characterize these states using quantum homodyne tomography and iterative maximum likelihood estimation.  We finish by discussing the approaches that we developed to convert our continuous source of squeezed light into pulses compatible with our quantum memory.
+
+Finally in Part \ref{part:3}, we look at the development of a new experiment which would allow us to use cold Cesium atoms as a storage medium in our recently developed magneto-optical trap.  As this requires an array of novel tools and experimental techniques, we will discuss the development of these elements, and how they have furthered our progress towards storing quantum states onto our Cesium atoms, and eventually entangling two atomic ensembles.
+
+
+La partie ref {part:1} de cette thèse commence par une vue d'ensemble théorique des concepts optiques quantiques généraux a eu l'habitude d'effectuer le travail expérimental montré ici. Nous définissons les états quantiques du champ(domaine) électromagnétique et le spectacle(salon) comment nous pouvons représenter ces états utilisant la matrice de densité et la fonction de Wigner. Nous continuons alors à discuter l'optique non-linéaire de lumière comme il passe par un matériel(une matière) non-linéaire et le spectacle(salon) comment nous pouvons utiliser ces interactions pour produire des états serrés.
+
+Dans la partie ref {part:2}, nous regardons l'installation expérimentale a eu l'habitude de créer un oscillateur paramétrique optique, qui nous permet de produire des états à vide serrés résonants avec le Césium D2 la ligne à 852 nm. Nous regardons alors les techniques a eu l'habitude de caractériser ces états utilisant le quantum homodyne la tomographie et l'évaluation de probabilité maximale itérative. Nous finissons en discutant les approches que nous nous sommes développés pour convertir notre source continue de lumière serrée dans des impulsions compatibles avec notre mémoire(souvenir) quantique.
+
+Finalement dans la partie ref {part:3}, nous regardons le développement d'une nouvelle expérience qui nous permettrait d'utiliser des atomes de Césium froids comme un moyen de stockage dans notre piège magneto-optique récemment développé. Comme cela exige un tableau de nouveaux outils et des techniques expérimentales, nous discuterons le développement de ces éléments et comment ils ont favorisé notre progrès vers le stockage d'états quantiques sur nos atomes de Césium et finalement finalement

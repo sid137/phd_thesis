@@ -1,0 +1,68 @@
+\chapter*{Motivation pour une M\'emoire Quantique}
+%4/5 pg
+\label{ch:1_fr} 
+
+L'int\'er\^et d'une m\'emoire quantique est de fournir un moyen de stocker l'information qui est encod\'ee sur des \'etats quantiques, et de les relire ensuite sur demande de fa\c{c}on fiable.  Les photons d'une part peuvent servir de porteur de l'information quantique sur de grandes distances. Les atomes d'autre part offrent la possibilit\'e de longues dur\'ees de stockage. Par cons\'equent, les tentatives actuelles se concentrent sur le transfert des fluctuations quantiques de la lumi\`ere sur les coh\'erences atomiques.  Nous pouvons caract\'eriser la performance d'une m\'emoire quantique en utilisant des mesures telles que son efficacit\'e de stockage et relecture, sa fid\'elit\'e conditionnelle et non-conditionnelle, son temps de stockage, et notre capacit\'e \`a l'utiliser pour le stockage d'\'etats arbitraires.  D'autres contraintes au fonctionnement d'une m\'emoire quantique concerne la longueur d'onde \`a laquelle elle op\`ere, le nombre de mode optique que nous pouvons stocker simultan\'ement, et la bande-passante de la lumi\`ere qu'elle supporte.  Malgr\'e toutes les tentatives actuelles de mettre en oeuvre une m\'emoire quantique, aucun syst\`eme disponible ne montre une performance \'elev\'ee par rapport \`a toutes ces contraintes.
+
+
+
+\section*{Les applications d'une m\'emoire quantique}
+
+Nous d\'efinissons une m\'emoire quantique comme un transfert coh\'erent et r\'eversible des qubits vers un milieu de stockage tel que l'\'etat relu soit une repr\'esentation fiable de l'\'etat stock\'e.
+
+\begin{eqnarray}
+  \label{eq:qmem_fr}
+  \underbrace{\alpha \ket{0} + \beta \ket{1}}_{\text{etat en entr\'ee}}  \rightarrow \underbrace{\alpha \ket{a} + \beta \ket{b}}_{\text{etat stock\'ee}} \rightarrow \underbrace{\alpha \ket{0} + \beta \ket{1}}_{\text{etat relu}}.
+\end{eqnarray}
+
+\noindent
+Une m\'emoire quantique pour la lumi\`ere est une composante n\'ecessaire dans plusieurs syst\`emes qui permettraient la manipulation de l'information quantique.
+
+Une des applications d'une m\'emoire quantique la plus simple serait comme source de photons uniques \`a la demande.  Si nous utilisons un syst\`eme de conversion param\'etrique pour cr\'eer une paire de photons simultan\'ement, nous pouvons stocker un de ces photons dans la m\'emoire quantique, et utiliser la d\'etection du deuxi\`eme photon pour signaler la pr\'eparation de notre m\'emoire.  Une fois que la m\'emoire est pr\'epar\'ee avec un photon, nous pouvons le r\'e-\'emettre \`a la demande avec la certitude qu'il corresponde \`a un \'etat de photon unique.
+
+Une autre utilisation d'une m\'emoire quantique serait comme composante dans un ordinateur quantique.  Les algorithmes quantiques actuels n\'ecessitent la manipulation de qubits intriqu\'es.  Ces qubits sont souvent r\'ealis\'es en parall\`ele pour chaque \'etape de calcul. Nous pouvons utiliser une m\'emoire quantique comme un m\'ecanisme de synchronisation qui stocke les qubits pendant que les autres \'etapes d'un calcul sont en train d'\^etre pr\'epar\'ees, pour qu'ils puissent tous \^etre r\'ealis\'es au bon moment.  C'est de cette fa\c{c}on qu'une m\'emoire quantique servirait comme outil de synchronisation pour les calculs quantiques  \cite{lvovsky2009optical}.
+
+Nous pouvons aussi envisager l'utilisation d'une m\'emoire quantique pour les communications quantiques \`a longue distance.  Notre capacit\'e d'utiliser des canaux quantiques s\'ecuris\'es d\'epend du protocole tel que la distribution des cl\'es quantiques, ce qui demande l'\'echange de qubits sur des longues distances.  Les fibres optique qui fonctionnent aux longueurs d'ondes de t\'el\'ecom de 1550 nm ont typiquement des taux d'att\'enuation de 0.25 dB/km, et les exp\'eriences avec la d\'etection des photons intriques a eu des taux de d\'etection d'environ 100 qubits/second comme r\'esultat \cite{Zeilinger07b}.  A cause des pertes dues \`a l'att\'enuation, le transfert des \'etats quantiques par des fibres optiques est actuellement limit\'e \`a quelques centaines de kilom\`etres.
+
+
+
+L'utilisation d'un protocole \`a r\'ep\'eteurs quantique du type de celui pr\'esent\'e Figure  \ref{fig:q_rep_fr} permet de surmonter cette limitation \cite{Briegel98}, \cite{Duan01}. Deux points $A_0$ et $A_N$ sont s\'epar\'es d'une distance L. L'objectif est d'intriquer deux \'etats quantiques sur une telle distance.  Une telle intrication est r\'ealisable en divisant la longueur L en N segments.  Au bout de chaque segment, on place une source de photons jumeaux, utilis\'es pour intriquer chaque segment avec son voisin.  Par cette m\'ethode, il devient possible de distribuer l'intrication sur toute la longueur L. 
+
+Par contre, ce sch\'ema n\'ecessite une synchronisation de la distribution de l'intrication de tous les noeuds entre eux.  En pratique, la probabilit\'e de rencontrer un erreur au niveau d'au moins un des ces noeuds augmente de fa\c{c}on exponentielle avec le nombre de noeuds. Le temps n\'ecessaire pour obtenir une parfaite intrication suit donc aussi cette croissance exponentielle avec la distance L.
+
+Pour contourner la difficult\'e pr\'ec\'edente, une m\'emoire quantique est alors plac\'ee au niveau de chaque noeud. Elle nous permet de stocker temporairement l'intrication durant le temps n\'ecessaire aux autres noeuds pour \^etre efficacement pr\'epar\'es. Une fois acquise la certitude que tous les noeuds ont bien \'et\'e pr\'epar\'es, la distribution d'intrication peut alors \^etre r\'ealis\'ee simultan\'ement sur toute la longueur L. Un tel protocole permettrait de limiter la probabilit\'e d'erreur \`a une fonction polynomiale de la distance, au lieu de l'exponentielle pr\'ec\'edemment d\'ecrite, le rendant beaucoup moins sensible \`a la distance. L'utilisation d'une m\'emoire quantique rend donc les r\'ep\'eteurs quantiques pratiques en leur ajoutant la capacit\'e de synchroniser l'intrication des \'etats, exactement comme les ordinateurs quantiques. 
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.65\textwidth]{figures/q_rep} 
+ \caption[Quantum repeater schematic]{Diagram of the protocol for
+distributing photon entanglement between points $A_0$ and $A_N$.  Length L is
+divided into N segments, which are connected by quantum repeaters.
+Entanglement is shared between segments via entanglement swapping at the
+nodes.  a)  Entanglement swapping along the entire length requires perfect
+synchronization, and a time exponential in the path length.  b)  Placing a
+quantum memory at each node facilitates the synchronization, and reduces the
+time to a polynomial time with path length.} 
+ \label{fig:q_rep_fr} 
+\end{figure}
+
+
+
+
+%% As these applications all show the potential promise of novel ways to manipulate quantum information, they provide a great motivation for the development of a performant quantum memory.
+
+
+
+\section*{Axes de recherche}
+
+ 
+Ces dix derni\`eres ann\'ees, d'\'enormes d\'eveloppements ont \'et\'e r\'ealis\'es au sujet des m\'emoires quantiques. Plusieurs techniques existent pour pr\'eserver l'\'etat quantique de la lumi\`ere, mais les plus prometteuses en terme d'augmentation du temps de stockage sont celles qui utilisent des ensembles atomiques.  Les recherches de \cite{Kuzmich05} et \cite{Lukin05} ont par exemple men\'ees au stockage de photons uniques. Le travail de \cite{Polzik04} a d\'emontr\'e la possibilit\'e d'utiliser des techniques d'optique QND (Quantum Non Demolition) afin d'obtenir des hautes efficacit\'es ainsi que des temps de stockage importants dans des atomes de C\'esium. Cependant, cette derni\`ere exp\'erience n'a permis de r\'ecup\'erer qu'une seule quadrature de du champ \'electromagn\'etique stock\'e.  Les techniques \`a \'echo de photons ont \'et\'e largement explor\'ees et ont permis d'augmenter les temps de stockage en jouant adroitement sur les coh\'erences atomiques. Le travail de \cite{PhysRevLett.96.043602} en 2006 utilisant le CRIB a \'et\'e appliqu\'e aux cristaux de Y$_2$SiO$_5$ refroidis a 4 K, mais il en ressort une m\'emoire de faible efficacit\'e.  D'autres techniques, m\^elant \'echo de photon et utilisation d'un AFC, ont atteint une efficacit\'e de 9\% dans le stockage d'impulsions de faibles intensit\'es  \cite{chaneliere2010efficient}. Enfin, plusieurs \'equipes ont utilis\'e l'EIT comme m\'ecanisme de stockage.  Le travail de \cite{choi2008mapping} a donn\'e lieu au stockage et \`a la r\'e\'emission d'\'etats intriqu\'es dans une vapeur de C\'esium.  Plusieurs \'equipes ont r\'eussi \`a stocker et r\'e\'emettre des \'etats coh\'erents dans du C\'esium  \cite{CviklinskiPhD}, ainsi que des \'etats de vide comprim\'e dans des vapeurs de Rubidium \cite{Lvovsky08}, \cite{Kozuma08}, \cite{Kozuma09}.
+ 
+
+
+
+\section*{Notre approche}
+
+Notre travail exp\'erimental de m\'emoire quantique se concentre sur le transfert d'un \'etat de vide comprim\'e du champ \'electromagn\'etique vers le spin collectif d'une population d'atomes de C\'esium, refroidis au sein d'un pi\`ege Magn\'eto-Optique. Dans l'id\'eal, les fluctuations des quadratures du vide comprim\'e sont effectivement transf\'er\'ees \`a celles du spin collectif du nuage atomique durant la phase d'\'ecriture. Puis, apr\`es un temps de stockage de quelques dizaines de nanosecondes, la r\'e\'emission du champ initial par les atomes, et l'analyse de ses quadratures, devrait permettre de montrer la pr\'eservation de la compression de bruit. Une fois que ce r\'esultat sera obtenu, nous envisagerons de diviser le faisceau aux quadratures comprim\'ees en deux faisceaux intriqu\'es que nous stockerons dans deux ensembles atomiques diff\'erents. On montrerait ainsi la capacit\'e de notre syst\`eme \`a transf\'erer et pr\'eserver l'intrication. 
+

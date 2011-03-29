@@ -1,0 +1,69 @@
+\chapter*{Introduction}
+\addstarredchapter{Introduction}
+\markboth{Introduction}{}
+\label{introduction} 
+
+
+\subsection*{Quantum Information vs. Classical Information}
+
+The field of Quantum Information has developed rapidly over the last few
+decades.  Quantum Mechanics has allowed us to manipulate light and matter in new ways, permitting us to observe phenomenon that have no classical parallel.  Many of
+these phenomenon arise due to core quantum principles such as the Heisenberg
+Uncertainty Principle, and the superposition of states.  As a result, this has led to a shift from our classical definitions of information towards the concept of quantum information.  The fundamental element at the core of
+quantum information is the quantum bit, or \emph{qubit}.  While classical bits
+allow us to represent information as discrete values of 1 or 0, qubits take
+advantage of quantum superposition, which allows them to represent information as 1, 0, or a superposition of both values.
+
+This characteristic of qubits has led to the development of novel protocols
+concerning information transfer, calculation, and computation that are
+impossible to implement when only considering classical bits of information.  One of the first insights on ways to benefit from using quantum information was proposed by Feynman in 1981, when he suggested that we use a quantum computer to
+simulate the evolution of quantum systems \cite{feynman1982simulating}.
+Shortly afterwards in 1984, Bennett and Brassard developed a protocol to use
+secure quantum channels for the distribution of cryptographic keys
+\cite{Bennett84}.  This was quickly followed by the work of Deutsch, who
+developed the first model of a quantum Turing machine, thus giving us a means to
+analyze quantum algorithms using quantum logic gates \cite{Deutsch85}.
+In 1991, Ekert continued the exploration of quantum information transfer by
+developing a protocol for secure communication based on quantum entanglement
+\cite{Ekert91}.  Research concerning the usage of quantum information for
+calculations continued throughout the 1990s with the development of Shor's
+algorithm in 1994, which provided a means to rapidly factor large numbers
+using a quantum computer \cite{Shor94}, and Grover's algorithm, which provided a
+means of using quantum information to search an unsorted database
+\cite{Grover96}. 
+
+All of these protocols concerning the manipulation of quantum information rest
+on the premise that we preserve the quantum superposition of our qubits.  Preserving the quantum superposition requires us to avoid measuring the value of a qubit, which would force it to take on a well-defined value and destroy its quantum characteristics.  This poses a problem if we approach these protocols with our classical treatment of information, as quantum mechanics imposes a no-cloning theorem which forbids us from making exact copies of unknown quantum states.  This limitation has sparked the need to develop a new means of preserving quantum information for long-term manipulation and storage.
+
+\subsection*{Quantum Memories}
+
+A reversible quantum memory allowing us to store and retrieve quantum
+information serves as a key necessity for implementing many of these quantum
+information protocols.  We could for example, use a quantum memory as a
+deterministic single-photon source, which would serve as an important element
+in optical quantum computing.  Quantum memories would also resolve a critical
+problem with the long-distance transfer of quantum information.  The optical
+propagation of photons in fiber optic cables is subject to losses, which limits the
+distance over which we can transfer optical qubits.  Quantum repeaters could
+be developed to bypass this limitation by entangling photons at both ends of
+our communications chain, but this is only possible if quantum memories are
+used to temporarily store quantum states.  It is this context that has
+motivated our group to work towards the development of a quantum memory.
+
+
+
+\subsection*{Research at the Laboratoire Kastler-Brossel}
+
+Over the last 20 years, the Quantum Optics group at the Laboratoire Kastler-Brossel has focused on studying the quantum-optical effects of light-matter interactions in Cesium atoms.  There have been a variety of experiments carried out to study the quantum noise reduction in cavities and with cold atoms by Laurent Hilico \cite{HilicoPhD}, Astrid Lambrecht \cite{LambrechtPhD}, Thomas Coudreau \cite{CoudreauPhD}, and Vincent Josse \cite{JossePhD}.  The theses of Laurent Vernac \cite{VernacPhD} and Aurelien Dantan \cite{DantanPhD} have developed the theoretical work concerning quantum electromagnetic fluctuations and their transfer towards atoms via light-matter interactions.  Most recently, the work of Jean Cviklinski \cite{CviklinskiPhD} and Jeremie Ortalo \cite{ortalo} has yielded the development and characterization of an atomic memory for coherent states with warm atoms, and an experimental study of electromagnetically-induced transparency in Cesium.
+
+ 
+
+\newpage
+\section*{Thesis Outline}
+
+Part \ref{part:1} of this thesis begins with a theoretical overview of the
+general quantum optics concepts used to carry out the experimental work shown here.  We define the quantum states of the electromagnetic field, and show how we can represent those states using the density matrix and Wigner function.  We then proceed to discuss the nonlinear optics of light as it passes through a nonlinear material, and show how we can use these interactions to generate squeezed states.
+
+In Part \ref{part:2}, we look at the experimental setup used to create an optical parametric oscillator, which allows us to generate squeezed vacuum states resonant with the Cesium D2 line at 852 nm.  We then look at the techniques used to characterize these states using quantum homodyne tomography and iterative maximum likelihood estimation.  We finish by discussing the approaches that we developed to convert our continuous source of squeezed light into pulses compatible with our quantum memory.
+
+Finally in Part \ref{part:3}, we look at the development of a new experiment which would allow us to use cold Cesium atoms as a storage medium in our recently developed magneto-optical trap.  As this requires an array of novel tools and experimental techniques, we will discuss the development of these elements, and how they have furthered our progress towards storing quantum states onto our Cesium atoms, and eventually entangling two atomic ensembles.

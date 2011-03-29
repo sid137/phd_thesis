@@ -1,0 +1,13 @@
+figures/*
+master.ps
+master.pdf
+master.d*
+master.fls
+master.m*
+*.aux*
+*.lof*
+*.out*
+*.toc*
+*.bbl*
+*.blg*
+tex/*.aux

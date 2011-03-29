@@ -1,0 +1,123 @@
+\cleardoublepage
+
+\section{Matisse Laser}
+\label{appendix:matisse_laser}
+
+
+The main laser that we use for squeezed light generation is a Matisse TR Titanium-Saphire laser, provided by Spectra Physics.  The laser is tunable from wavelengths of 770 nm up to 890 nm.  In our usage, we pump this laser with 532 nm light provided by a Coherent Verdi V18 operating at 10 W.  When we pump the Matisse with powers between 10 - 18 W, we can achieve between 2.2 - 4.2 W of output power at 852 nm.  We chose to have an output coupler installed with a higher than normal transmissivity of T=8\%, in order to allow us the opportunity to pump it stably at higher powers.  The laser outputs light in a $TEM_{00}$ mode with a horizontal polarization.
+
+The laser cavity has a ring shape shown in \rif{fig:matisse}, which is similar to other lasers used in our laboratory, and thus many of the components are described in detail in \cite{Biraben79}, and \cite{Bourzeix93}.  The cavity has a length of 1.75 m, corresponding to a FSR of 170 MHz.  The circulating cavity beam is focused onto a waist of 30 $\mu m$ by two concave mirrors with a radius of curvature of $R = 150 mm$. 
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.85\textwidth]{figures/matisse} 
+ \caption[Matisse laser ring cavity]{Illustration of the ring cavity for the Matisse TR laser. \cite{sirah} } 
+ \label{fig:matisse} 
+\end{figure}
+  
+The laser frequency is tuned via three filters placed inside of the cavity:  a birefringent filter, a thick etalon of $FSR = 20 GHz$, and a thin etalon of $FSR = 150 GHz$.  The birefringent filter and thin etalon are adjusted via step motor, whereas the thick etalon is controlled with a piezo.  We interface with the laser controls via the computer-based Matisse Commander interface software supplied by the manufacturer, which also allows us to lock the laser using its internal DSP control loop hardware.
+
+\subsection{Laser Locking} 
+
+In order to fix the laser's frequency at resonance with the Cesium $D_2$ line,
+we have implemented a system where we first lock that laser to a cavity, and
+then lock the cavity to the Cesium transition of interest using Saturated
+Absorption Spectroscopy.  With these techniques, we mange to reduce the
+laser's linewidth down to 100 kHz when it is locked.  In the next sections, we will outline the process of obtaining this lock.
+
+\subsubsection{Cavity Locking}
+
+We begin by locking the Matisse to a reference cavity using the fringe-side locking method.  The cavity is a symmetric, linear, Fabry-Perot cavity made of Invar, with a length of $l = 240 mm$ and having mirrors with a radius of curvature of $R = 1000 mm$.  The mirrors have a transmissivity of T = 5\%, and the cavity has a finesse of $\mathcal{F} = 60$, and a FSR of 625 MHz.  
+
+We send about 5 mW into this cavity, and detect the cavity peaks with a photodiode.  We then send this photodiode output into the input connector of the laser communication box, which allows us to observe the cavity peaks in the Matisse Commander user interface, as shown in \rif{fig:cav}.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Reference cavity peaks as observed in Matisse Commander.  We lock to the middle of a fringe side]{
+    \label{fig:cav}
+    \includegraphics[width=0.5\textwidth]{figures/cav} }
+  \subfloat[][Fast piezo lock is engaged at a setpoint near the side of a peak]{
+    \label{fig:fast_lock}
+    \includegraphics[width=0.5\textwidth]{figures/fast_lock} } \\
+  \caption[Matisse Commander fast piezo]{We lock the laser to the cavity by using the side-fringe locking technique.}
+  \label{fig:mc}
+\end{figure}
+
+\begin{figure}[!ht] 
+ \centering 
+\hspace{12em}
+ \includegraphics[width=0.55\textwidth]{figures/fast} 
+ \caption[]{Matisse Commander Fast piezo gain and setpoint configuration.} 
+ \label{fig:fast} 
+\end{figure}
+
+Once we observe these peaks, we then can configure the fringe-side lock.  We set the Fast Piezo controller of the Matisse to use gain of -2400 as shown in \rif{fig:fast}, and a setpoint of -0.05, which corresponds to a light level at 50\% of the cavity peak intensity.  We then manually adjust the cavity length to position the output at the setpoint.  When we enter the Control Loop Live View menu on the Matisse Commander and engage the Fast Piezo lock, we can see the Matisse lock to the cavity fringe, as we can see in \rif{fig:fast_lock}.
+
+While this compensates for rapid oscillations, we additionally adjust for slower derivations by locking with the Matisse's Slow Piezo.  We again set a setpoint of 0.5, and apply a Free Proportional Gain of -1, a Locked Proportional Gain of -4, and a Locked Integral Gain of -4.  When we then activate the Slow Piezo Control, the Matisse corrects for both slow and rapid drifts, as shown in \rif{fig:slow}.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/slow} 
+ \caption[Matisse slow piezo lock]{We engage the slow piezo lock, and the Matisse controller corrects for slow drifts of the cavity lock.} 
+ \label{fig:slow} 
+\end{figure}
+
+\subsubsection{Saturated Absorption}
+
+Once we lock the laser to the cavity, we wish to fix the cavity position with respect to the atomic transition F=4 $\to$ F'=4.  We send another fraction of the Matisse beam through an AOM which is modulated at 30 kHz.  This light then passes through into a Cesium cell, and we obtain the Doppler profile of our desired transition by using the saturated absorption technique.  A photodiode detects the peaks and send the signal to the lock-in detector, which demodulates it at 30 kHz, and obtains an error signal.  We send this error signal to a fast integrating circuit which is connected to the cavity piezo.  In order to lock the reference cavity to our transition of interest, we slowly scan the cavity length by adjusting its piezo, and then activate the integrator once the error signal is at zero for the proper transition.  By closing this control loop, we lock the Matisse at resonance for our transition.
+
+
+\clearpage
+\section{Chopper Disc Diagram}
+\label{appendix:chopper_disc_diagram} 
+
+ We developed a disc in order to produce the desired optical pattern when passing the squeezed vacuum through the chopper.  The disc was machined from a blank disc supplied by Scitec Instruments which we purchased along with the chopper.  \rif{fig:chopper_disc_datasheet} shows the specifications that we developed for the disc manufacture.
+
+\begin{sidewaysfigure}
+ \centering 
+ \includegraphics[width=1.1\textwidth]{figures/chopper_disc_datasheet} 
+ \caption{Chopper disc mechanical diagram} 
+ \label{fig:chopper_disc_datasheet} 
+\end{sidewaysfigure}
+
+ 
+\clearpage
+\section{Electronic Diagrams}
+\label{appendix:electronics_diagrams}
+
+The following figures show the electronic circuits developed over the course of this thesis, which were used to lock the doubling and OPO cavities, as well as the photodiode circuits used for tilt locking and Pound-Drever-Hall.
+
+
+\clearpage
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.95\textwidth]{figures/eds_pdh_photodiode} 
+ \caption[PDH photodiode circuit]{Electronic circuit developed for the low-noise, high photodiode amplifier used for Pound-Drever-Hall locking of the OPO.} 
+ \label{fig:eds_pdh_photo} 
+\end{figure}
+
+\clearpage
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.95\textwidth]{figures/eds_tilt_photodiode} 
+ \caption[Tilt Locking photodiode circuit]{Electronic circuit developed for the tilt-locking photodiode amplifier used to lock the doubling cavity.} 
+ \label{fig:eds_tilt_photo} 
+\end{figure}
+
+\clearpage
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.95\textwidth]{figures/eds_pdh_control} 
+ \caption[PDH integrator circuit]{Integrator circuit used for the OPO's Pound-Drever-Hall lock.} 
+ \label{fig:eds_pdh_control} 
+\end{figure}
+
+\clearpage
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.95\textwidth]{figures/eds_tilt_control} 
+ \caption[Tilt Locking integrator circuit]{Difference and integrator circuit used to lock the doubling cavity via tilt-locking.} 
+ \label{fig:eds_tilt_control} 
+\end{figure}
+
+\cleardoublepage

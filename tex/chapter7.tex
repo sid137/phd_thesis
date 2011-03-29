@@ -1,0 +1,773 @@
+\chapter{Usage of an FPGA for Timing Applications}
+\label{ch:7} 
+\minitoc
+
+
+Timing precision is an important requirement in many aspects of atom optics experiments.  Due to the fact that we work with processes that occur at microsecond timescales or below, we need a way to precisely determine when to launch the preparation of our quantum states, as well as the procedures to appropriately measure them.  In this chapter, we will discuss the solution we implemented to control the memory experiment using a National Instruments PXI-753R FPGA along with the Labview FPGA development environment.  We will first begin with an overview of the necessary digital concepts, and then discuss the experimental applications of these concepts in the specific cases of our experiment.
+
+
+\section{Digital Timekeeping}
+
+Although we perceive the passage of time in a continuous manner, we are
+limited to measuring it discretely using tiny intervals.  This fact makes it
+easy however, to use digital techniques for keeping track of time. 
+
+We can describe a time span digitally as the sum of a number of fixed-sized intervals.  The size of the interval relative to the time span fixes our precision in measuring the span, thus the smallest size of our interval gives us a more precise measurement.
+
+\begin{equation}
+  \label{eq:time_definition}
+  T = \int \; dt \to \sum_{\delta t \to 0} \delta t
+\end{equation}
+
+With this way of describing the flow of time, we can now conceive the idea of a digital clock, as a device which marks a starting point in time $t_0$, and keeps a running count of the number of ticks $\delta t$ which have occurred since this starting point.  Using this definition, we can easily develop an algorithm such as that in
+Listing \ref{lis:clock} which describes the operation of a digital clock.
+
+
+\lstset{
+  language=Pascal,
+  numbers=left,
+  %% numberstyle=\tiny,
+  basicstyle=\small,
+  stringstyle=\ttfamily,
+  showstringspaces=false,
+  captionpos=b
+}
+ 
+\begin{lstlisting}[float=!h,caption=Digital Clock Algorithm, label=lis:clock,xleftmargin=80pt]
+clock_counter = 0
+clock_running = true
+while(clock_running) 
+  clock_counter = clock_counter + 1
+  print clock_counter time has passed
+  do_something_else
+end
+\end{lstlisting}
+
+
+Here, we execute the algorithm instructions in a sequential manner.  First we create a \emph{clock\_counter} variable which stores the number of time intervals that have passed, and initialize it to 0 before measuring our time span, effectively marking our $t_0$.  We then start our clock with the while loop in line 3, and lines 4-6 are executed once for every loop iteration, where the loop repeats for as long as our \emph{clock\_running} variable holds true.  For each loop iteration, we increment our counter in line 4, thus adding $\delta t$ to our running sum, display the currently measured time span in line 5, and carry out an arbitrary action based on the current time in line 6.  
+
+We will see in a later section how this overly simple description can translate directly into a useful programmatic implementation.  The generality of this description allows us to implement it using software, or hardware-based techniques.  Our choice of implementation however, has critical consequences on the precision and reliability of our time measurement.
+
+\subsection{Software Based Clocks} 
+
+If we take our algorithm and write it in a standard imperative language such
+as C, we can compile it and run it on a computer running an operating system
+such as Windows, Linux, or Mac.  Once we ran the program, it would increment
+our clock counter, and display our time as we expect, and thus appear to function as expected.  
+
+A crucial problem however, is that the passage on time experienced by the
+computer program, what we call \emph{CPU time}, is not the same as the passage
+of time in the real world, or \emph{wall time}.  When computer program runs,
+it sequentially executes the instructions of our algorithm as fast as
+possible.  We must keep in mind however, that the processor is not only
+executing the instructions listed in our timekeeping algorithm, but also
+instructions from other programs that are needed to display information on the
+screen, read and write to files, and other operations necessary to run the
+operating system itself.  Thus in writing and executing our program, we simply
+propose a set of instructions to the processor to execute.  Our processor will
+execute those instructions however, at a time when it determines is the most
+convenient.  It is often the case that our instructions will be preempted by other instructions which the processor has placed at a higher priority than those in our program.
+
+As a result, the intervals at which the code executes in our algorithm are not fixed, and do not always correspond to real wall time intervals.  This can result in the computer program thinking that 25 ms have passed, when in reality 1 second has passed.                              
+                                       
+Another limitation to using a software based clock is that all of the
+instructions executed on an operating system take a finite amount of time.  At
+any instant, a processor can have millions of instructions scheduled for
+execution which are unrelated to our algorithm.  Thus while our software-based
+clock runs, millions of instructions can be carried out between 2 iterations
+of our main timing loop.   If we consider that we run our program on a 2 GHz
+processor which can execute $10^9$ instructions per second, if we have $10^6$
+instructions to execute between our loop iterations, that means that our
+software clock's loop can run no faster than once every millisecond.
+Therefore, our software-based approach gives us no ability to measure timescales smaller than this.
+Thus, we have two major obstacles in using software-based clock
+implementations.  The overhead of running an operating system imposes a
+non-trivial time interval in between each iteration of our loop, and the
+execution priority of our instructions prevents us from being able to make any real correspondence between CPU measured time, and events taking place in real time.
+The usage of a \emph{real-time} operating system could potentially address these issues, but using a hardware based timing system is a more commonly used alternative.
+We have considered here the special case of using a software-based clock on a
+computer with a standard operating system.  We could also conceivably program
+our algorithm directly into a microcontroller using the C language, and
+bypassing any operating system overhead.  Although this would improve the
+performance allowing us to measure smaller time intervals, the fundamental problem concerning the uncertainty of our instruction execution remains.
+
+
+
+\subsection{Hardware Based Clocks} 
+
+While software-based clocks depend on properly-timed code execution to measure
+a time interval, hardware based clocks  can provide a much more stable and
+reliable method of timekeeping as they are limited only by their physical
+properties and the environment.  The hardware-based clock uses as its
+fundamental element an \emph{oscillator}, which outputs a fixed-frequency
+voltage waveform.  We can construct an oscillator using several different techniques, such as those seen in the following sections.
+
+\subsubsection{RC Oscillators}
+\label{rc_oscillators} 
+
+RC Oscillators can be made with a network of resistors and capacitors that use
+the phase shift of a signal propagating through the circuit, combined with a voltage amplification and feedback mechanism to output an oscillating DC waveform.  If we consider that the circuit has a characteristic resistance R and capacitance C, the frequency of our output waveform will be given by the expression
+
+\begin{equation}
+  \label{eq:freq_rc}
+  F = \frac{1}{2\pi R C}
+\end{equation}
+
+RC oscillators are often simple to create, and can create output voltages with
+frequencies up to the MHz range.  The drawback of using an RC oscillator is
+that the output frequency depends on the values of the circuit components,
+which drift over time.  These drifts often arise due to the component's
+sensitivities to moisture and temperature changes in its surrounding
+environment.  Thus, RC oscillators do not possess a long-term stability.
+
+\subsubsection{Crystal Oscillators}
+\label{crystal_oscillators} 
+
+A more stable type of oscillator can be made using crystals such as quartz,
+which possesses piezoelectric qualities.  If we cut the quartz into small wafers and apply a voltage to it, it begins to vibrate at a resonance frequency that is determined by the thickness of the crystal.  The vibrating crystal functions electrically in the same manner as an RLC circuit, and creates an oscillating DC voltage at the crystal's resonance frequency.  
+Because the crystal's oscillation frequency is determined by its thickness, it is much less sensitive to environmental fluctuations.  Crystal oscillators can be made to function at frequencies up to several 100 MHz.
+
+\subsection{Digitizing the Oscillator} 
+
+The oscillators described in the previous section serve the purpose of establishing a fixed frequency reference which is represented as an analog and continuously changing DC voltage waveform.  Thus in order to use this waveform for digital timekeeping, we must digitize it.
+We can accomplish this by simply sending our waveform through an analog
+comparator combined with a stable DC reference voltage, as represented in
+\rif{fig:comparator}.   If for example, our DC waveform oscillates between 0-5V at frequency $f$, we can send it to the comparator along with a 2.5V reference voltage.  The comparator will output 5V when our signal has a higher voltage than the 2.5V reference, and output 0V when it has a lower voltage.   We thus manage to create a stable digital oscillator from our analog reference oscillator.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.85\textwidth]{figures/comparator} 
+ \caption[Electronic Comparator]{We can use a comparator to transform a
+continuous valued analog signal into a two state signal.} 
+ \label{fig:comparator} 
+\end{figure}
+
+   
+Once we have a digitized oscillator, we can interface it with digital logic
+circuitry to act as timebase, which represents the flow of time.  This is
+necessary because digital circuits can only represent data as binary values,
+which we typically interpret as values of True or False.  Thus when a circuit
+detects our digitized oscillator, it can read the 5V values as True, and read
+the 0V values as False.  Each time a True value is read by the circuit, this
+can signify the passage of one time interval.
+
+
+\section{FPGA Digital Circuits}
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Example Xilinx FPGA before mounting onto a circuit.]{
+    \label{fig:v5}
+    \includegraphics[width=0.3\textwidth]{figures/v5} }
+  \subfloat[][FPGA mounted on National Instruments PXI-7853R card with 96 digital input/output ports, and 8 analog inputs and outputs.]{
+    \label{fig:7852}
+    \includegraphics[width=0.65\textwidth]{figures/7852} } \\
+   \vspace{-10pt}
+   \caption[FPGA Picture]{ Pictures of FPGA chips.}
+  \label{fig:fpga_pics}
+\end{figure}
+
+The type of digital circuit that we use for our timekeeping applications is a
+Field Programmable Gate Array  (FPGA).  An FPGA is a chip composed of millions
+of transistors arranged into blocks, and tiny interconnects which we can use
+to route signals.  We can combine the transistors to create simple logic gates, and then use the interconnects to create more complex logic circuits.  Due to the small size of an FPGA, the propagation of a signal through the interconnects can terminate within nanoseconds.  Thus the FPGA can perform functions equivalent to many analog electronic circuits used with traditional components.
+Unlike analog circuits, logic circuits of an FPGA and be repeatedly reprogrammed onto the chip by the circuit designer.  Thus we can configure a chip to function as an integrator circuit one minute, and later reprogram it to function as a filter, PID controller, or data acquisition system.
+The ability to reprogram our electric circuit on demand gives FPGAs a
+versatility that is unparalleled by analog circuits.  This allows us to
+develop a logic circuit once, and once we have verified its operation, we can
+reuse it indefinitely.  As FPGAs have tight operating parameters, we can be
+reasonably certain that once we create a working circuit on one chip, we can
+easily duplicate it on another chip and expect the exact same functionality.
+These characteristics add extraordinary value in a lab environment where
+change occurs frequently, and it is usually difficult to produce two analog
+circuits with an exact duplicate functionality.  Furthermore, once a digital
+circuit has been conceptualized, it can be easily shared with other users.
+This thus accelerates the overall pace of development for an experiment.
+
+\subsection{Programming an FPGA} 
+
+In order to create a digital logic circuit in an FPGA, we need to program it
+using a Hardware Description Language (HDL) such as VHDL or Verilog.  Unlike
+iterative programming languages such as C, an HDL describes the logical
+functioning of the circuit as a black box.  We then specify the inputs,
+outputs and a combinatorial logical function which maps the inputs to the outputs.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/black_box} 
+ \caption[Black box representation of HDLs]{We can represent our HDL modules as black boxes with specified inputs, outputs, and combinatorial logic functions.} 
+ \label{fig:black_box} 
+\end{figure}
+
+
+In \rif{fig:half_adder}, we show an example logic diagram which
+describes a half-adder circuit, and the same circuit expressed in Verilog HDL
+in Listing \ref{lis:half_adder}.  This circuit adds two bits together from the
+A and B inputs, and outputs the sum and carry values from this addition.  The
+internal logic function uses XOR and AND logic gates.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.35\textwidth]{figures/half_adder} 
+ \caption[Half Adder Logic]{Logic Diagram for a 1-bit half adder circuit.  It takes two Boolean values as input and outputs their sum and carry values.} 
+ \label{fig:half_adder} 
+\end{figure}
+
+\lstset{
+  language=Verilog,
+  numbers=none,
+  %% numberstyle=\tiny,
+  basicstyle=\small,
+  stringstyle=\ttfamily,
+  showstringspaces=false,
+  captionpos=b
+}
+
+
+\begin{lstlisting}[float=!h,caption=Verilog program for a one bit half-adder, label=lis:half_adder,xleftmargin=80pt]
+module half_add(output reg sum, 
+    output reg carry, input a, b);
+always @(a or b)          
+    begin 
+        sum   = a ^ b;   //XOR
+        carry = a & b;   //AND
+    end
+endmodule
+\end{lstlisting}
+
+
+
+\subsubsection{Higher Level Programming}
+
+\label{higher_level_programming} 
+
+Although an HDL provides a means to directly describe how our circuit should
+function, programming a complex algorithm using an HDL can quickly become a
+difficult exercise.  Successful usage of an HDL requires a foundation of
+digital logic design experience.  As FPGAs do not execute code sequentially,
+as computers do with imperative languages such as C, developing an algorithm
+using an HDL requires a completely different programming methodology.
+Due to these difficulties, it is simpler to program an FPGA using a
+higher-level programming language that provides simpler conceptual constructs,
+and is capable of generating HDL code itself.  This greatly simplifies the
+development process, and allows us to benefit from the power and flexibility
+of using FPGA without having mastered a particular HDL or digital logic design.
+
+
+\subsubsection{NI Labview and Labview FPGA}
+\label{ni_labview_and_Labview_fpga} 
+
+For our applications, we use the Labview programming language with its FPGA
+module as our higher-level interface.  Labview provides a visual programming
+environment, where graphical symbols represent simple logic gates, and we can
+connect the gates using simulated wires.  There are numerous benefits as well
+as drawbacks to selecting Labview FPGA as a development platform.
+\\[2em]
+
+\noindent
+\Large
+\textbf{Benefits}
+\normalsize
+ 
+\subparagraph{Simplicity}
+
+The graphical aspect of Labview makes programming the FPGA much simpler, as we
+no longer need to learn a complex HDL syntax.  Furthermore,  once we construct
+a logic diagram for our circuit, we can create a working representation of it
+almost directly in Labview.  This allows us to use conditional logic to easily create complex programs, which would become much more challenging if we were using traditional components.  \rif{fig:half_adder_labview} shows the
+half-adder circuit implemented in Labview FPGA.  We can see that it matches
+that logic diagram shown in \rif{fig:half_adder} directly.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.25\textwidth]{figures/half_adder_labview} 
+ \caption[Half Adder in Labview]{Half adder implemented in Labview.  Created directly from logic diagram using logic gates, and Boolean controls (A,B) and indicators (Sum, Carry).} 
+ \label{fig:half_adder_labview} 
+\end{figure}
+
+\subparagraph{Cost} 
+
+Another interesting benefit is that we can greatly reduce the cost of our
+device compared with fixed-purpose devices.  As we wanted to create an
+application for timing control, we evaluated several models of digital pulse
+delay generators for comparison.  Their prices averaged at around 600 Euros
+per digital output, thus allowing us to control eight devices for around 5000
+Euros.  By creating a pulse generator on an FPGA, we can use its 96 digital
+outputs to lower this price to 30 Euros per output, or even further depending
+on the FPGA model.  Thus we can use it to control more devices in our experiment for a lower cost, and repurpose it on demand if needed.
+
+\subparagraph{Rapidity} 
+Using  Labview FPGA can greatly accelerate the development time for certain electronics tasks.  We can develop simple applications in minutes, and complex applications in days that would normally weeks or months using standard analog electronics.  Furthermore, our applications can handle much more complex cases, allowing us to attempt tasks which would otherwise be impossible.
+\\[2em]
+
+\noindent
+\Large
+\textbf{Drawbacks}
+\normalsize
+\\[1em]
+While using Labview FPGA presents enormous benefits, there are serious drawbacks that must be considered when deciding whether to use this system.
+
+\subparagraph{Proprietary Platform} 
+
+Labview is a proprietary platform developed by the company National
+Instruments.  This means that the software is closed to public analysis of its
+source code, and as a result, NI is the only entity capable of fixing
+platform bugs, of which there are many.  Updates to the platform are costly
+and are only released twice a year.  NI has been known to remove previously
+supported features from future versions of their software, making them
+available only at extra cost.
+Additionally, the HDL code generated by Labview FPGA is encrypted and not available to the end user.  Thus it is impossible to take the code, and run it on any hardware that is not sold by NI.  This means that anyone who wants to use the Labview platform must purchase the core software, the FPGA module, and the FPGA hardware from NI.
+
+\subparagraph{Costs relative to other systems} 
+
+As NI requires this purchase of specific hardware and platform licenses, this
+makes the initial investment of the material much more expensive than
+purchasing the equivalent FPGA components, and programming them directly in an HDL.  However creating a system for FPGA programming from the basic components requires expertise in digital electronics, circuit layout and design, digital logic programming, and C programming.  Thus the decision of whether to invest in the Labview platform or develop a system from the basic components requires a cost/benefit analysis on a case by case basis.  Individual who have the necessary expertise may choose to develop their own systems, while groups who must transfer the knowledge from person to person might prefer the long term benefits of a simpler Labview platform.
+
+
+
+
+\subsection{The Labview FPGA Programming Model} 
+
+In this section, we will illustrate the general structure of how the Labview platform allows us to easily develop FPGA programs.  When running a program on the FPGA, it runs independently from the computer which we use to control the system, however we can benefit from using a computer interface to interact with it.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/labview_project} 
+ \caption[Labview project window]{Labview project explorer lets us see all of the resources and dependencies needed for an FPGA project.} 
+ \label{fig:labview_project} 
+\end{figure}
+
+The development of every FPGA application is centered around a ``Labview Project'', which links all of the files, dependencies and configuration resources needed to compile and run a program.  In the Project Explorer window show in \rif{fig:labview_project}, see the expanded project resources which list our host computer, and the FPGA target device that we wish to program.  Beneath the FPGA device are additional resources configured for the FPGA such as analog and digital input and output ports, a 40 MHz clock which we can use as a timebase, and the FPGA.vi code which contains our program.  
+
+When running a Labview FPGA program, the FPGA can only run one source code file at a time.  Thus, if multiple projects need to be run simultaneously, then the code for each project needs to be merged into one file.  We thus place the code to be run on the FPGA under FPGA tree, and name it ``FPGA.vi''.  Although the program executes independently from the computer when it runs, Labview allows us to use the simple FPGA.vi front panel as a simple interface to control and monitor the program state.  Not every function can be carried out on the FPGA however, and thus if we wish to have a more complicated interface, we are required to create a separate program on our host computer.  \rif{fig:labview_project} shows this as the ``Host.vi'' file under the My Computer tree.  
+
+
+
+A simple example application is one which lets us monitor and change a digital voltage level on digital input/output ports.  Once we have created our Labview FPGA project, we can then develop a program such as that shown in \rif{fig:fpga_vi} which runs on the FPGA.  We see the actual code for the FPGA.vi file in the FPGA.vi block diagram shown in \rif{fig:fpga_bd}.  This code continuously reads the values of the ``Digital Input'' port, sending them to the ``Digital Input Value'' indicator, and takes values from the ``Digital Output Value'' control and sends them to the ``Digital Output'' port.  We can use the front panel shown in \rif{fig:fpga_fp} as a simple interface to interact with the program.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][FPGA based front panel interface allows simple interactions with FPGA program.]{
+    \label{fig:fpga_fp}
+    \includegraphics[width=0.5\textwidth]{figures/fpga_fp} }
+  \subfloat[][FPGA based code which reads and writes data to and from digital input and output ports.]{
+    \label{fig:fpga_bd}
+    \includegraphics[width=0.5\textwidth]{figures/fpga_bd} } \\
+  \caption[Example FPGA vi for digital input and output]{FPGA vi that we can use to generate and detect TTL level voltages. }
+  \label{fig:fpga_vi}
+\end{figure}
+
+While the FPGA vi shown in \rif{fig:fpga_vi} suffices for a simple application, we would be obliged to create a host vi to interact with our program if we require more advanced functionality.  We can create this host vi by programming the Host.vi file such as is shown in \rif{fig:host_vi}.  The block diagram shown in \rif{fig:host_bd} illustrates the operation.  The host begins by connecting to the FPGA program, and then continuously sends the data to the FPGA that we enter on the front panel.  When we hit the stop button and exit the program, the host vi closes the connection to the FPGA vi.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Host.vi front panel interface run from the computer.]{
+    \label{fig:host_fp}
+    \includegraphics[width=0.5\textwidth]{figures/host_fp} }
+  \subfloat[][Host.vi back panel code communicates with the program in the FPGA.vi]{
+    \label{fig:host_bd}
+    \includegraphics[width=0.5\textwidth]{figures/host_bd} } \\
+  \caption[Example host vi]{We can use a host vi to communicate with the FPGA vi when we need more advanced logging and monitoring functionality.}
+  \label{fig:host_vi}
+\end{figure}
+
+
+By using the host vi, we can monitor at behavior of our program executing on the FPGA.  \rif{fig:fpga_run} shows the result of us running this program.  When we set the output value to 3.3V in \rif{fig:fpga_run_h}, we see in \rif{fig:fpga_run_f} that the program mirrors the same behavior.
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Host vi front panel while the program runs.]{
+    \label{fig:fpga_run_h}
+    \includegraphics[width=0.5\textwidth]{figures/host_fp_run} }
+  \subfloat[][The FPGA vi mirrors the input and output shown on the host vi.]{
+    \label{fig:fpga_run_f}
+    \includegraphics[width=0.5\textwidth]{figures/fpga_fp_run} } \\
+   \caption[Short Caption]{Program running on the FPGA while interfaced with a computer-based host.}
+   \label{fig:fpga_run}
+\end{figure}
+
+
+This simple example gives an overview of the process used to create a Labview FPGA program.  We can use the same process to develop programs that provide more complex functionality, as we will see in the next sections.
+
+ 
+\section{Basics Concepts in Digital Logic}
+Before diving into the implementation of our FPGA timing system, we will first overview a few necessary concepts of digital programming.
+
+\subsection{Data Representation} 
+Any data that can be represented in a digital logic device, such as a computer
+or microcontroller, is composed of a series of bits, where each bit takes a
+value of 1 or 0, with 1 representing True and 0 representing False.  Thus when we try to measure continuous data, we must first discretize it and form a digital representation composed of strings of 1's and 0's.
+
+\subsection{Digital Input and Output (DIO)} 
+In order to interface a digital device with the analog world, we send data
+through pins connected to the device in the form of voltage levels.  Although
+voltage is naturally continuous, we can use standardized voltage level
+definitions to represent a continuous voltage signal as a 1 or 0.
+
+The voltage levels that we use for the FPGA are defined by Transistor-Transistor Logic (TTL).  This logic interprets incoming voltages between 0-0.8 V as a low signal, or False, and it interprets voltages sent to the device from 2.0-5.0 V as a high signal, or True.  Thus by encoding information into the voltage levels, we can recreate this information in the form of bit strings on the digital device.
+
+In a similar way, we can send information from the device to the real world.
+If we instruct the device to set the value of a pin to True, or 1, the pin
+outputs a voltage of 5V (or 3.3V for Low-Voltage TTL).  Similarly, by setting
+the value of the pin to False, the voltage on the pin goes to 0V.  Thus by
+using TTL voltages, we can fully communicate digital information to and from our circuit.
+
+\subsection{Integers} 
+
+We stated earlier that data is represented inside of a digital device by strings of 1's and 0's.   A basic datatype that we can represent using these binary strings is an integer.  The numeric value of a binary string is determined by the string length, and the numeric type.  Integers typically use binary string lengths of 8, 16, 32, or 64 bits.  The integers can also either have signed, or unsigned representations, where signed numbers can take on negative values.
+
+There are consequences to using binary integer representations that must be considered.  As there are only a finite number of permutations for a binary sequence of a given length, that means that our integer type can only represent a finite range of numbers.   If we try to surpass this range, the number can \emph{overflow} or \emph{underflow}, and can take on unexpected values.  Table \ref{tab:bit_sizes} shows the ranges for the most common integer types.
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    Size & Name & Signed Range & Unsigned Range \\
+    \hline
+    8 bits & Byte & -128 to +127 & 0 to 255 \\
+    16 bits & Word & -32,768 to +32,767 & 0 to 65,535 \\
+    32 bits & Double Word & -2,147,483,648 to +2,147,483,647  & 0 to 4,294,967,295 \\
+    64 bits & Long & -9e18 to +9e18 & 0 to 18e18 \\
+    \hline
+  \end{tabular}
+  \caption{Ranges for signed and unsigned integers}
+  \label{tab:bit_sizes}
+\end{table}
+
+\subsection{Floating Point Numbers} 
+
+Floating point numbers add another level of complexity to our numerical types, and they can typically take on single or double precision representations.  Usage of double precision floats usually offers more numerical stability in complex calculations.  One limitation however, is that we can not represent every possible number using a double precision float.  Therefore, calculations involving floating point numbers are often sensitive to rounding errors.
+
+Although integers and floats are represented by binary strings, the FPGA can
+not natively interpret floating point numbers without additional software routines.  Thus when implementing algorithms for the FPGA that require numerical operations, we must either use integers or fixed-point numbers.
+
+\section{Basic Building Blocks for Timing Applications}
+
+Now that we have described the fundamental concepts needed to work with digital logic, we will discuss simple logic applications that we can use on the FPGA in order to construct a larger timing application.  The goal of our development was to use the FPGA to replicate a digital delay generator.  This device allows us to regulate the timing of experiments by specifying precise trigger times, with high timing resolution and low jitter.  It accomplishes this by producing TTL pulses at a set of digital outputs, which we can configure to have a desired time and width.
+
+
+
+\subsection{Describing a Pulse}
+\label{describing_a_pulse} 
+
+The delay generator application we have developed for our experiment is a system
+to create TTL pulses with the ability to control their delays and durations with 25 ns  precision.  We can quickly analyze the creation of a TTL pulse to understand the method used.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/pulse_abstract} 
+ \caption[Abstract Representation Of a Pulse]{Representation of a pulse as change between two different states at two distinct time points $t_1$ and $t_2$.} 
+ \label{fig:pulse_abstract} 
+\end{figure}
+
+We can abstractly and succinctly define a square pulse as a binary state
+change at two points in time, as illustrated in \rif{fig:pulse_abstract}.  We thus consider two dimensions in describing a
+pulse: the state dimension, and the time dimension.  We can examine the time
+dimension by using the concept of a timebase, as shown in \rif{fig:timebase_init}.  A timebase serves both as a
+reference for the flow of time, and a measuring system.  We can represent this
+timebase as an infinite train of ticks, or events, where each tick represents
+the passage of a time interval.  Once we have established our timebase, we can then pick an arbitrary point as a trigger, or initial time $t_0$.  By using the ticks in the timebase as a measuring system, we can specify two points after $t_0$, $t_{delay}$ and $t_{duration}$ in terms of the number of ticks after $t_0$, which specify the start time and width of our pulse.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/timebase_init} 
+ \caption[Timebase With Reference Point]{Infinite timebase with reference point $t_0$ chosen.  We can express time intervals by counting the number of timebase ticks.} 
+ \label{fig:timebase_init} 
+\end{figure}
+
+
+After determining the relevant time points for our pulse, we can now consider the second aspect - the state change.  Since we are only considering binary state changes, we can use True and False values to identify the states.  This allows us to define a positive pulse as a sequence of False-True-False states, and a negative pulse as a sequence of True-False-True states.
+
+
+\subsection{Labview Timer Implementation} 
+\label{timer} 
+
+Now that we have developed the basic concepts, we can examine how to implement
+a timer using Labview FPGA.  We first begin by creating our timebase.  Labview
+FPGA provides a Single-Cycle Timed Loop (SCTL) which allows us to do this.
+The SCTL is a Labview construct which allows us to execute code in a loop that
+has a deterministic processing time - specifically, the code is executed
+within 1 clock cycle of the FPGA.  For our timer, we configure the FPGA to use
+a 40 MHz oscillator as a clock source, and thus any code executed in a SCTL is
+guaranteed to repeat every 25 ns.  We can visualize this using \rif{fig:timebase}, where we have a series of events executed at each timebase tick.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/timebase} 
+ \caption[Timebase]{Example of a timebase represented by ticks.} 
+ \label{fig:timebase} 
+\end{figure}
+
+
+Now that the timebase is established, we can create a clock to set an initial
+reference time, and track the number of ticks as time passes.  In order to
+track this time, we can simply use a counter which is incremented by 1 with
+each passing tick.
+
+Labview does not natively use the concept of a variable to store state such
+as we understand from C, due to that fact that it is based on a dataflow
+programming paradigm.  Thus we can keep track of our counter in Labview by
+using a shift register or a feedback node.  A shift register is a construct
+which passes the value of data present in a current loop's iteration, as input
+to the next loop iteration.  Whenever we want to pass data between loop
+iterations, we must use one of these constructs.  With this in mind, we can
+represent a counter using the layout in \rif{fig:counter_sr}.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Counter implemented with a Shift Register]{
+    \label{fig:counter_sr}
+    \includegraphics[width=0.5\textwidth]{figures/counter_psr} }
+  \subfloat[][Counter with a Feedback Node.  Provides the same behavior as the shift register implementation, but the compacted form allows us to enclose it in a SubVi.]{
+    \label{fig:counter_fb}
+    \includegraphics[width=0.5\textwidth]{figures/counter_fb} } \\
+  \caption[Labview Counter Implementations]{ Two options for implementing a counter using Labview.}
+  \label{fig:counter_lv}
+\end{figure}
+
+
+We initialize the counter to 0 before entering the loop, as mentioned in our
+algorithm.  We must also take care to pick a numerical datatype large enough
+to avoid any unintentional overflows as we increment our counter.  Considering
+that we will have $4*10^7$ ticks per second at 40 MHz, if we select our
+counter to use a datatype of U64, our clock will be capable of running for over 14,000 years before overflowing.
+
+By using a feedback node instead of a shift register, we can encapsulate this
+behavior in a subprogram, or subVi, and place the entire subVi in a SCTL as
+shown in \rif{fig:counter_fb}, and thus create our FPGA based clock.
+
+For our applications, we have developed over time a slightly more complex
+timer based on this method, shown in \rif{fig:clock_timer}, which provides expanded functionality.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.65\textwidth]{figures/clock_timer} 
+ \caption[Clock Timer]{Full clock timer used for our FPGA programs.  Timer is resettable by a Boolean signal or square waveform, and tracks the elapsed time as well as loop execution time.} 
+ \label{fig:clock_timer} 
+\end{figure}
+
+This timer has the feedback loop counter embedded within it, but also gives us
+the ability to reset the counter on demand.  We can reset it by either sending
+a True value on the Reset input, or by sending in a square waveform on the
+Waveform input.  We can decide if we want to reset the counter on the waveform's rising edge, falling edge, or both.
+
+This expanded timer outputs a True signal on the Clock Reset output indicator
+every time it is reset to 0, which allows us to monitor the timer progression
+and control other program logic.  It also uses a second feedback register to
+track the number of times the loop is executed before each clock reset using
+the Last Interval Between Resets output.
+If we choose to use this timer in a normal while loop as opposed to a SCTL, the Ticks Per Loop output tells us the number of ticks needed for each loop to execute once, which allows us to measure the duration of our loop logic.
+
+
+
+\subsubsection{Digital Input and Output}
+\label{digital_input_and_output} 
+
+The next aspect of creating a pulse is generating our state change event.  Using a binary state allows us to use a Boolean value to represent our pulse outputs.  When combined with LVTTL logic, we can create voltage outputs from these Boolean values.
+
+With Labview FPGA, we can accomplish this by using DIO ports as depicted in
+\rif{fig:digital_output}.  Our model of FPGA has 96 DIO ports available, each of which can be configured as a digital input, or a digital output.  In order to use a pin as a digital output, we simply wire a Boolean control to a DIO port in Labview.  If we set the control value to True, the FPGA outputs a 3.3V level, and if we set it to False, it outputs 0V.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/digital_output} 
+ \caption[Digital Output]{Creating TTL voltage output using Labview FPGA.  Writing a True value to a digital output produces 3.3V on the pin.  Writing a False value produces 0V.} 
+ \label{fig:digital_output} 
+\end{figure}
+
+
+Using a similar method, we can detect voltage state changes as Boolean state
+changes.  Thus if we wire a Boolean indicator to a DIO port in Labview and
+send 5V to its pin, the indicator will show a True value.  Once its voltage
+falls below 0.8V, the indicator value will become False.  \rif{fig:digital_input} shows an implementation in Labview.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/digital_input} 
+ \caption[Digital Input]{Creating TTL voltage input using Labview FPGA.  A 5V voltage on the pin of a digital input as read as a True value.  A 0V signal is read as False.} 
+ \label{fig:digital_input} 
+\end{figure}
+
+
+
+\subsubsection{Detecting Edge Transitions}
+\label{detecting_edge_transitions} 
+
+We can use this method of digital input to detect TTL edge transitions and thus create triggers.  If we send a square wave into a pin configured as a digital input, and read the DIO port over time, we will read out alternating True and False values  where each value is read in 1 clock tick.  
+ 
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.65\textwidth]{figures/dio_tf} 
+ \caption[Digital Input Representation]{True-False representation of digital input.  Input state changes between True and False at two distinct time points.} 
+ \label{fig:dio_tf} 
+\end{figure}
+
+As an edge transition involves a state change, we can detect edge transitions
+by simply detecting when a state changes from False to True, or True to False,
+where $F \to T$ represents a rising edge, and $T \to F$ represents a falling
+edge, as we can see in \rif{fig:dio_tf}.  
+
+\subsection{Labview Implementation} 
+
+We can implement this edge detection logic in Labview using an SCTL and a
+feedback node as shown in \rif{fig:edge_transitions}.  Here we simply compare the current value of our DIO input to the value from the previous loop iteration.  If the values are different, then an edge transition has taken place.  We can more specifically determine which type of transition has occurred by using the inequality symbols.  If the current value is less than the previous value, then we have a falling edge, and if the current value is greater than the previous value, then we have a rising edge.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.75\textwidth]{figures/edge_transitions} 
+ \caption[Edge Transitions in Labview]{Methods of detecting edge transitions in Labview FPGA.  The top example detects a rising or falling edge, the middle example detects falling edges, and the bottom example detects rising edges.} 
+ \label{fig:edge_transitions} 
+\end{figure} 
+
+
+\subsection{Implementing the Pulse generator}
+
+
+With our clock implementation and our knowledge of how to create digital
+output, we can implement a full FPGA digital pulse generator.  As stated
+before, we can define our pulse using a delay time, $t_{delay} $ with respect
+to a certain start time $t_0$ and a duration $t_{duration}$.  We can also
+define it as two times $t_{start}$ and $t_{stop}$ with respect to our
+reference time, where $t_{start}$ and $t_{stop}$ represent the state change
+events.  It is this second definition that we use for our implementation.  The
+block diagram in \rif{fig:pulse_generator} shows us the core component of our pulse generator.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.35\textwidth]{figures/pulse_generator} 
+ \caption[Pulse Generator]{Pulse generation combinatorial logic function.  Signal Stop and Signal Start specify the two time points for our pulse state change, and the clock input provides the current tick count.  The Boolean valued state is output on the Boolean wire.} 
+ \label{fig:pulse_generator} 
+\end{figure}
+
+
+We send the Loop Counter output from our timer to the Clock input of the pulse
+generator, where the clock uses 0 as the start time.  We also send in the two
+values Signal Start and Signal Stop which specify the tick numbers at which we
+carry out the state changes.  Finally, we use a Labview ``In Range and
+Coerce'' component which takes in three numbers - an upper limit, a lower limit, and a value, and outputs True if the value is between the limits and False otherwise.  This behavior is the exact behavior that we use to describe our pulse.  By connecting the output from this component to an XOR gate along with a ``Signal Sign'' Boolean control, we can easily change the output between positive and negative pulses.  For a final step, we wire the output from our XOR gate to a DIO output terminal, and when we run the program, we produce voltage pulses with our desired timing characteristics on our output pin.
+
+\subsection{Putting the Blocks Together} 
+
+Now that we have seen all of the necessary steps to create a digital delay generator, we can observe how to combine them to form a simple, but complete FPGA pulse generator with a computer based interface.
+
+We can begin by creating a Labview project for the generator, such as shown in \rif{fig:ddg_proj}.  This project contains our PXI-7853R FPGA as a resource, which is configured with digital output ports named \emph{trigger} an \emph{laser control}.  It also has a 40 MHz clock configured, along with an FPGA.vi program, and the subvis needed to run it. Additionally we have provided a Host.vi host interface program, along with its necessary subvis.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.40\textwidth]{figures/ddg_proj} 
+ \caption[Digital delay generator project]{Project explorer showing the resources used to implement a digital delay generator.  This includes clocks, digital outputs, subvis and other dependencies.} 
+ \label{fig:ddg_proj} 
+\end{figure}
+\section{Experimental Application}
+
+
+
+We can now look at the FPGA.vi which contains the core timer itself.   The block diagram shown in \rif{fig:ddg_fpga} shows how we place our entire program in an SCTL timed at 40 MHz, so that each iteration executes within one 25 ns clock cycle.  We then use the Square Wave Generator vi to create a square wave timebase with a period set by the \emph{Repetition Period} control.  Next we use the Edge Detector to detect the rising edges of our timebase, and on each rising edge, we reset the \emph{Timer} subvi to zero.  The timer subvi has the exact code shown in \rif{fig:clock_timer}, and tracks the number of ticks since each reset.  We then use the \emph{Pulse Generator} vi to configure a pulse state change at times \emph{Pulse Start} and \emph{Pulse Stop}, where these times are given as the number of ticks elapsed with respect to the reset time $t_0$ provided by clock timer.  The Pulse Generator block diagram has the code shown in \rif{fig:pulse_generator}.  The pulse generator's Boolean output then goes directly to the \emph{laser control} digital output, which creates the TTL voltage that we can use to activate and extinguish a laser.  \rif{fig:ddg_fpga_fp} shows a simple front panel for this FPGA.vi, where the times must be entered in the number of ticks due to the FPGA's inability to use double numbers.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Front panel for FPGA.vi allowing us to configure the pulse timing.  Timing information in specified in ticks, as the FPGA can not process floating point numbers.]{
+    \label{fig:ddg_fpga_fp}
+    \includegraphics[width=0.35\textwidth]{figures/ddg_fpga_fp} }
+  \subfloat[][Core FPGA.vi program for a digital delay generator.  This includes a timebase, edge detection, and a pulse generator all executing within a 25 ns loop.]{
+    \label{fig:ddg_fpga_bd}
+    \includegraphics[width=0.7\textwidth]{figures/ddg_fpga_bd} } \\
+  \caption[Digital delay generator FPGA.vi]{FPGA based code used for a digital delay generator.}
+  \label{fig:ddg_fpga}
+\end{figure}
+
+
+We can take this example further and create an easier to use interface by creating a Host.vi file.  \rif{fig:ddg_host_bd} shows how we can use the Host.vi pattern discussed earlier.  It begins by opening a communication with the FPGA target, and then enters a loop where it continuously sends the configuration settings of our pulse generation to the FPGA.  These settings include the \emph{Repetition Period}, \emph{Pulse Delay}, \emph{Pulse Duration}, \emph{Pulse Sign}, and a Stop command to exit the program.  When we exit the program, the Host.vi breaks communication with the FPGA.
+
+
+\begin{figure}[!htb]
+  \centering
+  \subfloat[][Host.vi front panel executing on the computer, which allows us to express the time in $\mu s$ and ms.]{
+    \label{fig:ddg_host_fp}
+    \includegraphics[width=0.35\textwidth]{figures/ddg_host_fp} }
+  \subfloat[][Back panel of Host.vi shows how the program communicates and sends the timing configuration to the FPGA based FPGA.vi.]{
+    \label{fig:ddg_host_bd}
+    \includegraphics[width=0.7\textwidth]{figures/ddg_host_bd} } \\
+  \caption[Digital delay generator Host.vi]{Host.vi computer based interface program, which allows us more advanced interface features and functionality.}
+  \label{fig:ddg_host}
+\end{figure}
+
+As our Host.vi program is executed on the computer instead of the FPGA, we can use double precision numbers to express our timing parameters, as shown in \rif{fig:ddg_host_fp}.  We must however, convert these human-readable double precision numbers to a format which can be understood by the FPGA.  Thus we use the subvis shown in \rif{fig:ddg_host} to convert all times expressed in ms and $\mu s$ into 40 MHz tick counts.
+
+
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][HostConvertTimetoTicks.vi block diagram.  Converts the pulse delay an pulse duration expressed in $\mu s$ into a number of 40 MHz ticks.]{
+    \label{fig:host_convery_time}
+    \includegraphics[width=0.5\textwidth]{figures/host_convert_time} }
+  \subfloat[][ScaleFrequency.vi block diagram.  Converts the repetition frequency expressed in ms into a number of ticks.]{
+    \label{fig:scale_freq}
+    \includegraphics[width=0.5\textwidth]{figures/scale_freq} } \\
+  \caption[DDG Subvis]{The host vi uses these subvis to carry out conversions in order to convert our double precision time to a tick based format.}
+  \label{fig:ddg_subvi}
+\end{figure}
+
+These figures show a fully usable but simple implementation of an FPGA based  digital delay generator, using the concepts that we have developed throughout this chapter.  The aim of this section was to outline a clear path of how we used the FPGA and basic logic structures to create a dynamic and powerful utility for timing and synchronization.  While it is impossible to discuss the full-scale code used in the experiment due to its complexity, it the next section we will show the interfaces which illustrate a few of the tools that we were able to develop with these techniques.
+
+%% \section{What is an FPGA}
+%% A \emph{Field Programmable Gate Array} (FPGA) is a type of electronic circuit composed of transistors and logic gates.  What makes it special, is that we can reroute the connections between the transistors and logic gates to produce complex logical structures, and as a result, carry out complete computations.  This allows us to look at an FPGA as programmable circuit, or in an oversimplified view, a computer on a chip.  The programmability of this circuit allows us to take the functionality of an analog electronic device, and duplicate its functionality programmatically on the FPGA, which when activated, should perform similarly to thee analog circuit. However, the benefits to using an FPGA come as a result of its flexible programmable nature.  once we have a functioning circuit implemented on the FPGA, it is trivial to copy code to other devices to use the exact same functionality in multiple places.  Thus, the programs we face with duplicating analog circuits completely disappear, and we can be assured that the a copy of our program will function in the exact same manner as the original.
+
+%% A further benefit to using FPGA's is that when we face the need to modify our device's functionality, for example to control another piece of equipment, or to improve the circuits behavior, a modification which would be extremely complicated in analog circuitry can bee turned into a simple copy and paste operation with an FPGA.  This not only saves time in development, but also lets you return your device to a prior configuration if the modifications turn out to be detrimental.
+
+
+
+%% \subsection{Timing} 
+%% The timing choices required us to have a precise control over TODO{how many} lasers, the timing for the OPO pulse creation, as well as the circuitry to cut the B-fields of the MOT.  Due to the enormous amount of control we needed to have on the experiment, we decided to use an TODO{NI PXI-7853?} FPGA to manage the timing for the experiment.  The FPGA allowed us to programmatically express our timing requirements.  This allowed us to essentially create a pulse delay generator, and send TTL pulses to up to 96 devices with a 25 ns precision.  In order to control the FPGA, we developed interfaces in Labview which allowed us to specify our pulse delays and durations on a computer.
+
+%% In order to use the FPGA to control the laser beams, we sent a TTL pulse from the FPGA into a TODO{minicircuits} Minicircuits switch, which either blocked, or passed an rf signal to an AOM, depending on the TTL state.  This forced the AOM to either switch the beam into either order 0 or order 1, thus changing the optical path of the beam depending on the TTL state.  
+
+%% For controlling the magnetic field coils, we used the TTL to trigger a TODO{type} NI acquisition card.  The acquisition card was set to generate  an analog signal on the falling edge of the TTL trigger, and send that signal to the circuit which cut the B-fields.  
+
+%% For the timing for the pulses of squeezed light, we initially planned on using a chopper to create the pulses of squeezed light.  The FPGA was set to allow us to measure the rotation period of the chopper in real time, and thus predict when the next pulse of light would arrive so that we could prepare thee experiment.  The FPGA allowed us to measure the pulse-to-pulse jitter and realize that it was too great in order to use that method to meet our timing specifications. Although the FPGA could potentially be programmed to correct for the jitter, the programming for such an uncertain device turned out to be extremely complicated, an thus we decided to proceed with using an AOM. The figure below shows an example of the interface we used for specifying pulse delays.
+
+%% TODO:  include timing screenshots
+
+%% \begin{figure}[ht] 
+%%  \centering 
+%%  \includegraphics[width=0.95\textwidth]{figures/placeholder} 
+%%  \caption{Screenshot of the pulse timing interface} 
+%%  \label{fig:label} 
+%% \end{figure}
+
+
+
+
+\subsection{Laser Timing via Pulse Delay Generation} 
+
+The digital delay generator example we just developed offers a proof of concept for the timing applications we can implement with Labview FPGA.  To control our quantum memory experiment, we expanded this application to provide more digital outputs, which allows us to control multiple lasers with 25 ns precision.  We also added interface options which let us use an internally generated timebase to trigger the experiment, or send a TTL signal generated by the chopper's optical fork.  \rif{fig:timing_fp} shows the control panel for the MOT, which lets us configure all of the laser beam timings, as well as configure different timing sequences to run while the magnetic field is cut.  This allows us to select between the timing for the memory storage, Raman spectroscopy, optical density measurements, or other optimization steps, all from the same interface.
+
+ \begin{figure}[!ht] 
+  \centering 
+  \includegraphics[width=0.95\textwidth]{figures/timing_fp} 
+  \caption[MOT timing interface]{Interface used to control the MOT timing.} 
+  \label{fig:timing_fp} 
+ \end{figure}
+
+
+\subsection{Chopper Period Measurement} 
+
+We also developed a program to allow us to measure the pulses created by the optical chopper.  As the chopper wheel turned, it output a TTL signal from its optical fork signifying the creation of a pulse.  \ref{fig:pulse_acq} shows the interface we developed to time the pulse arrival, and measure the mechanical jitter of the chopper.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.95\textwidth]{figures/pulse_acq} 
+ \caption[Chopper pulse acquisition]{Interface use to measure pulses acquired from the optical chopper.} 
+ \label{fig:pulse_acq} 
+\end{figure}
+
+
+\section{Where to find Source Code}
+
+All of the Labview code developed during this thesis can be found in the Git source code repository, located at \href{http://github.com/quantopt/eit-sequence/zipball/master}{http://github.com/quantopt/eit-sequence} \cite{quantopt}.

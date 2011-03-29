@@ -1,0 +1,603 @@
+\chapter{Experimental Setup of the OPO} 
+% 21+b/20 pgs
+\label{ch:4}
+\minitoc
+
+In the preceding chapters, we developed the theory of optical interactions in nonlinear media, and showed how the usage of parametric down-conversion can lead to the deamplification of quadrature noise, thereby producing squeezed states.  In this chapter, we will discuss our experimental development of a doubly-resonant degenerate OPO, which allowed us to create squeezed light through its below-threshold operation.  
+ 
+
+\section{Optical Setup}
+\label{optical_setup}
+
+\subsection{Laser Source} 
+\label{laser_source}
+
+The laser we used to run this experiment is a Titanium-Sapphire Matisse TR Sirah laser, which is optically pumped by a Coherent Verdi V-18 laser with 10 W of 532 nm light.  Pumping at this power provides us with 2.3 W of output power from the Matisse at 852 nm.  We will discuss the laser setup in more detail in Appendix \ref{appendix:matisse_laser}. 
+
+When the light exits the laser we divide it into several beams.  The primary beam of around 1.5 W is used to power the OPO and cold atom experiments.  A second beam of around 40 mW  is sent to a second part of the table where it is further subdivided.  We inject one of these subdivided beams into a reference cavity, which we use daily to verify the alignment of the laser.  A second beam is injected into another cavity, which we use to lock the laser on the resonant atomic transition. A third beam is sent into a wavemeter which allows us to monitor the wavelength in real time.  We send a fourth beam to another optical table, where it serves as a frequency reference for phase-locking a second diode laser.
+
+
+ 
+\subsubsection{Optical Fibers} 
+\label{optical_fibers}
+  
+Although the laser source generates our light on one table, the light is used to power experiments which are spread across several other optical tables.  In order to transfer this light, we use single-mode polarization-maintaining fibers purchased from OzOptics (PMJ model).  The polarization-maintaining property of these fibers allows us to assure the linearity in the polarization of the beams output from the fibers.
+
+Preserving this linear polarization is extremely important when using polarization-maintaining fibers.  This is due to the fact that any polarization fluctuations that occur within the fibers will transform into power fluctuations once the beam passes through any polarizing optic.  Random power fluctuations are destructive to the experiments, as they prevent us from obtaining a fixed measurement reference point, such as when we measure the shot noise in the squeezed light measurement.
+
+There exists an alignment technique which allows us to assure that we can preserve the polarization linearity in our beams as much as possible. This requires that the polarization of our input beam be properly aligned with the core of the fiber \cite{aalto:2861}.  To carry out this alignment, we glued a PBS cube to a small optical rotation mount, and placed the entire ensemble directly in front of the fiber coupler entrance, as shown in Figure \ref{fig:pbs_coupler}.  Using a cube assures that the polarization in the beam transmitted from the cube's output port is linear, and by placing it just at the fiber input, we assure that the beam polarization has not undergone any randomization due to reflections from mirrors.  Finally, the rotation mount allows us to precisely adjust the polarization angle until it is properly aligned with the fiber core.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.25\textwidth]{figures/fiber_cleaning_pbs} 
+ \caption[Polarization alignment for fiber optics]{PBS Cube mounted to a rotation mount allows us to align the linear polarization to the fiber optic core.} 
+ \label{fig:pbs_coupler} 
+\end{figure} 
+
+In order to verify our alignment with the axis, we optimize the extinction ratio $\zeta $ of the output beam's polarization while subjecting the fiber to stress.  We measure this extinction ratio by mounting a Glan polarizer to a rotating optical mount, and placing it at the output of the fiber.  While stressing the fiber, we measure $P_{max}$ as the power transmitted through the polarizer when it is aligned with the output polarization, and $P_{min}$ as the power transmitted when the polarizer is turned to block the light transmission.  We then calculate the extinction ratio with
+
+\begin{equation}
+  \label{eq:extinction_ratio}
+  \zeta = -10 \; log \; \frac{P_{min}}{P_{max}}   .
+\end{equation}
+
+Turning the rotation mount at the input changes the output extinction ratio.  Once we manage to maximize this extinction ratio, this indicates to us that we have obtained the best input polarization alignment.  Using this method, we typically obtain extinction ratios ranging from 24 dB to 27 dB, approaching the specification limits for our fibers.  Thus, further optimization is limited by the quality of the fiber.  By using this method, we obtain a stable beam polarization at the fiber output, which is usable for the rest of the experiment.
+
+%% In addition to properly aligning the input polarization, we must also protect the fiber from polarization fluctuations created by thermal or mechanical stresses.  We do this by wrapping the fibers in thermal insulating material in order to protect them from temperature changes due to air currents, and we fasten them to rigid supports so that we prevent them from experiencing any mechanical distortions.
+
+
+
+
+
+\subsection{OPO Table} 
+\label{opo_table}
+
+
+Figure \ref{opo_table} shows a layout of the OPO table.  The light prepared by the Matisse arrives on the table, where it is divided and sent towards the 3 main components of the table: the two optical cavities, and the homodyne detector.  We typically couple 975 mW of light from the Matisse into the optical fibers and obtain 585 mW at the output on the table.  Of this amount, we send 500 mW into the doubling cavity where we carry out second-harmonic generation, 10 mW is injected into the OPO which serves as a locking beam, and 16 mW continues on to the homodyne detector where it functions as a local oscillator.  We also fraction off a portion which we call the seed beam, which is used as an injection beam for the OPO.  This is primarily used as an aid to check for cavity alignment.
+
+\begin{figure}[ht] 
+ \centering 
+ \includegraphics[width=0.8\textwidth]{figures/OPO} 
+ \caption[OPO table block diagram]{Block diagram of the main OPO components: The Matisse laser connected by a fiber optic, SHG and OPO cavities, and homodyne detector.  500 mW of 852 nm input into the doubler produces 160 mW of 426 nm light.  10 mW is used for the OPO lock beam, and 16 mW is sent into the local oscillator.}
+ \label{fig:opo_table} 
+\end{figure}
+
+\subsubsection{Cavity Generalities}
+\label{cavity_generalities} 
+
+The two optical cavities have many characteristics in common.  Both contain a PPKTP nonlinear crystal, both use a bow-tie design, and both use electronic feedback systems to lock them at resonance.  Each cavity is mounted on a brass breadboard which provides it with additional stability, and is housed inside of a plexiglass case which protects it from dust and air fluctuations.
+
+We have selected the bow-tie design for these cavities for several practical reasons.  We first preferred a ring cavity to a linear one, as the ring cavity would prevent the buildup of standing waves and thus allow us to avoid problems arising from interference effects \cite{courtillot2003premiere}.  As the large angles in a ring cavity typically introduce astigmatism into its beam, we chose a bow-tie design which would allow us to minimize the angles of reflection \cite{LamPhD}.  We also selected smaller mirrors of 1/2'' diameter, which allowed us to further reduce the angles.
+
+The mirrors chosen were purchased from VLOC, and were selected to have a high transparency for the blue second-harmonic light, which was at $\lambda = 426$ nm.  Excluding the cavity couplers, the mirrors have high reflectivities for the red light at $\lambda = 852$ nm.  Experimental measurements have shown us that they offer a reflectivity of $R \approx 7\%$ for the blue light, and $R>99.98\% \pm 0.01\%$ for the red light.
+
+
+\section{Nonlinear Crystal} 
+\label{nonlinear_crystal} 
+
+We decided to use Periodically-Poled Potassium Titanyl Phosphate (PPKTP) as the nonlinear crystal inside our cavities.  These were purchased from Raicol Crystals in Israel with dimensions of 1 mm x 2 mm x 20 mm, and were coated with an anti-reflection treatment of R < 0.2\% for light at 852 nm and 426 nm.  
+
+\subsection{Selection Characteristics} 
+Historically, many types of crystals have been used for second-harmonic
+generation and squeezed light production.  The most important criterion in
+selecting a crystal for nonlinear effects is assuring that the phase-matching
+condition can be satisfied for the experimental application.  Our decision to
+select PPKTP as opposed to others was based on the following several factors, that suggested it would provide the most promising nonlinear response for our SHG and squeezed light production.
+
+\subsubsection{Quasi-Phase Matching} 
+\label{quasi_phase_matching} 
+
+In Section \ref{phase_matching}, we discussed how the phase-matching of the optical waves in a non-linear medium leads to a higher overall efficiency in our nonlinear processes. The phase-matching condition is difficult to satisfy in practice.  For waves propagating through a nonlinear crystal, there exists a finite \emph{coherence length} $L_c$ for the nonlinear interaction.  Beyond this length, the waves undergo a phase inversion and the overall efficiency of our process begins to decrease.  If we consider the case of second-harmonic generation, the pump wave produces the second-harmonic with increasing amplitude, supplying energy to the second-harmonic beam up until the coherence length.  After this point, the energy then begins to flow back from the second-harmonic into the pump, until the waves have undergone a $2\pi$ phase inversion and the process restarts
+
+\begin{equation}
+  \label{eq:coherence_length}
+  L_c = \frac{\pi}{\Delta k} .
+\end{equation}
+
+In order to prevent this effect from limiting our overall output efficiency, we can use the quasi-phase matching technique which will allow us to have an overall better phase-matching throughout the length of our material.  This technique involves reversing the sign of the $\chi^{(2)}$ nonlinearity after every multiple number of coherence lengths.  This will prevent the phase inversion from taking place, and will bring us closer to the ideal condition of a perfect phase-matching throughout the entire crystal length.  Figure \ref{fig:qpm} illustrates the effects of applying this technique to second-harmonic generation.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.47\textwidth]{figures/qpm} 
+ \caption[Quasi-phase matching in a nonlinear crystal]{Quasi-phase matching in a nonlinear crystal for second-harmonic generation.  a) Second-harmonic output with ideal phase matching.  b)  Output in the case of quasi-phase matching.  c) Output when the phase-matching periodically reverses.} 
+ \label{fig:qpm} 
+\end{figure}
+
+
+\subsubsection{Periodic-Poling}
+\label{periodic_poling} 
+
+In order to attain quasi-phase matching practically, the technique of
+periodic-poling is applied to the crystals.  This involves applying electrodes
+to the crystal at certain intervals to allow a strong electric field to reverse
+the ferroelectric domains.  We refer to these periods as the poling period.  We
+can determine the poling period needed for our crystal by first beginning with
+the Sellmeier equations to determine the refractive indices at our wavelengths.  We can use the expression given in \cite{Vanherzeele}
+
+
+\begin{equation}
+  \label{eq:sellemier}
+  n^2_z = A + \frac{B}{1-(\frac{C}{\lambda})^2 }  - D \lambda^2,
+\end{equation}
+
+\noindent
+where A=2.3136, B=1.00012, C=0.23831, and D= 0.01679.  Applying this expression to our wavelengths, we find the indices of refraction $n_{426 nm} = 1.9406$ and $n_{852 nm} = 1.8401$ for KTP.  We can then use the phase-matching condition to determine the coherence length over which we need to apply a poling in order to compensate for the phase mismatch 
+
+\begin{equation}
+  \label{eq:pp_mismatch}
+  \Delta k= k _{426} - 2k_{852} = \frac{2 \pi}{426 nm } (n_{426} - n_{852}) = \frac{2 \pi}{l_{poling}} .
+\end{equation}
+
+\noindent
+Carrying out this calculation indicates that we need a poling period of 4.2 $\mu m$ to compensate for the phase mismatch.  For our experiment, we used crystals with a poling period of 4.15 $\mu m$, where the discrepancy is likely due to our specific requests for a specific phase-matching temperature.
+
+\subsubsection{Phase-Matching Angle}
+\label{phase_matching_angle} 
+
+Another consideration needed to obtain optimal phase-matching is that the angle needed to satisfy the phase-matching condition can vary depending on the crystal.  Some crystals require a \emph{critical phase-matching}, which means that the beams are only phase-matched for a certain angle.  This would force us to have a precise angular control over the crystal and beam alignment.  A preferable situation is to use noncritical phase-matching with a crystal such as PPKTP, which removes this restriction.  
+
+
+
+\subsubsection{Nonlinear Coefficient}
+\label{nonlinear_coefficient} 
+
+PPKTP has one of the highest nonlinear coefficients available, which has been measured to be around $d_{33} = 14.9 pm/V$ \cite{arie1997}.  Due to this high nonlinearity, we can expect a more efficient usage of our pump beams, and thus a higher second-harmonic generation efficiency, and lower OPO threshold.
+
+
+\subsubsection{Phase-Matching Temperature}
+\label{phase_matching_temperature} 
+
+Efficient nonlinear interactions can only take place when we satisfy the phase-matching condition.  However, this condition is not satisfied for all wavelengths simultaneously, but only for a fixed wavelength at a given temperature.  We thus need to ensure that we can achieve phase-matching for 852 nm light at an experimentally accessible temperature.  Some crystals such as $\mathrm{KNbO}_3$ allow efficient phase-matching at colder temperatures, but this adds complexity to the experiment in that it requires a cryostat and can lead to condensation on the crystal surface, thus complicating the overall setup \cite{Biaggio92}.  PPKTP allows us to use temperatures closer to room temperature, we lets us more easily exert a fine control over the temperature regulation.
+
+\subsubsection{Damage Threshold}
+\label{damage_threshold} 
+
+When the crystal is used inside of a cavity to obtain second-harmonic generation, the large intracavity intensity buildup of our fundamental pump beam can surpass the damage thresholds of some crystals inducing optical degradation.  This degradation can then translate into optical losses, which lowers our overall conversion efficiency. The damage threshold for PPKTP was rated by the manufacturer at around 1.5-2 $MW/cm^2$, which is relatively high compared to most crystals.  This thus allows for higher pump powers, and as a result, a higher second-harmonic power output.
+
+
+\subsubsection{Blue Light Induced Losses}
+\label{blue_light_induced_losses} 
+
+Another harmful effect that an be potentially observed is Blue Light Induced InfraRed Absorption (BLIIRA) \cite{Mabuchi:94}.  This takes place in crystals such as $KbNO_3$ when the presence of a second-harmonic beam in the crystal causes it to increase its absorption of waves at the fundamental wavelength.  This effect can be translated into an optical loss for our fundamental, which has destructive effects when producing squeezed light in the OPO.  At the time of our crystal selection, no observations of BLIIRA had been reported during PPKTP usage.
+
+
+
+
+\subsection{Implementation Parameters} 
+
+For the particular crystals that we used in our experiment, they satisfied a Type I phase-matching condition.  In order to best adapt the crystals to our experiment and build a predictive model of their nonlinear behavior, we also needed to consider effects such as their optical losses, temperature control methods, and how we focused our beams inside of them.
+
+
+\subsubsection{Optical Losses}
+\label{optical_losses} 
+
+For our PPKTP crystals, we measured single pass absorption rate of around $2\% \pm 0.5\%$ for light at 852 nm.  These losses render this crystal less than ideal for producing squeezed states at 852 nm, but they are not so elevated as to prevent the OPO operation.  PPKTP is also known to have higher absorption for wavelengths below 500 nm due to its lower UV bandgap energy \cite{letargat2005}, and our crystals were subject to this effect, having absorption rates 10\%/cm for 426 nm light \cite{Hansson00}.  This has the effect of heating the crystal when we pump the OPO with high 426 nm pump powers.  As a result, our alignment and phase-matching conditions can change at intense pump powers due to thermal effects in the crystal.
+
+
+\subsubsection{Temperature Control}
+\label{temperature_control} 
+
+We sought to maintain a temperature stability of our crystal of 10 mK.  We thus inserted each crystal into copper a block which acted as an oven, and the contact points were covered in Arctic Silver thermal interface compound.  The oven itself was mounted on a peltier, and another thermal interface compound was applied to the interface between the peltier and the oven.  The temperatures were controlled to within 0.01\textdegree C using a homemade PID controller for the doubler, and an Innolight temperature controller for the OPO.  We were able to continuously monitor the temperatures by using a thermistance which was buried inside of the oven for each crystal. We noticed that fluctuating air currents changed the temperature greatly, so we enclosed the entire cavity inside a plexiglass box in order to have a more stable atmospheric environment.
+
+\subsubsection{Optimal Focusing}
+\label{optimal_focusing} 
+
+Another important factor to determine was how to optimally focus the light into the crystals to obtain the highest nonlinear efficiency \cite{BourzeixPhD}.  If we recall our expression for the nonlinear efficiency given by \req{eq:enl}, and assume the perfect phase-matching condition $\Delta k=0$, we can see that the efficiency is inversely proportional to the interaction area S of our beam.  This indicates to us that we should focus our beam as tightly as possible in order to obtain the highest interaction efficiency
+
+\begin{equation}
+  \label{eq:enl2}
+  E_{NL} = \frac{\omega^2_2 \chi^{(2)2}}{8 n_1^2 n_2 \epsilon_0 c^3} \frac{z^2}{S}  .
+\end{equation}
+
+If we consider the case of second-harmonic generation in a cavity, a tighter focus will deliver a much larger beam intensity to the crystal, likely surpassing its damage threshold and destroying it.  Thus, an extremely tight beam focus presents practical problems.  A loose focusing does not offer solutions either however, as it causes our nonlinear-efficiency to decrease.
+
+An additional factor arises due to the fact that when we derived our equations of motion for the nonlinear interaction, we made the simplification that our beams consisted of plane waves.  In practice, the beams circulating in the cavity and interacting with the crystal are highly focused gaussian modes, which changes our estimation for the nonlinear efficiency.
+
+As a result, we see that a more refined model is needed which offers an optimization between loose and tight focusing.  Boyd and Kleinman have shown a method for finding this optimal focus \cite{Boyd68}.  They suggest that when considering gaussian beams, we replace the factor $z^2/S$ in \req{eq:enl2} by the expression
+
+\begin{equation}
+  \label{eq:bk_replace}
+  \frac{k l}{\pi} h_m(B, \xi), 
+\end{equation}
+
+\noindent 
+where $l$ is the length of our crystal, B represents a function linked to double refraction, and $h_m$ is a function that depends on the phase-matching, beam waist position, and focusing strength $\xi$.  The authors have numerically determined that $h_m$ reaches a maximum of $h_m = 1.068$ when the focusing parameter is optimized at $\xi_{opt} = 2.84$.  The focusing parameter is defined as $\xi \equiv \frac{l}{b} $, where b is the confocal parameter of our beam, such that $b = \frac{2 \pi \omega_0 ^2 }{ \lambda}$.  If we set the crystal length as our interaction length $l$, this definition provides us with a recipe for finding the optimal waist size for focusing
+
+\begin{equation}
+  \label{eq:bk_opt_waist}
+  \omega_{opt} = \sqrt{\frac{l \lambda}{2 n \pi \xi_{opt}}} .
+\end{equation}
+
+\noindent
+When we substitute into \req{eq:bk_opt_waist} the particular values for our crystal, n = 1.84, $\lambda = 852 nm$, and $l=20 mm$, we find that our optimal waist size according to Boyd and Kleinman is 
+
+\begin{equation}
+  \label{eq:w_opt_ppktp}
+  w_{opt} = 22.7 \mu m.
+\end{equation}
+
+\section{Doubling Cavity}
+\label{doubling_cavity} 
+
+The Boyd and Kleinman optimum that we have just derived fixes an optimum focusing size for both the doubling cavity, and the OPO.  However, due to the different functioning modes of the two cavities, we cannot simply use the result as it is.  We first tried to operate the doubler with a tightly focused beam, however we noticed that it was subject to thermal lensing effects and bistability effects.  These effects not only subtly altered our intended efficiency, but also weakened the cavity lock stability, which further lowered the overall conversion efficiency.  We thus found it necessary to adjust the cavity geometry by optimizing the conversion inefficiency directly.  The best configuration that we found produced a waist in the crystal of $w_0 = 60 \mu m$
+
+
+\begin{figure}[ht] 
+ \centering 
+ \includegraphics[width=0.85\textwidth]{figures/doubler_cavity_exp} 
+ \caption[Doubling cavity geometry]{Geometry of our bow-tie doubling cavity
+used for second-harmonic generation.  A waist of $w_0 = 60 \mu m$ is produced
+in the center of a $l=20 mm$ PPKTP crystal by using mirrors with a radius of curvature of R = 150 mm.  A T=12\% plane mirror serves as the input coupler.} 
+ \label{fig:doubling_cavity} 
+\end{figure}
+
+The doubling cavity has the bow-tie design as shown in Figure
+\ref{fig:doubling_cavity}, with angles of reflection of $3^\circ$ and a total length of $l = 790 mm$, corresponding to a free spectral range of 380 MHz.  The two curved mirrors each have a radius of curvature of R = 150 mm, with the PPKTP crystals mounted between them.  The bow-tie geometry produces two optical waists in the cavity, and thus the second one had a size of $w_1=245 \mu m$.  We decided to use an input coupler of 12\% in order to optimize second-harmonic output, according to the following expression, where L = 0.02, and we have a measured nonlinear efficiency of $E_{NL} = 0.02$, and $P_1 = 0.6$  \cite{letargat2005}
+
+\begin{equation}
+  \label{eq:input_coupler}
+  T_{opt} = \frac{L}{2} + \sqrt{\left( \frac{L}{2} \right)^2 + E_{NL}P_1 }.
+\end{equation}
+
+\subsection{Intracavity Losses} 
+\label{intracavity_losses} 
+We took several measures of the cavity finesse by measuring the ratio between
+the free spectral range (FSR) and the $TEM_{00}$ mode peak width (FWHM) when scanning the cavity
+
+\begin{equation}
+  \label{eq:finesse}
+  \mathcal{F} = \frac{FSR}{FWHM} .
+\end{equation}
+
+\noindent
+With this method, we obtained a finesse of $\mathcal{F} = 46 \pm 2$, which corresponds to $14\% + 1\%$ cavity losses.  This confirms our single pass measurements of the crystal's 2\% absorption rate, given our cavity's T=12\% input coupler.
+
+
+
+
+\subsection{Tilt Locking} 
+\label{tilt_locking} 
+
+In many optics experiments, cavity locking systems are employed which keep the cavity length stable so that it remains fixed at resonance.  These generally work by optically measuring the difference between the carrier frequency of beam and the frequency of the cavity mode, and creating an error signal from this difference.  This signal is then sent into a feedback controller which adjusts the cavity length by displacing a cavity mirror loaded onto a piezo.  For our doubler cavity, we use the Tilt Locking system \cite{Shaddock:99}, \cite{shaddock2001} in order to create our error signal.
+
+\begin{figure}[!htb] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/tilt_photo} 
+ \caption[Tilt locking schematic]{Tilt locking: a) The interference between
+the $TEM_{00}$ and $TEM_{01}$ modes results in different intensities on the photodiode surface.   b)  The interference is detected on a split photodetector, whose sections we subtract to obtain the error signal.}
+ \label{fig:tilt_ill} 
+\end{figure}
+
+Tilt locking works by using spatial-mode interference to measure the length
+changes of the cavity.  This works by injecting a $TEM_{00}$ mode beam into
+the cavity, and then slightly disaligning it so that the input beam excites a
+$TEM_{01}$ mode.  Part of the reflected beam is then sent to a photodiode
+which is split into two sections, which we then subtract to obtain the
+difference photocurrent.  Each section receives half of the $TEM_{00}$ mode,
+and one of the lobes for the $TEM_{01}$ mode as shown in Figure
+\ref{fig:tilt_ill}.  The electric field of the $TEM_{00}$ mode has a constant
+phase $\phi(\omega )$ across the detector surface and serves as a phase
+reference, whereas the lobes of the $TEM_{01}$ mode have a phase difference of $\pi$ across the detector surface.  
+
+
+
+This setup can create an error signal by using changes in the cavity length to detect relative phase shifts between the modes.  When the cavity is at resonance, the two modes have zero relative phase shift, and when they interfere, the photodetector surface detects equal intensity on each of the two sections.  When we then subtract the two photocurrents from these sections, we obtain a zero-valued DC error signal.  When the cavity mirrors are displaced from resonance, this induces a relative phase shift between the two modes, and the interference no longer produces equal intensity on both detector sections.  This can thus create a positive or negative DC error signal depending on the mirror displacement direction.  Tilt locking has a bandwidth coverage similar to the commonly used Pound-Drever-Hall scheme, and thus yields similar locking performance \cite{Shaddock:99}.
+
+\begin{figure}[!ht] 
+ \centering    
+ \includegraphics[width=0.5\textwidth]{figures/tilt}   
+ \caption[Experimental tilt locking error signal]{a) $TEM_{00}$ and $TEM_{01}$
+peaks from a cavity scan that are used to create the error signal.  The
+$TEM_{01}$ peak has about 7\% of the amplitude of the $TEM_{00}$ peak.  b)  Experimental error signal generated with the tilt locking method, used to lock the doubling cavity.} 
+ \label{fig:tilt_peaks_and_error} 
+\end{figure}
+
+
+For our implementation of this scheme, we purchased Advanced Photonix (SD 197-23-21-041) photodiodes from digikey.com.  We selected this model for several of its technical characteristics which we found to be important when implementing a tilt lock.  The photodiode has a 4.98 $mm^2$ area, which means that it will have a higher precision when detecting the displacement of a smaller sized 200 $\mu m$ beam.  The gap between the two sections of the photodiode acts as a blind spot which cannot measure the beam, thus its preferable that it be as small as possible.  For these photodiodes, the gap is only 30 $\mu m$ in width.  It also has very low noise characteristics which improves the signal-to-noise ratio of our detection.  Finally, it has a 75MHz bandwidth, which would allow us to more easily maintain a high detection bandwidth when amplifying our signal with a strong gain.  We developed a photodiode amplifier to use with this detector, whose circuit is shown in Appendix \ref{appendix:electronics_diagrams}, \rif{fig:eds_tilt_photo}.
+
+For the beam itself, we then attenuated power from the reflected beam to about
+1 mW, sent it onto the photodiode, and disaligned our beam such that the
+$TEM_{01}$ mode contained 7\% of the intensity of the $TEM_{00}$ mode when viewing the scanned cavity in an oscilloscope.  This setup allowed us to obtain the error signal shown in Figure \ref{fig:tilt_peaks_and_error} for the cavity.
+
+We then sent the error signal to a homemade proportional-integrating controller  whose circuit is shown in Appendix \ref{appendix:electronics_diagrams}, \rif{fig:eds_tilt_control}, which controlled the piezo and closed the feedback loop.  When there were no external disturbances in the room, we managed to obtain stable cavity locks with this setup which easily kept the cavity output at its peak for several hours.
+
+
+
+
+\subsection{Second-Harmonic Generation Results} 
+\label{second_harmonic_generation_results} 
+
+
+
+\subsubsection{Nonlinear Efficiency}
+\label{4:nonlinear_efficiency} 
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/enl_doubler} 
+ \caption[Nonlinear efficiency measurement]{Nonlinear efficiency of 1.76\%/W
+ derived from linear fit of  $P_2$ vs $P_1^2$ using \req{eq:nonlinear_eff}.  We
+ estimate a systematic error of 10 mW on the output power measurement due to the
+ precision of the power meter. } 
+ \label{fig:enl_doubler} 
+\end{figure}
+
+With the cavity parameters and locking mechanism selected, we next sought to test the nonlinear aspects of the doubling cavity.  The first useful measurement to obtain was a measurement for the nonlinear efficiency.  This would allow us to obtain a quantitative estimation of how well the beam was focused onto the crystal.  In order to carry out this measurement, we removed the input coupler from the cavity which allowed us to send in much larger light intensities.  We then sent infrared light into the mounted crystal in a single passage so that the light would maintain the same cavity mode focalization as it would have during its normal functioning.  We then measured the blue power output as a function of the square of the red power input, which allowed us to trace a line shown in \rif{fig:enl_doubler} whose slope provided us with the nonlinear efficiency value, according to \req{eq:nonlinear_eff}.  This resulted in a measured value of \cite{villa2007} 
+
+\begin{equation}
+  \label{eq:non_lin_meas}
+  E_{NL} = 1.76 \%/W \pm 0.02 \%/W.
+\end{equation}
+
+
+
+\subsubsection{Phase-Matching Temperature}
+\label{doubler_phase_matching_temperature} 
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.5\textwidth]{figures/doubler_shg} 
+ \caption[SHG output vs. temperature]{Second-harmonic power output vs. crystal temperature shows a phase matching temperature around 48.3\textdegree C, with a 1.5\textdegree C range.} 
+ \label{fig:doubler_shg} 
+\end{figure}
+
+ 
+The next step necessary in order to optimize the doubler output was to find the optimal phase-matching temperature.  The phase matching condition for our crystal only holds for 852 nm within a certain temperature range,  thus it was necessary to measure this range experimentally in order to set the temperature for optimum second-harmonic generation.  In order to measure this range, we sent 600 mW of infrared light into the cavity, and measured the blue light power generated while adjusting the temperature at 0.1\textdegree C intervals.  This measurement given in Figure \ref{fig:doubler_shg} shows us that the phase matching follows the expected $sinc^2$ shape.  As a result, we learned that the optimal phase matching temperature was around 48.3\textdegree C, with a 1.5\textdegree C FWHM temperature range.  
+
+       
+
+\subsubsection{SHG Efficiency}
+\label{shg_efficiency} 
+
+In order to estimate the second-harmonic output that should be produced by the
+doubler, we used the expressions developed in Section
+\ref{cavity_enhanced_shg}.
+
+If we first assume an input power of 600 mW and an $E_{NL}$ of 2\%/W and
+intracavity losses of 2\%, plotting \req{eq:sorenson} yields us the curve shown
+in Figure \ref{fig:shg_vs_pt1}.  We see that the SHG output efficiency levels
+out at coupler transmissions of around 10-13\% before starting to decrease.  Therefore, we can use a 12\% coupler to obtain efficient performance.  Next we can use the same expression to plot a theoretical curve of the SHG output for this coupler, as a function of the input pump power.  This gives us the results shown in Figure \ref{fig:shg_vs_pp1}.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][SHG power output vs. input coupler transmission with a fixed 600
+mW input pump power.]{
+    \label{fig:shg_vs_pt1}
+    \includegraphics[width=0.5\textwidth]{figures/shg_vs_t1} }
+  \subfloat[][SHG power output vs. input pump power using a fixed input coupler of 12\% transmission.]{
+    \label{fig:shg_vs_pp1}
+    \includegraphics[width=0.5\textwidth]{figures/shg_vs_tp1} } \\
+  % \vspace{-10pt}
+  \caption[SHG output efficiency vs input coupler and pump power]{Using
+\req{eq:sorenson} to predict the SHG output based on the input coupler and pump
+power.} 
+  \label{fig:sorenson}
+\end{figure}
+
+With the proper phase-matching temperature having been determined, we were able
+to obtain a maximum production of 330 mW of 426nm light with an input of 600 mW
+of 852nm light, for an overall efficiency of $\eta = 55\%$ \cite{villa2007}. We
+were also able to properly measure the SHG curve as a function of input power.     
+
+As we can see in Figure \ref{fig:doubler_p2_vs_p1}, the experimental results of the doubler follow the theoretical curve up until a certain power, at which point the power output begins to slowly diverge.  It is suspected that this divergence comes from birefringence effects at high pump powers preventing us from locking the cavity at its peak output.  While we were able to obtain a relatively high power output, it was necessary to translate the crystal after a certain time because the output power rapidly deteriorated.  This could be due to heating effects inside of the crystal, optical degradation such as gray-tracking \cite{Boulanger00}, or more likely, optical damage on the crystal which degraded its surface quality.
+
+\begin{figure}[ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/shg_vs_p1_exp} 
+ \caption[SHG output vs. fundamental input]{426 nm output power measured from the doubler vs input at 852 nm, compared with theoretical prediction given by\req{eq:sorenson}.  Divergence from theory at 250 mW is likely due to thermal effects in the crystal.} 
+ \label{fig:doubler_p2_vs_p1} 
+\end{figure}
+
+
+\section{OPO Cavity}
+\label{opo_cavity} 
+
+We can now begin to focus on the OPO, our primary instrument for squeezed light generation.  The OPO cavity has a similar bow-tie design to the doubler, with a PPKTP crystal mounted between the two curved mirrors.  Unlike the doubler, the OPO normally functions in a mode where we inject a vacuum state into the cavity, thus we don't have the same buildup of high intracavity power.  As a result, we are not at risk from suffering from the effects of heating the crystal such as thermal lensing, or changes in the crystal size due to thermal effects.  This allows us to use a slightly more tightly focused waist in the crystal of $w_o = 45 \mu m$, while the cavity's second waist is at $w_1 = 200 \mu m$.  The curved mirrors have a radius of curvature of R = 100 mm, and the cavity has a total length of $l = 550 mm$.  We use a slightly larger angle of reflection, of $\theta=9.9^\circ$, and have selected an output coupler with a transmission of $T=7\%$.  The cavity has a bandwidth of around 10 MHz.  Figure \ref{fig:opo_cavity} shows a schematic of the cavity layout.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.85\textwidth]{figures/opo_cavity_exp} 
+ \caption[OPO cavity geometry]{OPO cavity geometry, with lock beam propagating opposite to the squeezed light.  Mirrors of radius of curvature R = 100mm create a $w_0 = 45 \mu m$ waist at the center of the $l = 20mm$ PPKTP crystal.  The squeezing exits through a T=7\% output coupler.} 
+ \label{fig:opo_cavity} 
+\end{figure} 
+
+As optical losses play a more critical role in squeezed light generation, we measured the finesse of our OPO using the same method as for the doubler.  This measurement gave us a finesse value of $\mathcal{F} = 60 \pm 4$, which corresponds to $10\% \pm 1\%$ losses.  As we use a 7\% output coupler, this again confirms our previously measured crystal absorption rate of around 2\%.  We similarly measured the nonlinear efficiency in the OPO and found a value around 2.6 \%/W, which is similar to our measurement in the doubler's crystal. The slight variation is likely due to factors such as variations in the crystal sample, focusing, and surface deterioration.  
+
+
+
+\subsection{Cavity Locking} 
+\label{cavity_locking} 
+For locking the OPO, we needed a robust method which would require little daily maintenance.  We furthermore wanted to allow a wide locking bandwidth in order to rapidly correct the cavity fluctuations and produce stable squeezing.  
+
+We locked the cavity by sending a lock beam through a high-reflectivity mirror, in a direction counter-propagating with respect to the squeezing.  Since the mirror was highly reflective, trying to detect the reflected light would not allow us to observe any absorption peaks, as only 0.01\% of the light would be transmitted into the cavity.  We thus carried out all of our detection of the lock beam with the light transmitted through the cavity and exiting from the output coupler.
+
+
+\subsubsection{Tilt Locking Attempts}
+\label{tilt_locking_attempts} 
+
+Due to our previous success in using tilt locking for the doubler, we
+initially tried to use it on the OPO as well.  The implementation of this
+method posed several technical problems that made using it impossible.  Tilt
+locking provides us with a method for measuring beam displacement by measuring
+intensity fluctuations on the photodetector.  However with the OPO, we noticed
+that our tilt-locking photodiode detected much larger intensity fluctuations
+than when it was used with the doubler cavity.  This is likely due to the fact
+that the light used to lock the OPO traveled a much lager distance before
+reaching the photodetector than the light used to lock the doubler.  As a
+result, the locking for the OPO was rendered much more sensitive to any
+sources of displacement of our lock beam.  These detection sensitivities
+included mechanical vibrations of the cavity, optical misalignments, as well
+as the effects of electronically controlling the cavity piezo.  Another issue
+was that due to the high reflectivities involved, we had difficulties
+detecting both $TEM_{00}$ and $TEM_{01}$ modes on our photodiode.  We thus measured very weak interference levels, which weakened the signal-to-noise ratio of our error signal.  Furthermore, we wanted to use the weakest beam possible for the lock beam, as this beam would still have 0.2\% of its power reflected from the crystal surface.  This reflected portion would then circulate in our cavity in the same direction as the squeezed light, and act as an injected signal to our crystal.  As a result, we would no longer have a squeezed vacuum state at the output.
+
+Thus we needed to balance between low reflection levels from the lock beam, and a beam with a high enough intensity to yield a strong enough detection signal to provide a stable lock.  While we sent a beam of around 1 mW to the photodiode for the doubler, the OPO only left us with a beam of a few $\mu W$ of power incident on our photodiode.  We additional found that this power was too weak to provide us with a usable signal.  Efforts to amplify this signal did not improve our signal-to-noise ratio.  Given all of these difficulties, we abandoned the tilt locking approach, and implemented a Pound-Drever-Hall (PDH) system.
+
+\subsubsection{Pound-Drever-Hall Locking}
+\label{pound_drever_hall_locking} 
+
+
+PDH is a more complicated scheme to implement than tilt locking due to the electronic requirements.  However once its installed and working, it requires no adjustment on a daily basis, or special alignment of the beams.  Due to its large modulation frequencies, it is also a high-bandwidth locking method.  This method works by first taking our optical beam which we can express in the form $E=E_0 e^{i \omega t}$, and adding a phase modulation to it so that it transforms into 
+
+\begin{equation}
+  \label{eq:pdh_modulated}
+  E=E_0 e^{i (\omega t + \beta sin \Omega t)} ,
+\end{equation}
+
+\noindent
+where $\omega$  is the carrier frequency, $\beta$ is the modulation depth, and $\Omega $ is the modulation frequency.  This transformed beam thus contains two frequency components at $ \omega \pm \Omega $.  We then inject this beam into our cavity and measure the reflected beam, which has a reflection coefficient of $F(\omega )$, where $E_{ref} = F(\omega )E_{inc}$.  We can then express the reflected modulation beam as \cite{black4notes}
+
+\begin{equation}
+  \label{eq:pdh_ref_mod}
+  E_{ref} = E_0 [ F(\omega ) J_0(\beta) e^{i \omega t} + F(\omega + \Omega
+)J_1(\beta) e^{i (\omega + \Omega ) t} - F(\omega - \Omega ) J_1(\beta)
+e^{i(\omega - \Omega )t} ]  ,
+\end{equation}
+
+\noindent
+where the $J_i(\beta)$ are the Bessel functions.  As the reflection
+coefficient depends on the cavity resonance, it vanishes when the cavity is at
+resonance.  We can use this fact to create an error signal by detecting the
+reflected light with a photodiode, and mixing its photocurrent with our
+reference modulation frequency $\Omega $.  We then pass this through a
+low-pass filter which produces a DC output signal $\epsilon$ given by
+\req{eq:pdh_slow_modulation}, that represents the derivative of our light
+intensity with respect to frequency.  We can use this output directly as an
+error signal to control our feedback loop, which is given by \cite{black79}
+
+\begin{equation}
+  \label{eq:pdh_slow_modulation}
+  \epsilon = P_0 \d{\abs{F}^2}{\omega } \Omega \beta .
+\end{equation}
+
+\subsubsection{Electronic Implementation}
+\label{electronic_implementation} 
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.65\textwidth]{figures/pdh_block} 
+ \caption[Pound-Drever-Hall block diagram]{Electronic block diagram for our PHD setup. A VCO sends a 20 MHz RF signal to an EOM who phase modulates our lock beam.  A photodiode detects the modulation sidebands, and its amplified output is demodulated and low-pass filtered to create an error signal.} 
+ \label{fig:pdh_block} 
+\end{figure}
+
+In order to implement this for our OPO, we added phase modulations to our lock
+beam using a NewFocus 4001 resonant electro-optical modulator (EOM) which was
+modulated by a 20 MHz RF signal sent from a homemade VCO.  We then sent 10 mW of
+this modulated light into the cavity and detected the transmitted beam with a
+high-frequency photodetector whose circuit is shown in Appendix
+\ref{appendix:electronics_diagrams}, \rif{fig:eds_pdh_photo}.  For this
+photodiode, we used an infrared LED as the photodetecting element.  We then sent
+the photodiode high-frequency output into a homemade amplifier/mixer/filter
+circuit, which used components from Minicircuits, which pre-amplified the signal
+by 15 dB, and then demodulated and filtered it with a 5 MHz low pass filter.
+This allowed us to produce our error signal, which you can see in Figure
+\ref{fig:pdh_error}.  We then passed this signal to a simple integrating circuit
+whose circuit is shown in Appendix \ref{appendix:electronics_diagrams},
+\rif{fig:eds_pdh_control}, and then to a high voltage amplifier which actuated
+the cavity piezo.  This locking scheme allowed us to successfully lock the OPO
+for an entire day, and obtain stable measurements of squeezing.
+
+
+\begin{figure}[ht] 
+ \centering 
+ \includegraphics[width=0.4\textwidth]{figures/pdh} 
+ \caption[Experimental Pound-Drever-Hall error signal]{Error signal obtained with the PDH method overlaid onto the cavity peak.  We see that the value of the error voltage is zero at the cavity resonance.} 
+ \label{fig:pdh_error} 
+\end{figure} 
+
+
+\subsection{Pump Matching} 
+\label{pump_matching} 
+
+For the observation parametric down-conversion, we used the second-harmonic beam created by the doubler to act as an optical pump for the OPO.  For the OPO to function correctly, we needed to ensure that this pump beam was properly mode-matched to the cavity mode for the OPO.  Because the OPO is not resonant for the pump however, we did not have the visual feedback that we typically have with cavities in order to tell us if it is properly aligned.  The only indication we do have in this situation, is if the OPO threshold is at the power level that we expect.  
+
+We initially tried to implement a scheme where we set up an interferometer in between the doubler and OPO.  The idea was that we could temporarily operate the OPO as a doubler, and by superposing the blue light from the doubler and the OPO and applying a relative phase shift, we would be able to easily detect interference fringes, and adjust the matching and alignment as needed.  We ran into difficulties properly matching the two cavities given our table space, and were forced to abandon the idea.  In the end, we followed a simplified scheme where we temporarily replaced the OPO mirrors with blue-light reflecting mirrors so we could render the OPO resonant for the pump.  This allowed us to have the necessary visual feedback about the matching quality, and easily match the beam to the cavity as we typically do with any other cavity.  Once we determined the proper matching configuration, we fixed the mode-matching optics, and replaced the red-reflecting OPO mirrors.
+
+\subsection{Classical Observations} 
+\label{classical observations} 
+
+
+%% Gain tweaking with mirrors  uselessness of pg
+%% No Bliira
+
+
+\subsubsection{OPO Threshold} 
+\label{opo_threshold} 
+
+We have seen in Section \ref{below_threshold_parametric_gain} that the gain diverges and the squeezing approaches its maximum value as the pump power approaches the threshold.  Thus we need to assure that our doubler would produce sufficient amounts of light to surpass this threshold without problem.  This ability is also useful for verifying the pump alignment as described in the previous section.
+
+Although the doubler was able to produce over 300 mW of blue light, we noticed that this performance was only short lived, and we had rapid degradation of the pump power.  Typical pump powers ranged to around 160 mW, with 500 mW input into the doubler.  Thus in order to assure an easily obtainable threshold level, the threshold had to rest below this value.
+
+As the threshold power depends on the OPO output coupler transmissivity, we tested several different output couplers in order to find one which would give us the optimal balance between a low threshold, and high squeezing.  In Table \ref{opo_thresholds}, we list the thresholds measured for each output coupler.  We see that our measured values are within 10\% of our theoretical threshold powers calculated using \req{eq:threshold_enl}
+
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|l|c | c | c | c | c | c |}
+    \hline
+    Output Coupler  & 1\%  & 2.5\% & 5\% & 7\% & 10\% & 12\%\\
+    \hline
+    Measured $P_{th}$ & 14 mW & 33 mW & 45 mW & 90 mW & 125 mW  & >160 mW\\
+    \hline
+    Theoretical $P_{th}$ & 9 mW & 20 mW & 47 mW & 78 mW & 140 mW  & 188 mW\\
+    \hline
+  \end{tabular}
+\caption{Output couplers and threshold pump powers tested for the OPO.  Uncertainty of $\pm$ 3 mW on measured threshold values.}
+\label{opo_thresholds}
+\end{table}
+
+
+Although the 10\% coupler provides us with a threshold value less than our maximum pump power, we found it difficult to observe the threshold when the pump beam became slightly disaligned.  Additionally, the 10\% coupler did not greatly change the amount of squeezing we measured from the OPO.  This could be due to heating effects at high pump powers, which were exacerbated by the crystal's high absorption rate of 426 nm light.  Thus we rested with the 7\% coupler.
+
+\subsubsection{Type I OPO Degeneracy}
+ 
+As stated earlier, the PPKTP crystal in our OPO uses a Type I phase matching.
+OPOs that contain a Type I crystal have a characteristic tuning curve such as that shown in Figure \ref{fig:type1_deg}, which shows their above threshold behavior.  There exists a certain degeneracy temperature for the crystal, $T_{deg}$, such that if we pump the OPO above its threshold power while the crystal is below this temperature, the OPO will not produce any output as the phase-matching condition will not be satisfied \cite{Eckardt:91}, \cite{LamPhD}.  We begin to satisfy the phase-matching condition by increasing the temperature to $T_{deg}$, at which point the OPO will output signal and idler beams which both have the same frequency and polarization.  If we further increase the temperature beyond this point, the signal and idler beams will lose their degeneracy, and begin to take on frequencies such that $\omega_{signal} + \omega_{idler} = \omega _{pump}$.
+
+\begin{figure}[!htb] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/type1_phase} 
+ \caption[Type I crystal degeneracy]{Characteristic oscillation curve for Type I crystals.  No photons are emitted above threshold below a certain degeneracy temperature.  Above this temperature, signal and idler photons of different wavelengths are emitted.} 
+ \label{fig:type1_deg} 
+\end{figure}
+
+\subsubsection{OPO Above Threshold} 
+\label{opo_above_threshold} 
+
+As we require that our squeezed light be at the degeneracy frequency in order to have both signal and idler beams be resonant with the Cesium $D_2$ line,  we can use the above threshold behavior as means of calibrating the OPO.  The phase-matching condition holds for a relatively wide temperature range for our system.  Once the OPO oscillation began, we noticed that there was a 2\textdegree C temperature window where we could observe the above-threshold photon emissions.  In Figure \ref{fig:opo_above_threshold}, we can see that the above-threshold photon pairs produced gives the emission a parabolic shape, as the non-degeneracy of our output produces a spread of photon frequencies.
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[OPO oscillating far from degeneracy. Signal and idler photon pairs $\omega_s$ and $\omega_i$ are emitted at random frequencies which conserve the energy relation $\omega_p = \omega_s+ \omega_i$.]{\label{fig:opo_above_threshold}\includegraphics[width=0.52\textwidth]{figures/opo_oscillation} }
+  \subfloat[We seek the degeneracy condition by lowering the crystal temperature to the point where the above threshold photon emission stops.  This is represented by a finer frequential spread in the emitted photon pairs as illustrated in Figure \ref{fig:type1_deg}.]{\label{fig:opo_degenerate}\includegraphics[width=0.52\textwidth]{figures/opo_degenerate} }
+  \caption[OPO above-threshold operation]{Above threshold operation of an OPO
+  with a 90 mW threshold pumped at 130 mW with 426 nm light, and no injected
+  seed beam.  Light emission is measured on an oscilloscope while the cavity
+  length is swept through resonance.  The OPO cavity has a 550 mm length and a
+  10 MHz bandwidth. }  
+  \label{fig:opo_above_threshold_modes}
+\end{figure}
+
+
+Adjusting the phase-matching temperature allows us to adjust the frequency difference between the emitted signal and idler photons.  By placing ourselves at the degeneracy temperature just before we lose our above threshold output, we can approach the degeneracy condition for the OPO and obtain frequency-degenerate signal and idler beam outputs.  This resembles the trace shown in Figure \ref{fig:opo_degenerate}.
+  
+
+\subsubsection{OPO Injected Below Threshold} 
+\label{opo_injected_below_threshold} 
+
+We have also seen how the OPO operating below threshold leads to the phase sensitive amplification and deamplification of out input field.  We can observe this effect by studying the parametric gain of our system.   In order to measure the gain, we installed a piezo on a mirror on the pump beam's optical path, which allowed us to change the relative phase between the pump, and the injected seed beam.  When we set our input pump to 90\% of the threshold, the deamplification of the seed approached 50\%, while the amplification approached a maximum of 10x.
+
+
+\begin{figure}[ht] 
+ \centering  
+ \includegraphics[width=0.55\textwidth]{figures/parametric_gain_comp} 
+ \caption[Below-threshold parametric gain]{Parametric gain of the OPO with a relative phase sweep between the pump and injected beam.  OPO output shown with and without pump at 50\% of threshold} 
+ \label{fig:parametric_gain_comp} 
+\end{figure}
+
+
+In the next chapter, we will show how the operation of the OPO in this below-threshold configuration allowed us to produce squeezed states.

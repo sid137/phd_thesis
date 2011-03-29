@@ -1,0 +1,209 @@
+\documentclass[a4paper,epsfig,12pt,twoside,openright]{brahim}
+\usepackage{ae,aeguill,aecompl}
+\usepackage{lettrine}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage[mathscr]{eucal}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage[dvipdfm]{epsfig}
+\usepackage{boxedminipage}
+\usepackage[margin=10pt, font=small]{caption}
+\usepackage{minitoc}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+%\usepackage[T1]{fontenc} 
+\usepackage{verbatim}
+\usepackage{subfig}
+\usepackage{lscape}
+\usepackage{listings}
+\usepackage{algorithmic}
+\usepackage{rotating}
+\usepackage{indentfirst}
+\usepackage{breakcites}
+\usepackage{pdfpages}
+%% \usepackage{showframe}
+\usepackage{bookmark}
+ %% \usepackage[pdfpagelabels,colorlinks, dvipdfm,ps2pdf,dvips,hypertex,pagebackref]{hyperref}
+\def\backref{Cited p. }
+\hypersetup{
+  colorlinks={true}, 
+  citecolor={blue}, 
+  menucolor={blue}, 
+  filecolor={blue}, 
+  anchorcolor={blue}, 
+  linkcolor={blue}, 
+  plainpages=false,
+  urlcolor={blue},
+  pdftitle={Towards A Quantum Memory For Non-Classical Light With Cold Atomic Ensembles},
+  pdfauthor={Sidney Burks},
+  pdfsubject={Doctoral thesis for Sidney Burks.  Creation of a quantum memory or squeezed light using a cold ensemble of Cesium atoms.},
+  pdfstartview={FitB},
+  bookmarksnumbered=true,
+  pdfpagemode=UseOutlines,
+  pdfstartpage=1,
+  pdfpagelabels=true,
+  pdfkeywords={quantum optics, quantum memory, squeezed light, fpga physics, opo, nonlinear optics, fpga, physics, cesium, atoms, MOT, phd thesis}
+%  bookmarksopen=true
+} 
+
+%% hyperref Hack according to
+% http://codeinthehole.com/tutorials/thesisfile/index.html  
+%% \makeatletter
+%% \newcommand\org@hypertarget{}
+%% \let\org@hypertarget\hypertarget
+%% \renewcommand\hypertarget[2]{%
+%% \Hy@raisedlink{\org@hypertarget{#1}{}}#2%
+%% } \makeatother 
+
+% Jolis titres de chapitres (va avec titlesec)
+\titleformat{\chapter}[display]
+{\normalfont\Large\filcenter\sffamily}
+{%\titlerule[1pt]%
+  \vspace{1pt}%
+  %\titlerule
+  \vspace{1pc}%
+  \raggedleft\LARGE\MakeUppercase{\chaptername} \thechapter}
+{1pc} {\titlerule
+   \vspace{1pc}%
+  \Huge}[{\vspace{1pc}\titlerule}]
+
+
+
+% Quelques réglages de tailles
+\renewcommand\baselinestretch{1}
+\setlength{\textwidth}{155mm} \setlength{\oddsidemargin}{5mm}
+\setlength{\textheight}{208mm}
+\setlength{\evensidemargin}{0mm}
+\def\echcorel{0.85}
+\def\echcorelbis{0.35}
+\def\echxls{0.36}
+\def\echrep{1}
+\jot = 5pt
+
+
+
+\setcounter{secnumdepth}{3} % Donne le nombre de (sous-)sections qu'on peut numéroter
+\setcounter{minitocdepth}{2} % Donne le nombre de (sous-)sections qui apparaissent dans la minitoc
+\setcounter{tocdepth}{3} % Donne le nombre de (sous-)sections qui apparaissent dans la toc
+%\renewcommand\thesection{\Alph{section}} % Met une lettre pour la section et non un chiffre
+
+ 
+\include{commands}
+
+\makeatletter
+\renewcommand\paragraph{%
+   \@startsection{paragraph}{4}{0mm}%
+      {-\baselineskip}%
+      {.5\baselineskip}%
+      {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\makeatletter
+\renewcommand\subparagraph{%
+   \@startsection{subparagraph}{4}{0mm}%
+      {-\baselineskip}%
+      {.5\baselineskip}%
+      {\normalfont\normalsize\bfseries}}
+\makeatother
+
+
+\begin{document}
+% Pour faire des headings jolies, ne pas toucher !
+ \pagestyle{fancy}                       % Sets fancy header and footer
+   \fancyfoot{}                            % Delete current footer settings
+   \renewcommand{\chaptermark}[1]{         % Lower Case Chapter marker style
+     \markboth{\chaptername\ \thechapter.\ #1}{}} %
+   \renewcommand{\sectionmark}[1]{         % Lower case Section marker style
+     \markright{\thesection.\ #1}}         %
+   \fancyhead[LE,RO]{\thepage}    % Page number (boldface) in left on even
+                                           % pages and right on odd pages
+   \fancyhead[RE]{\leftmark}      % Chapter in the right on even pages
+   \fancyhead[LO]{\rightmark}     % Section in the left on odd pages
+   \renewcommand{\headrulewidth}{0.2pt}    % Width of head rule
+
+
+\setcounter{totalnumber}{4}
+\renewcommand{\textfraction}{.2}
+\renewcommand{\floatpagefraction}{0.7}
+
+\dominitoc 
+\frontmatter 
+
+
+\setlength{\textwidth}{155mm} 
+\setlength{\oddsidemargin}{-1mm}
+\setlength{\textheight}{208mm}
+\setlength{\parindent}{0.25in}
+%% \setlength{\parskip}{0.10in}
+ 
+\include{cover}
+%% \includepdf{cover}
+\newpage
+\thispagestyle{empty}
+\newpage
+\null
+\cleardoublepage
+
+\setlength{\textwidth}{155mm}  
+\setlength{\oddsidemargin}{5mm}
+\setlength{\textheight}{208mm}
+\setlength{\evensidemargin}{0mm}
+
+\include{tex/abstract}
+\include{tex/acknowledgements}
+\pagestyle{fancy}
+
+\pdfbookmark[0]{Table of Contents}{toc}
+\tableofcontents
+
+\cleardoublepage
+\phantomsection  
+\pdfbookmark[0]{List of Figures}{fig}
+\listoffigures
+\mainmatter
+ 
+\include{tex/introduction}
+\part{Introduction to Quantum Optics}
+\label{part:1} 
+\include{tex/chapter1}
+\include{tex/chapter2}
+\part{Squeezed Light Production With an OPO}
+\label{part:2}   
+\include{tex/chapter3}
+\include{tex/chapter4}
+\include{tex/chapter5}
+
+%% \bookmarksetup{startatroot}
+\include{article}
+
+\part{Preparation of a Quantum Memory With Cold Atoms}
+\label{part:3} 
+\include{tex/chapter6}
+\include{tex/chapter7}
+
+%% \bookmarksetup{startatroot}
+\include{tex/conclusion}
+
+\bookmarksetup{startatroot}
+\appendix
+\include{tex/appendix}
+%%\include{tex/introduction_fr}
+%%\include{tex/chapter1_fr}
+
+\backmatter
+
+
+\cleardoublepage
+\phantomsection
+\bookmarksetup{startatroot}
+\bibliographystyle{apalike-jeremie}
+\bibliography{references/foreword,references/chapter1,references/chapter2,references/chapter3,references/chapter4,references/chapter5,references/chapter6,references/chapter7,references/appendix}%,references/jeremie}
+ 
+
+%% \nocite{*}
+\end{document} 

@@ -1,0 +1,72 @@
+\chapter{Motivation for a Quantum Memory}
+%4/5 pg
+\label{ch:1} 
+
+The aim of a quantum memory is to provide a means of storing information encoded into quantum states, and allow a mechanism for reliable, on-demand retrieval.  As light serves as a reliable long-range carrier of quantum information, and atoms offer the possibility of long storage times, current attempts at creating quantum memories focus on the transfer of the quantum fluctuations of light onto atomic coherences.  We can establish a performance metric for a quantum memory by using measurements such as its storage and retrieval efficiency, the conditional or non-conditional fidelity of its output state as a representation of its input state, the overall storage lifetime, and our ability to store arbitrary quantum states in it.  Other considerations for a quantum memory include the wavelength of light to which it responds, the number of frequential modes we can store inside of it simultaneously, and the bandwidth of light it supports.  Despite current attempts at implementing a quantum memory, as of yet there is no system available that shows a high performance with regards to all of these characteristics.
+
+
+\section{Applications of a Quantum Memory}
+
+We can define a quantum memory as a coherent and reversible transfer of qubits to and from a storage medium, such that our retrieved state superposition is a faithful representation of the original stored state.
+
+\begin{eqnarray}
+  \label{eq:qmem}
+  \underbrace{\alpha \ket{0} + \beta \ket{1}}_{\text{Input state}}  \rightarrow \underbrace{\alpha \ket{a} + \beta \ket{b}}_{\text{Stored state}} \rightarrow \underbrace{\alpha \ket{0} + \beta \ket{1}}_{\text{Retrieved state}}.
+\end{eqnarray}
+
+\noindent
+A quantum memory for light is a necessary component in several systems which would permit the advanced manipulation of quantum information.  
+
+One of the simplest usages of a quantum memory is as an on-demand source of  single photons.  If we create a pair of photons simultaneously using a system such as parametric down-conversion, we can store one of the photons in the quantum memory, and use the detection of the second photon to signal that our memory has been \emph{prepared}.  Once the memory is charged with a photon, we can release it on demand with the assurance that it yields a single-photon state.  
+
+Another usage of a quantum memory would be as a component of a quantum computer.  Current quantum algorithms require the manipulation of entangled qubits, which are often processed in parallel for each step in a computation. We can use a quantum memory as a timing mechanism which stores qubits while other steps of the computation are being prepared so they can be processed at the right moment.  In this way, a quantum memory would serve as a synchronizing tool for quantum computations \cite{lvovsky2009optical}. 
+
+We can also envision the usage of a quantum memory for long-range quantum communication.  The promise of unbreakable quantum communications channels depends on protocols such as quantum key distribution, which require the exchange of qubits over long distances.  Fiber optic cables at the telecom 1550 nm wavelength typically have attenuation levels of 0.25 dB/km, and experiments with the detection of entangled photons has resulted in the detection of around 100 qubits/second \cite{Zeilinger07b}.  Due to attenuation losses, transferring quantum states through fiber optic cables is currently limited to a few hundred kilometers.
+
+
+Using a quantum repeater protocol illustrated in Figure \ref{fig:q_rep} would
+allow us to bypass this limitation \cite{Briegel98}, \cite{Duan01}.  We can
+begin by defining two points $A_0$ and $A_N$ separated by a distance L, over
+which we would like to entangle two quantum states.  One way to accomplish
+this is by first dividing our distance up into N segments.  At the end of each segment, we can place a twin photon source, which we can use to entangle each segment with its neighboring segment.  By entangling each sub-segment with its neighbor, we can swap entanglement over the entire length L.
+
+One problem with this approach however, is that entangling the path extremities via entanglement swapping is a process that must be properly synchronized, so that the entanglement of every segment node happens simultaneously.  This posses a problem because the probability of experiencing an entanglement error in at least one of the nodes increases exponentially as the number of nodes increase, and as a result, so does the time required to simultaneously entangle all nodes. 
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.65\textwidth]{figures/q_rep} 
+ \caption[Quantum repeater schematic]{Diagram of the protocol for
+distributing photon entanglement between points $A_0$ and $A_N$.  Length L is
+divided into N segments, which are connected by quantum repeaters.
+Entanglement is shared between segments via entanglement swapping at the
+nodes.  a)  Entanglement swapping along the entire length requires perfect
+synchronization, and a time exponential in the path length.  b)  Placing a
+quantum memory at each node facilitates the synchronization, and reduces the
+time to a polynomial time with path length.} 
+ \label{fig:q_rep} 
+\end{figure}
+
+
+A solution to this would be to place a quantum memory at each node, which would allow us to temporarily store our entangled photons while the other nodes were being prepared, allowing us to independently entangle each segment.  Once all of the nodes were in a prepared state, we could then carry out the entanglement swapping over the entire distance.  This would lower the probability of error to a polynomial order with increasing distance, as opposed to exponential, thus rendering our long-distance communication practical.  As in the case of quantum computation, a quantum memory makes quantum repeaters practical by synchronizing the entanglement of states.
+
+As these applications all show the potential promise of novel ways to manipulate quantum information, they provide a great motivation for the development of a performant quantum memory.
+
+
+
+\section{Research Avenues} 
+
+The last 10 years have seen a large development in the research attempts in
+constructing a quantum memory.  Numerous methods exist for preserving the
+quantum state of light, but the most promising techniques for longer storage
+times are those using large ensembles of atoms.  Work such as that done by
+\cite{Kuzmich05}, and \cite{Lukin05} has succeeded in the storage and retrieval of single-photon states.  The work of \cite{Polzik04} has shown the ability to use continuous-variable quantum non-demolition techniques to achieve high efficiencies and storage times in Cesium, yet they have only allowed the retrieval of a single quadrature of light.  Photon-echo techniques have also been explored in order to preserve the atomic coherences, and thus extend the overall memory storage time.  Work done by \cite{PhysRevLett.96.043602} in 2006 using Controlled Reversible Inhomogenous Broadening (CRIB) has been applied in Pr doped solid-state Y$_2$SiO$_5$ crystals cooled to 4 K, however with low efficiency results.  Other photon-echo techniques such as the usage of an Atomic Frequency Comb (AFC) have been demonstrated showing a 9\% storage efficiency of weak photon pulses \cite{chaneliere2010efficient}.  The usage of EIT as a storage mechanism has also yielded results by several groups.  In the work of \cite{choi2008mapping}, entangled states were successfully stored and retrieved from Cesium vapor. Several groups have also succeeded in the storage and retrieval via EIT of coherent states in Cesium vapor \cite{CviklinskiPhD}, and squeezed vacuum states in Rubidium vapor \cite{Lvovsky08}, \cite{Kozuma08}, \cite{Kozuma09}.
+
+
+
+\section{Our Approach}
+
+Our approach towards the construction of a quantum memory focuses on the
+transfer of squeezed vacuum states onto Cesium cloud trapped and cooled in a
+magneto-optical trap (MOT).  We wish to transfer the quadrature fluctuations of the light field onto the collective spin of Cesium atoms stored in an magneto-optical trap, and after the storage time of a few tens of microseconds, re-emit the light to show the preservation of quadrature squeezing.  Once this is accomplished, we aim to carry out the storage in two atomic ensembles, and show the ability of our system to preserve the entanglement of two remote ensembles.
+

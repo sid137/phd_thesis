@@ -1,0 +1,4 @@
+#!/bin/bash
+touch master.tex
+make
+cp master.pdf  "Towards a Quantum Memory For Non-Classical Light With Cold Atomic Ensembles, Ph. D Thesis - Sidney Burks.pdf"

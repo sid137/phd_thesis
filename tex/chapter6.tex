@@ -1,0 +1,957 @@
+\chapter{Experimental Tools for the Storage of Squeezed Light}
+\minitoc
+
+ 
+\section{Introduction}
+
+Over the last several years, our group has focused on the development of a quantum memory in Cesium.  The idea is based on using EIT to carry out a reversible transfer of the quantum fluctuations of light onto the transverse spin components of an ensemble of Cesium atoms.  The theory describing this approach was developed during the thesis of Aurelien Dantan \cite{DantanPhD}.  During the work carried out afterwards by Jean Cviklinski \cite{CviklinskiPhD} and Jeremie Ortalo \cite{ortalo}, a memory was developed using warm Cesium vapor where the Zeeman sublevels served as the fundamental levels for EIT.  This work resulted in showing that we could carry out a noiseless storage and retrieval of coherent states.  As the Zeeman sublevels are closely spaced in frequency, we have focused our next memory implementation on using the hyperfine transitions for EIT, which will allow us a much finer frequential resolution for the signal and control transitions.
+
+In this chapter, we will discuss our development of this new implementation of
+a quantum memory, and describe the experimental elements needed to store
+squeezed light onto a cold Cesium vapor.  Our main goal for this
+implementation of the memory is to show that we can achieve the storage and
+retrieval of squeezed vacuum states using the cold atomic medium.  Once we
+accomplish this, we can create entangled beams from our squeezed vacuum, and
+store these entangled states into separate regions of our ensemble.
+Accomplishing this goal will show that it is possible to create a quantum memory which can function as the core component in a quantum repeater network. 
+
+As this work takes a departure from our previous experimental approaches, it requires us to develop new tools and techniques before we will have system that is usable for storage.  In the following sections, we will discuss the individual components that were assembled in order to advance our progress towards a working quantum memory.
+
+\subsection{Optical Storage Through EIT} 
+
+As stated earlier, the storage mechanism that we will use for this experiment is
+EIT \cite{harris1997electromagnetically}.  For this method, we use the 3-level
+$\Lambda$ system shown in Figure \ref{fig:eit_transitions}, where the
+fundamental levels are the F=3 and F=4 hyperfine states, and the excited level
+is the F'=4 state.  Our atoms will be initially prepared by pumping them into
+the F=4 state.  We will then use the F=3 $\to$ F'=4 transition for our control
+beam to dress the F'=4 level.  We then tune our signal pulse on the F=4 $\to$
+F'=4 transition, ans as it is not resonant with the dressed F'=4 level, this
+leads to a transparency for our signal.  Once the signal pulse has entered the atomic ensemble, we extinguish the control beam to trap the signal pulse for a small time period, which is the memory storage time.  We then reactive the control beam to release the signal pulse, and read the stored state from the memory.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.35\textwidth]{figures/eit_transitions} 
+ \caption[EIT transitions for Cesium quantum memory]{Transitions used to carry out EIT in Cesium for the quantum memory.  The F=3 and F=4 hyperfine levels serve as the ground states, with an F'=4 excited state.  A control beam F=3 $\to$ F'=4 controls the transparency of the atomic ensemble, while a signal is encoded onto the F=4 $\to$ F'=4 beam.} 
+ \label{fig:eit_transitions} 
+\end{figure}
+ 
+
+\section{Phase Lock}
+
+When carrying out experiments with atoms involving atomic coherence effects, it is necessary that the lasers used to probe the atomic transitions possess a narrow linewidth and a high optical coherence with each other \cite{hockel2009robust}.  Specifically with EIT, changes in the laser linewidth can affect the EIT transparency and our ability to slow down and store light \cite{lu2008realization}.
+
+Typically when performing EIT, if we are studying the coherence effects between transitions having a small frequency difference, such as the Zeeman sublevels, the frequency range is small enough to allow us to probe the levels using one main source laser.  We can accomplish this by passing a fraction of the laser through an AOM or EOM, and thus create a second frequency shifted beam on output.  This shifted beam will have the highest possible degree of coherence with the original beam, as they both originate from the same laser source.
+
+For probing the hyperfine levels of Cesium however, the 9.2 GHz frequency separation is far too large to achieve efficiently using an AOM.  Large band EOMs are
+available, but their high costs and low efficiencies prevent us from using this
+option to directly create an intense frequency shifted beam.
+
+For this case, it is simpler to use two separate lasers to explore the two transitions.  For our experiment, we decided to tune the Matisse laser to the F=4 $\to$ F'=4 signal transition, and use a separate diode slave laser for the F=3 $\to$ F'=4 control beam.  In order to preserve the coherence between the two lasers, we need to develop a way to lock them in phase such that the relative change of phase between the master laser and the slave laser rests locked at a fixed beat frequency.  To accomplish this phase lock, we have developed an Optical Phase Locked Loop (OPLL) as a feedback system to lock the diode laser to the Matisse.
+
+\subsection{Theory} 
+ 
+In order to understand how the OPLL functions, we can begin by analyzing the
+simpler electronic PLL on which it is based \cite{curtin1999phase3}.  We begin
+by sending our PLL a signal frequency from a voltage-controlled oscillator
+(VCO), and a reference frequency to which we wish to lock the VCO and reduce its linewidth.  We take these two signals and compare them using a phase-frequency detector (PFD), which outputs an error signal based on their phase and frequency difference.  We then filter this error signal using a low-pass loop filter, which must be properly tuned to the system \cite{abramovitch2002phase}, and we use the output from this filter as feedback to control the VCO frequency.  We can optionally pass the VCO feedback through a frequency divider if we need to run the VCO at a much higher rate than the reference frequency.  When the circuit is activated, the VCO locks its frequency to the reference frequency at a reduced linewidth.  The block diagram in Figure \ref{fig:pll_block}  illustrates this operation.
+
+\begin{figure}[!htb] 
+ \centering 
+ \includegraphics[width=0.75\textwidth]{figures/pll_block} 
+ \caption[PLL block diagram]{A typical PLL is composed of a phase-frequency detector (PFD), low-pass filter (LPF), voltage-controlled oscillator (VCO), and frequency divider (f-DIV).  The VCO signal is fed back into the PFD for comparison to the reference signal} 
+ \label{fig:pll_block} 
+\end{figure}
+ 
+\begin{eqnarray}
+  \label{eq:pll_eq}
+  S(t) = A_1 \sin \left(\omega_1 t + \phi_1(t)\right) = A_1 \sin (\Phi_1) \\
+  R(t) = A_2 \sin \left(\omega_2 t + \phi_2(t)\right) = A_2 \sin (\Phi_2) 
+\end{eqnarray}
+
+\noindent
+If we imagine our signal and reference as two periodic signal $S(t)$ and $R(t)$, engaging the phase lock assures a fixed relationship between our signal arguments, such that 
+
+\begin{equation}
+  \label{eq:pll_def}
+  \Phi_1=\Phi_2.
+\end{equation}
+
+\noindent
+Given this description of a PLL, there are two core components which must be properly adjusted in order to optimize the system - the phase-frequency detector, and the loop filter.
+
+
+\subsubsection{Frequency Division}
+
+The PLL response is limited to its reference signal's input frequency, but often we wish to run a VCO at a much higher frequency.  We can accomplish this by adding a frequency divider to the VCO output.  By dividing the VCO signal frequency to a lower value closer to the reference frequency, we can compare the reference and signal frequencies without artificially slowing down our VCO.  
+
+Additionally, we can consider this division as a type of \emph{gain} on our PLL control signal.  By dividing the VCO output by $n$, the PLL can use the same voltage to correct for a range of $n$ times the reference frequency, as opposed to only correcting for a range around the reference frequency without a divider.  This can potentially increase the loop performance by allowing us to use small control signal voltages for a large response.
+
+
+
+\subsubsection{Phase-Frequency Detection}
+
+There are several methods of creating phase detector for signal comparison.  For our design, we use an all-digital PFD.  This system is composed of a set of digital flip-flops which execute the logic shown in Figure \ref{fig:pfd_logic} \cite{mch12140}.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/pfd_logic} 
+ \caption[Phase-frequency detector logic diagram]{Logic diagram for the all-digital phase-frequency detector used in our PLL.  Phase and frequency changes in the reference (R) and signal (V) inputs cause digital state changes on the U, $\bar{U}$, D, and $\bar{D}$ outputs, allowing us to create an error signal.} 
+ \label{fig:pfd_logic} 
+\end{figure}
+
+A digital PFD takes a reference (R) and VCO (V) signal as input, and outputs four signals based on their phase or frequency difference.  By subtracting either the positive (U-D) or negative ($\bar{U}$-$\bar{D}$) signals, we can receive an error signal on the output, as is shown in Figure \ref{fig:pfd_output} \cite{mch12140}.  The error signal output from the PFD is proportional to the frequency and phase error of our input. 
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/pfd_output} 
+ \caption[PFD output signal]{Output voltage as a function of phase $\Phi$ from a PFD after subtracting the $U-D$, or $\bar{U}-\bar{D}$ outputs.} 
+ \label{fig:pfd_output} 
+\end{figure}
+
+
+
+
+\subsection{Experimental Setup} 
+
+\begin{figure}[!ht] 
+ \centering  
+ \includegraphics[width=0.55\textwidth]{figures/pll_table} 
+ \caption[OPLL optical table photo]{Photo of optical table used for the OPLL.} 
+ \label{fig:pll_table} 
+\end{figure}
+
+
+Creating an Optical PLL follows the exact same procedure as a traditional PLL.  Instead of using a VCO, we use the beat signal generated from the optical interference of our slave and master lasers, and we use the filtered error signal to adjust the frequency tuning of the slave laser.  We have three main methods to adjust the frequency of a slave laser:  changing the cavity length, changing the diode temperature, or modulating the injection current.  The current
+ modulation approach has the fastest response and allows for the largest loop bandwidth, so we use this approach.
+
+  
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][OPLL optical block diagram.  A few mW of light from the Matisse and Diode are mixed onto a photodetector.  90\% of the diode light continues to a saturated-absorption cell, and the MOT.]{
+    \label{fig:pll_block_optical}
+    \includegraphics[width=0.5\textwidth]{figures/pll_block_optical} }
+  \subfloat[][OPLL Electronic block diagram.  A biased photodiode detects a 9.0 GHz optical beat signal, which is then amplified +30dB and mixed down to 400 MHz.  The beat signal enters the PLL along with a 100 MHz reference to create the error signal, which is then integrated, and used to control the diode modulation.]{
+    \label{fig:pll_block_electronic}
+    \includegraphics[width=0.5\textwidth]{figures/pll_block_electronic} } \\
+  \caption[OPLL block diagrams]{Optical and electronic block diagrams for our OPLL implementation }
+  \label{fig:opll_block}
+\end{figure}
+
+Figure \ref{fig:pll_block_optical} shows the optical layout of our
+phase-locking system pictured in Figure \ref{fig:pll_table}.  Our setup begins
+with us creating a beat signal from the interference of the Matisse and diode
+lasers.  To accomplish this, we combine a few mW of light from the Matisse
+with an equal amount of light from the diode on a non-polarizing beam splitter. The two light sources are aligned to have the same matching and polarization.  We then send the light into a Hamamatsu photodiode which is powered by a 9V battery, and biased with a Minicircuits ZX85-12G-S+ Bias Tee with a 12 GHz bandwidth.  The usage of a battery allows us to minimize the electronic noise in the photodiode.
+
+Next, we lock the Matisse to the 4-4 transition, and manually adjust the diode
+laser so that it is near the 3-4 transition, and separated by approximately
+9.0 GHz.  We lock at 9.0 GHz instead of 9.2 GHz because we pass our diode
+laser through an AOM before sending it on to the MOT.  The AOM adds the
+remaining 200 MHz offset we need to reach 9.2 GHz, and allows us to easily
+create pulses of this light.  
+
+The optical interference of the two lasers
+creates a beat note which is detected by the biased photodiode, as shown in
+Figure \ref{fig:pll_block_electronic}.  By adjusting the
+optical power, we amplify the beat note power up to around 0 dBm.  We then send the photodiode output to an Amplical AMP8G12-33 amplifier where
+it is amplified by 30 dB and then sent to a Minicircuits ZMX-10G+ mixer.  We
+demodulate the note with a microwave 8.6 GHz signal generated by a HP 8672A signal generator.  This allows us to mix down the optical beat note to 400 MHz, allowing us to observe it on our low-frequency spectrum analyzer as shown in Figure \ref{fig:beat_note}.  This is convenient because we can from this point on, avoid using high-frequency RF components in our electronics chain, and use a simpler low-frequency setup.  
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/beat_note} 
+ \caption[Optical PLL beat note demodulated to 400 MHz]{Optical beat note between Matisse and diode lasers demodulated to 400 MHz.} 
+ \label{fig:beat_note}
+\end{figure}
+
+Once we have the 400 MHz beat note, we use a Minicircuits ZFDC-10-2
+directional coupler to extract 10\% of the signal and send it to a spectrum
+analyzer which permits observation of the lock. The remaining 90\% continues
+on to two ZFL-500LN-BNC amplifiers, which give a total amplification of 10 dB,
+and then on to a homemade wideband 0-400 MHz preamplifier circuit which
+amplifies the signal by up to an additional 20 dB.  We then send the beat note to our
+phase-frequency detection circuit, which creates the error and modulation
+signal that we then use to lock the diode.  The last step in our chain
+involves passing the modulation signal through the integrating circuit shown
+in Figure \ref{fig:pll_integrator}, which acts as our loop filter.  We then send this integrated output directly into the current modulation input for the diode laser.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/pll_circuit_block} 
+ \caption[PLL circuit block diagram]{Block diagram showing our PLL functionality.  The 400 MHz signal is divided by 4, and compared to a 100 MHz reference with the PFD.  A differential op-amp subtracts the PFD outputs to create the error signal.} 
+ \label{fig:pll_circuit_block} 
+\end{figure}
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/pll_whole} 
+ \caption[PLL circuit photo]{Photo of actual OPLL circuit with notable features marked.} 
+ \label{fig:pll_whole} 
+\end{figure}
+
+ 
+Figure \ref{fig:pll_circuit_block} depicts the operation of our PLL circuit pictured in Figure \ref{fig:pll_whole}.  For our reference signal, we use a 100 MHz signal generated by an Agilent 
+E4420b generator.  Our 400 MHz beat note enters the PLL circuit where it is
+divided by 4 using an ON Semiconductor MC12093 divider, and the divided signal
+and our reference are compared using an ON Semiconductor MCH12140 PFD.  The
+PFD outputs signals on its U and D outputs which we then subtract using a
+differential operational amplifier (opamp).  The opamp then outputs the error signal, which we send
+directly to the integrator circuit for low-pass filtering.
+
+In order to interface the filtered modulation signal with the laser diode, we
+use the current divider circuit shown in Figure \ref{fig:bias_t} to limit the
+current applied by our PLL circuit.  This allows us to avoid destroying the
+laser by applying too much modulation current.
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][PLL integrator circuit.]{
+    \label{fig:pll_integrator}
+    \includegraphics[width=0.65\textwidth]{figures/pll_integrator} }
+  \subfloat[][Diode current modulation interface.]{
+    \label{fig:bias_t}
+    \includegraphics[width=0.35\textwidth]{figures/bias_t} } \\
+   \caption[OPLL integrator and diode current modulation circuits]{\subref{fig:pll_integrator} Circuit Diagram for PLL Integrator  \subref{fig:bias_t} Current modulation circuit to interface PLL with diode laser.  The current divider protects the diode from too much modulation current.}
+  \label{fig:opll_circuits}
+\end{figure}
+    
+
+Using this setup, once we tune the diode laser to place the beat signal near the reference frequency, we can observe the error signal take the form in Figure \ref{fig:pll_err}, which resembles the logic diagram output in Figure \ref{fig:pfd_output}.
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][OPLL error signal as the beat signal approaches the lock point.  We see that this resembles the output shown in Figure \ref{fig:pfd_output}.]{
+    \label{fig:pll_err}
+    \includegraphics[width=0.5\textwidth]{figures/pll_err} }
+  \subfloat[][Error signal goes to zero when we engage the OPLL lock.]{
+    \label{fig:pll_locked}
+    \includegraphics[width=0.5\textwidth]{figures/pll_locked} } \\
+  \caption[OPLL error signal]{PLL error signal as we a) approach the lock point and b) engage the lock.}
+  \label{fig:pll_error}
+\end{figure}
+
+
+At this point when we engage the phase lock, the slave laser locks to the
+Matisse and the optical beat note produces the noise
+trace shown in Figure \ref{fig:phase_lock_results}.
+
+
+%% \begin{figure}[ht] 
+%%  \centering 
+%%  \includegraphics[width=0.70\textwidth]{figures/phase_lock} 
+%%  \caption[Phase lock scan]{Diode laser phase-locked to the Matisse at a 9.2Ghz shift.  The majority of the power is held within the central peak.} 
+%%  \label{fig:phase_lock_results} 
+%% \end{figure}
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Diode laser phase-locked to the Matisse at a 9.0 GHz frequency
+  offset.  The majority of the power is held within the central peak.  This
+  system maintains a lock for over 10 hours, and is only sensitive to the slow
+  long-term stability drifts.]{
+    \label{fig:phase_lock_bbig}
+    \includegraphics[width=0.5\textwidth]{figures/phase_lock} }
+  \subfloat[][Zoom of central peak with 10 Hz span, 1 Hz VBW and RBW.  This zoom
+  shows that our system maintains a frequency lock with a precision of better
+  than 1 Hz.  Our resolution of the ultimate lock precision is limited by the spectrum
+  analyzer.]{
+    \label{fig:pll_1hz}
+    \includegraphics[width=0.5\textwidth]{figures/pll_1hz} } \\
+  \caption[Phase lock results]{ Phase lock results}
+  \label{fig:phase_lock_results}
+\end{figure}
+
+
+\subsection{Analysis} 
+
+In order to quantify the quality of the phase lock, we can use the mean-square error of the phase noise.  This quantity is defined as the ratio of power in our beat signal at its center frequency, and the power integrated over all frequencies.  We take the center frequency power as simply the height of our central peak given by the spectral analyzer.  
+
+We can derive this quantity by defining the noise density as was done earlier for the electric field, and as is seen in \cite{zhu1993stabilization}.  We begin by defining the E field of our laser as 
+
+\begin{equation}
+  \label{eq:pll_e}
+  E(t) = A(t)e^{-i \omega_0 t - i \phi t},
+\end{equation}
+
+\noindent
+where A(t) is the instantaneous field amplitude, and $\phi(t)$ is the phase modulation.  We have an instantaneous angular frequency given by 
+
+\begin{equation}
+  \label{eq:pll_om}
+  \omega (t) = \omega_0 + \d{\phi(t)}{t}.
+\end{equation}
+
+\noindent
+We can write the autocorrelation function of our field as 
+
+\begin{equation}
+  \label{eq:pll_ac}
+  R_\epsilon (\tau) \equiv \avg{E(t)E^*(t+ \tau)},
+\end{equation}
+
+\noindent
+and by taking the Fourier transform, we can obtain
+
+\begin{equation}
+  \label{eq:pll_pow}
+  P_\epsilon(\tau) = \frac{1}{2\pi} \intind P_\epsilon (\omega ) d \omega  
+\end{equation}
+
+\noindent
+We can find the mean square noise error by measuring the fraction of the power contained at our lock frequency with respect to the total power
+
+\begin{equation}
+  \label{eq:pll_rms}
+  exp(-\avg{\Delta \phi^2}) = \frac{P_0}{\intind P(\omega ) d \omega } 
+\end{equation}
+
+\noindent
+\req{eq:pll_rms} allows us to establish a quantitative measure of the phase
+noise contained in the lock by using a spectrum analyzer to measure the power contained in the peak, and
+the total integrated power \cite{appel2009versatile}.
+%% \noindent
+%% Using \req{eq:pll_rms}, we obtain a phase noise for our lock of XXXXXXXX???????
+
+
+
+\section{The Magneto-Optical Trap}
+
+The principle component of this experiment is the MOT itself which contains
+our trapped atoms.  We will begin by describing the characteristics of the
+MOT, and the experimental elements that allow us to prepare a dense atomic
+cloud inside of it.
+
+\subsection{Basic Trapping Principles} 
+
+In order to trap our atoms inside the MOT, we need to create a system for
+cooling and confining the atoms in a small region.  We first require three
+pairs of counter-propagating beams, where one pair of beams is aligned with each
+spatial axis.  The beams are circularly polarized such that two pairs take a
+$\sigma^+$ polarization, and one pair takes a $\sigma^-$ polarization. These
+trapping beams are detuned from the F=4 $\to$ F'=5 Cesium cycling transition by
+10 MHz.  This detuning from resonance allows us to the Doppler effect to apply a velocity-dependant breaking force to the atoms, and thus create an optical molasses at the point where the beams meet at the center of the MOT.
+
+
+%% \begin{figure}[!ht] 
+%%  \centering 
+%%  \includegraphics[width=0.35\textwidth]{figures/mot_transitions} 
+%%  \caption[MOT trapping and repumping beam transitions]{} 
+%%  \label{fig:mot_transitions} 
+%% \end{figure}
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][We require three circularly polarized beams to create the optical molasses, and a magnetic field gradient to confine the atoms.  A repump beam is superposed with the trapping beam along two axes.]{
+    \label{fig:mot_ill}
+    \includegraphics[width=0.5\textwidth]{figures/mot_ill} }
+  \subfloat[][Optical transitions used for the trapping and repumping beams in the MOT.  The trapping beam is detuned by 10 MHz from the F=4 $\to$ F'=5 transition.  The repumping beam is resonant with the F=3 $\to$ F'=4 transition.]{
+    \label{fig:mot_transitions}
+    \includegraphics[width=0.5\textwidth]{figures/mot_transitions} } \\
+   \caption[MOT illustration and transitions]{Requirements for building a MOT.   Converging beams and magnetic field gradients trap the atoms when we use the F=4 $\to$ F'=5 trapping transition.}
+   \label{fig:mot_ill_trans}
+\end{figure}
+
+As some of the atoms relax into the F=3 state, we also require a repump beam for the F=3 $\to$ F'=4 transition, so that we can repump these atoms into the F=4 state allowing us to retrap them.  We overlap two of these repump beams with two of the trapping beams described earlier. Figure \ref{fig:mot_transitions} depicts the 3-level diagram that shows the relevant transitions needed for creating the molasses.   
+
+
+Once the optical molasses is created, we also need to apply a magnetic field gradient so that we can confine the atoms to a small region.  We supply the MOT chamber with the necessary beams via fiber optic, which prevents the beams from disaligning on a day-to-day basis.
+
+In the following sections, we discuss the experimental setup that we developed in order to fulfill these requirements and create our atomic ensemble.
+
+\subsection{MOT Characteristics} 
+
+For the trap itself, we selected a glass chamber with 7 viewports on its
+sides, as shown in Figure \ref{fig:mot_glass}.  This allows us a large flexibility in how we inject our beams into the
+chamber.  We inject the trapping beams through the opposing windows to create
+an optical molasses in the chamber center.  In order to create the magnetic field, we wound 120 loops of copper wire into coils around circular Teflon frames, which had a radius of 10 cm.  The coils were positioned at each side of the trap and fixed to the table with brass posts.  Brass was selected for the post material as it does not respond to magnetic fields.  We typically sent 5A of current into the coils to create the fields.  The chamber's glass composition also aids with respect to the magnetic field as it prevents the creation of Foucault currents when we cut off the field.
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Glass chamber used to create the MOT with multiple input ports.]{
+    \label{fig:mot_glass}
+    \includegraphics[width=0.5\textwidth]{figures/chamber} }
+  \subfloat[][Atoms trapped at the center of the chamber]{
+    \label{fig:chamber_mot}
+    \includegraphics[width=0.5\textwidth]{figures/atoms_mot} } \\
+   \caption[Glass MOT chamber]{MOT Chamber used to trap the atomic ensemble.} 
+  \label{fig:mot_chamber}
+\end{figure}
+
+We create an initial vacuum in the chamber by pumping the pressure down to $10^{-7}$ torr.  At this point, we activate an ion pump which further decreases the pressure to $10^{-9}$ torr or lower.  
+
+Cesium atoms are injected into the chamber by means of a set of getters, which are Cesium filled wires that were installed inside of the chamber during its construction.  When we pass a strong current through these getters, they heat up to around $400^\circ C$, and begin to release their Cesium.  We typically send around 5A of current through the getters, which yields the largest MOT with the highest density of atoms.  Using this configuration, we have managed to trap an estimated $10^9$ atoms.  
+
+\subsection{Laser Sources} 
+  
+To create the beams at all of the necessary transitions, we developed a set of diode lasers and used them along with a Toptica Photonics BoosTA Master Oscillator Power Amplifier (MOPA) to produce a high optical output for our trapping beam.  The diodes used to create the laser transitions were constructed from designs
+developed at the Paris Observatory \cite{Baillard06}.  Figure
+\ref{fig:ioe_labeled} shows an example of one of the diodes.  Their bodies consist of a monolithic aluminum alloy, inside of which we fix two mirrors to create a linear cavity.  An interferential filter placed between the mirrors serves as the frequency selecting element, and has a transmissivity of 90\% and a FWHM of 3 nm.  The output mirror of the cavity has a transmissivity of 30\% and is mounted to a piezo which controls the cavity length.
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Simplified illustration of diode components.]{
+    \label{fig:diode_block}
+    \includegraphics[width=0.41\textwidth]{figures/diode_laser_block} }
+  \subfloat[][Photo of diode with open casing, and actual components identified. ]{
+    \label{fig:ioe_labeled}  
+    \includegraphics[width=0.41\textwidth]{figures/diode_labeled} } \\
+  \caption[Laser diode]{Laser diode constructed from models developed at the Paris Observatory.}
+  \label{fig:diode_lucy}
+\end{figure}
+
+ 
+This design offers several benefits in comparison to the Littrow design that we previously used for our other diodes \cite{ortalo}.  First, the frequency selecting element and the cavity mirrors are decoupled, which grants us the possibility to tune the cavity frequency while independently optimizing it for stability.  The usage of a linear cavity also allows us to change the wavelength by rotating the interferential filter, without changing the direction of the output beam.  Finally, the output mirror is placed in a \emph{cat's eye} configuration, in which the mirror is located in the focal plane of the focusing lens.  This allows us to preserve the cavity stability by nullifying the effects of any changes in the cavity beam direction.
+
+With each of these lasers, we manage to obtain roughly 40 mW of output power at 852 nm.  Initially, the output beams have a highly elliptical shape, thus we use a set of anamorphic prisms with a 3:1 ratio to render them Gaussian and usable for the rest of the experiment.
+
+We use two of these diodes to trap the atoms in the MOT and repump them into the
+F=4 state.  The diode ``Shaddok'' produces a beam which
+is tuned to the 3-4 transition, which pumps the atoms from F=3 to F=4.  We
+send this beam into a fibered beam splitter, which provides us with two repump beams at its output near the MOT chamber.  We then apply a circular polarization to these beams and attenuate their output so that they each have around 2 mW of power.  
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/diode_setup_block} 
+ \caption[Block diagram for diode table]{Trapping and repump beams mix in a fibered beamsplitter to provide 3 trapping beams, and 2 repump beams at the MOT.} 
+ \label{fig:diode_setup_block} 
+\end{figure}
+
+
+Next, we use a diode called ``Zeus'' to create the trapping beams for the MOT
+which are tuned to the 4-5 transition and red-shifted by 10 MHz.  We use three
+trapping beams that enter the MOT chamber from orthogonal directions, and
+recombine at its center.  The beams then exit the chamber, where they reflect
+off of fixed mirrors and return along their original path, thus trapping the
+atoms from 6 directions.  The beams have circular polarizations such that two
+of them are left circularly polarized, and the third is right circularly
+polarized.  We require around 25 mW of power in each of these three beams.  As
+our diode is only capable of producing a total output power of around 40 mW,
+we first pass the light through a MOPA which amplifies the power up to 600 mW.
+After alignment and coupling losses inside of the MOPA, we have about 300 mW
+at the MOPA output that is usable for the experiment.  We then divide this
+beam into two segments, sending one segment directly to the MOT chamber, and
+sending the other through the second input port of our fibered beam splitter,
+as shown in Figure \ref{fig:diode_setup_block}.  
+This allows us to obtain a total of three trapping beams at the MOT chamber.
+
+
+
+
+
+\subsubsection{Locking}
+\label{locking} 
+
+In order to lock each diode to its respective transition, we use the saturated
+absorption spectroscopy technique to measure the Doppler and
+transition peaks.  We then use a lock-in detector to create the error signal
+which then passes through to an integrator circuit.  The integrator applies
+the feedback control to the piezo mounted in each diode to lock the cavity.
+The diodes are also temperature controlled using a homemade controller which
+provides us with a temperature regulation having 10 mK stability.  The
+frequencies of the diodes are fixed by locking them onto the crossover
+resonances which arise due to the closely-spaced excited states.
+We then pass each beam through an RF-tuned AOM which allows us to precisely
+adjust its frequency.  Table \ref{sat_abs_locks} identifies the crossovers and
+AOM frequencies that we use for each laser.  This method allows us to easily adjust the beam around the transition frequency, as well as extinguish it with a digital command.
+
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c | c |}
+    \hline
+    Laser & Transition & Lock Point & AOM \\
+    \hline
+    Repump & F=3 $\to$ F'=4 & 3-4 Crossover  & Order -1: 100 MHz\\
+    Trapping & F=4 $\to$ F'=5 -10 MHz  & 4-5 Crossover & Order +1: 115 MHz\\
+    \hline
+  \end{tabular}
+\caption{Transitions and lock points for MOT lasers}
+\label{sat_abs_locks}
+\end{table}
+
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Doppler profile showing the F=4 crossovers and absorption peaks]{
+    \label{fig:sas_lucy}
+    \includegraphics[width=0.45\textwidth]{figures/lucy} }
+  \hspace{-10pts}
+  \subfloat[][Doppler profile for the F=3 spectrum.]{
+    \label{fig:sas_shadoks}
+    \includegraphics[width=0.45\textwidth]{figures/shadoks} } \\
+  \caption[Saturated absorption Doppler measurements]{Saturated absorption Doppler measurements of the Cesium F=3 and F=4 lines.}
+  \label{fig:sat_abs}
+\end{figure}
+
+%% \begin{figure}[!ht] 
+%%  \centering 
+%%  \includegraphics[width=0.85\textwidth]{figures/Abs_Sat_erreur} 
+%%  \caption[Saturated absorption]{Doppler measured using the saturated absorption technique, along with the error signal.} 
+%%  \label{fig:label} 
+%% \end{figure}
+
+%% \begin{figure}[!ht]
+%%   \centering
+%%   \subfloat[][caption1]{
+%%     \label{fig:label1}
+%%     \includegraphics[width=0.5\textwidth]{figures/picture1} }
+%%   \subfloat[][caption2]{
+%%     \label{fig:label2}
+%%     \includegraphics[width=0.5\textwidth]{figures/picture2} } \\
+%%    \vspace{-10pt}
+%%   \subfloat[][caption1]{
+%%     \label{fig:label1}
+%%     \includegraphics[width=0.5\textwidth]{figures/picture1} }
+%%   \subfloat[][caption2]{
+%%     \label{fig:label2}
+%%     \includegraphics[width=0.5\textwidth]{figures/picture2} } \\
+%%   \caption[Short Caption]{ Long Caption \subref{fig:Short Caption} }
+%%   \label{fig:label}
+%% \end{figure}
+
+\subsection{Controlling the Magnetic Field} 
+
+While it is necessary to use a magnetic field to create our atomic cloud, the presence of a field during the memory storage can introduce huge limitations to the memory performance.  As the magnetic field in the chamber has an inhomogeneous distribution throughout the atomic cloud, the atoms in different regions of the cloud experience different degrees of Zeeman level splitting.  This results in an inhomogeneous broadening and eventual dephasing of the atoms in different sections of the cloud as the system evolves, finishing with a loss of the collective coherence between the atoms in our ensemble.  When magnetic fields are present, this process can take place within a few hundred nanoseconds \cite{felinto2005control}.  Thus, the decoherence effect fixes an upper limit on the storage time that we can expect with our memory.
+
+By cutting off the magnetic field, we can preserve the coherence between our atoms for a much longer time, and thus expect larger storage times.  Once we begin to cut the magnetic field, the atoms of our cloud immediately begin to disperse.  Thus it is in our interest to cancel out the magnetic field as quickly as possible, so that we can nullify it while maintaining a high atomic density.
+
+In order to control the magnetic field created by the coils, we use a current
+driver circuit based on a design published in \cite{garrido2007}.  This design
+allows us to control the amount of current flowing through the MOT coils by
+applying an analog voltage signal to a control box.  A network of transistors
+in the circuit controls the current flowing through to the coils by acting as
+a sink, and allows us to create a magnetic field that is proportional to the
+applied analog voltage. This circuit is useful in that it not only allows us
+to use low control voltages of around 10V, which are easily producible, but we
+can also supply it with a relatively low current of 10 A, which is also easily
+produced using a commercial generator.  A critical factor to take into
+consideration when selecting the circuit components is the choice of the
+transistor breakdown voltage.  When we cut off the current flow by setting the
+control voltage to 0V, this can create a high voltage back-electromotive force (emf) which can potentially overload and destroy the transistors.  As this emf is determined by the cutoff time, the current flow, and the coil inductances
+
+\begin{equation}
+  \label{eq:emf}
+  Emf = -L\d{I_L}{t},
+\end{equation}
+ 
+\noindent
+we have to take these properties into account during our transistor selection.
+
+The details of the circuit construction and characteristics will be described in more detail in the future Ph.D thesis of Lambert Giner.  Here, we focus on describing the optimization of the timing and control mechanism associated with this circuit.
+
+
+\subsubsection{Control Signal} 
+
+Switching off the magnetic field induces eddy currents in nearby magnetic materials, which can create time and spatially varying magnetic fields around our atoms \cite{garrido2007}.  In order to minimize the effects of these currents, and reduce the magnetic field experienced by the atoms to zero as quickly as possible, it is useful to reverse the current direction before cutting it off completely.  This allows us to cancel out these induced transient fields.
+
+Usage of this technique introduces several technical consequences.  First, any
+electronic system that we develop will have a unique response which depends on
+the coil construction, the nearby environmental fields, and the components in
+the electronic circuits.  Thus we must try to experimentally observe when our
+field has been properly cut off.  Furthermore, the time needed to cut the
+field to zero depends on the amount of current flowing through it at a given
+time.  Thus when we reverse the current flow, we introduce time as a second
+factor as we must determine how long we need to apply the reversed current.  
+
+These factors mean that we must empirically determine how to optimize the current flow so that we can completely cancel out the field as quickly as possible.  As we control the current with an analog voltage, this means that we have to carry out an optimization procedure on our voltage signal.
+
+One option for optimizing the signal is to use an arbitrary waveform generator, and manually program it with our desired signals.  While this works, it is a slow and expensive solution as programming in each waveform can be a time consuming process. 
+
+We thus decided to use a spare NI analog acquisition and generation card to generate our signals.  By using a Labview based computer interface, we could change all of the necessary parameters for our signal within seconds, and find an optimal waveform within a day.  This proved particularly useful when we had to rebuild the circuit several times, as each circuit required different signal parameters.
+
+
+\subsubsection{Labview Interface}
+
+
+\begin{sidewaysfigure}
+  \centering
+  \subfloat[][Labview control panel used to generator the analog signal.]{
+    \label{fig:bgen_fp}
+    \includegraphics[width=0.5\textwidth]{figures/bgen_fp} }
+  \subfloat[][Illustration of user-configurable variables to optimize the signal.]{
+    \label{fig:bgen_ex}
+    \includegraphics[width=0.5\textwidth]{figures/b_field_signal} } \\
+  \caption[B-Field control signal]{Labview interface and analog signal generated by DAC used to optimize the time to cut the B-field.}
+  \label{fig:b_field_signal}
+\end{sidewaysfigure}
+
+
+The interface for our program was that shown in Figure
+\ref{fig:b_field_signal}.  We used it to specify the positive and negative
+voltages of our control signal, as well as the time for which we wanted to
+apply the reversed current (interval A), and the duration of time when wanted
+to keep it at zero (interval B).  We used an FPGA generated TTL signal as an
+input trigger to launch the generation of this signal.  Our hardware consisted
+of an National Instruments PCI-6733 high-speed analog output card connected to
+a BNC-2110 connector block.  This BNC connector allowed us to send the analog
+output from the card directly to the voltage control input of the driver circuit.
+
+
+\subsubsection{Program Operation}
+
+In order to understand the code that allowed us to carry out this generation, we must first understand the program's intent, which is to generate arbitrary analog voltages for a fixed time period after receiving a trigger.
+
+We can begin by describing our analog signal as a function composed of two variable intervals A and B, and a fixed high voltage $V_{HI}$ as shown in Figure \ref{fig:bgen_ex}. The interval A varies between the voltages $V_1$ and $V_2$, and B varies between voltages $V_3 $ and $V_4$.  When the card receives a trigger signal, it outputs $V_{HI}$ for a small amount of time, and then outputs the voltages specified for intervals A and B.  When these intervals have passed, the voltage output level returns to $V_{HI}$ until the next trigger is received.
+
+Our card is capable of generating output at up to 1 MS/s,  however in order to reduce the distortion of our signal, we limited our output generation rate to 250 kS/s.  The generation process works by writing voltage levels to a large array buffer for every sample of our generation period, where each voltage is represented as a double precision float.  Because we specify the type of signal we want to create and all of its properties are well-defined, we can prefill the entire array of voltages during the configuration of our card, and write them to the card to be executed by the hardware when it receives our trigger.
+
+The voltages that we output during the intervals A and B have the possibility of taking on increasing or decreasing values over time.  Due to this, we can specify the voltage values to insert in our array for these intervals with the expression 
+
+\begin{equation}
+  \label{eq:b_volt}
+  V_{out} = V_{i} + i \frac{V_f - V_i}{t},
+\end{equation}
+
+
+\begin{figure}[!htb]
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/bgen_bdaf} 
+ \caption[B-Field control generation code]{Code used to create the analog voltage values.  This block takes two voltage ranges as inputs, and calculates and fills an array of voltage values for each time segment for the control signal.} 
+ \label{fig:bgen_bdaf} 
+\end{figure}
+
+\noindent
+where $t$ represents the duration of each interval A and B, and $i$ represents the index of their respective array buffers.  The Labview implementation of \req{eq:b_volt} is shown in Figure \ref{fig:bgen_bdaf}.
+
+
+ Once we have generated the array buffers for each segment of our signal, we simply concatenate these arrays together, and send the entire array to the card's  hardware buffer, so that it will begin the generation of our signal on command.  The Labview diagram for this program is shown in Figure \ref{fig:bgen_bd}.
+
+
+\begin{sidewaysfigure}
+ \centering  
+ \includegraphics[width=0.95\textwidth]{figures/bgen_bd} 
+ \caption[B-Field generator Labview code]{Block diagram for Labview interface to used to generate the control signal} 
+ \label{fig:bgen_bd} 
+\end{sidewaysfigure}
+
+\clearpage
+
+
+\subsubsection{Results}
+
+By using this current driver and control signal generator, we were able to cut the coil currents by at least 16 dB to 2\% of its original value within 700 $\mu s$ of sending our TTL trigger, which is a short enough time to allow us to carry out the storage before the atoms begin to dissipate, as the plots in Figure \ref{fig:bcurrent} show.
+
+\begin{figure}[!htb]
+  \centering
+  \subfloat[][Voltage measured by a pickup coil used to detect the magnetic flux.]{
+    \label{fig:b_field}
+    \includegraphics[width=0.45\textwidth]{figures/b_pickup} }
+  \subfloat[][Current in main coils measured using a resistive circuit.]{ 
+    \label{fig:coil_current}
+    \includegraphics[width=0.45\textwidth]{figures/b_current} } \\
+  \caption[Magnetic field extinction times]{We can cut the magnetic field quickly by reducing the coil current by 16 dB within 700 $\mu s$, using the optimized control signal.}
+  \label{fig:bcurrent}
+\end{figure}
+
+
+
+
+\subsection{Timing} 
+
+Once we created the MOT, we needed to introduce a timing mechanism in order to allow us to send pulses of light into it while cutting off the magnetic field.  The synchronization requirements oblige us to have a precise control over the lasers, the timing for the OPO pulse creation, as well as the circuitry to cut the magnetic-field for the MOT.  In Chapter \ref{ch:7}, we will discuss how we developed an FPGA program to implement this timing control.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.75\textwidth]{figures/mot_timing} 
+ \caption[MOT timing diagram]{Timing diagram for the quantum memory.  We trap the atoms for 18 ms to obtain a high density, and after cutting the magnetic field, cut the trapping and repump beams 1 ms later.  The signal beam stays active when using a squeezed vacuum, as it allows us to track the quadrature phase evolution.  It is mostly inactive when using a coherent state.} 
+ \label{fig:mot_timing} 
+\end{figure}
+
+In order to extract reliable statistics regarding the operation of our memory,
+we need to carry out multiple storage and retrieval runs of a large number of
+optical pulses.  For each run, we prepare the MOT by creating a dense atomic
+cloud and pumping the atoms to the F=4 state for about 18 ms.  After the atoms
+have been sufficiently pumped, we then cut the magnetic field.  While the
+field strength decreases, we leave the trapping beams activated for about 1 ms
+to preserve the optical molasses, along with the repumping beam who will
+continue to repump any depumped atoms.  Shortly after the field reaches zero,
+we then cut the trapping beams and the repump beams.  Figure \ref{fig:mot_timing} outlines the timing relationship between the magnetic field and the beams used for the experiment.  We define the \emph{memory sequence} as the time period from when we send the trigger to switch off the magnetic field, up until it is reactivated.  We allocate about 18 ms for the preparation phase of each run, and about 7 ms for the memory sequence where we store the pulse.  Thus the storage should occur every 25 ms, allowing us a 40 Hz repetition rate for the experiment.
+
+The control and signal beams are active throughout the entire experiment except for certain periods during the memory sequence.  Once we cut the trapping and repumping beams, we cut the wait for a few hundred $\mu s$ and then cut signal beam.   We then send a small pulse of the signal beam, and once the pulse is inside of the atoms, we cut the control beam to close the transparency window and store the pulse.   After a short time, we reactivate the control beam to release the pulse, and then reactivate other beams along with the magnetic field, which begins the process again for the next run.
+
+
+
+  
+\section{Optical Layout} 
+
+Now that we have discussed the system used to generate the EIT control beam, the
+MOT and B-field driver, we can begin to examine the optical elements needed in
+order to carry out storage of our state.  Firstly, we require a system that
+allows us to measure the optical density of the atomic ensemble in order to
+ensure that our light has the highest interaction efficiency.  Next, as we will
+use EIT for storage, we need to send in our control beam to open the
+transparency window, as well as pulses of our signal beam that we wish to store.
+Before attempting to store squeezed states in the memory, we will first attempt
+the storage of coherent states in order to optimize the system. Therefore, we
+also need a system which allows us to create pulses of coherent light to use as
+the signal to be stored.  Also, as we want to store entanglement in two atomic ensembles, we will need a system to allow us to create the two atomic ensembles within the MOT.  Finally, we will need to carry out the detection of the squeezed states and monitor the control and signal beams to calibrate our quantum memory.  Figure \ref{fig:mot_table} shows the optical layout that we have built around the MOT in order to satisfy these requirements.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.95\textwidth]{figures/mot_photo} 
+ \caption[Photo of MOT layout]{Photo of optical setup around the MOT used to implement the quantum memory.} 
+ \label{fig:mot_photo} 
+\end{figure}
+
+%%%%% \cleardoublepage
+\begin{sidewaysfigure}
+ \centering 
+ \hspace{-10em} 
+ \includegraphics[width=1.05\textwidth]{figures/mot_table} 
+ \caption[Optical layout for MOT]{Optical diagram of MOT supporting optics.  The control section shows the output and monitoring of the control beam.  The signal section allows us to interchange a squeezed state with a coherent state.  The detection area mixes the MOT signal output with a LO for homodyne detection. The beam displacers near the MOT allow us to create two memories.  The photodiodes in the Optical Density section allow us to measure the optical density, and carry out the Raman spectroscopy.} 
+ \label{fig:mot_table} 
+\end{sidewaysfigure}
+
+\clearpage
+
+\subsection{Beam Displacers}
+
+As we wish to store entanglement in two atomic ensembles, we use a set of beam displacers to create two memory ensembles within the MOT \cite{choi2008mapping}.  This gives us the versatility to send the light into separate regions of the atomic cloud, and effectively create two MOTs.  Once the beam displacers are installed, we can either send in a squeezed vacuum state which can be separated into two entangled beams, or we can send in EPR entangled beams generated directly from a Type II OPO \cite{LauratPHD} and use the beam displacers to send a different polarization into each ensemble.
+
+The beam displacers are a set of calcite crystals ordered from the Karl
+Lambrecht Corporation, having a 10 mm x 20 mm aperture and cut to a customized
+thickness.  If we adjust the half-wave plates placed along the path of the signal and control beams, we can rotate their polarizations to $45^\circ$  and the beam displacers separate them into their horizontally and vertically polarized components.  By placing a beam displacer before and after the MOT, we can recombine the separated beams after they interact with the atoms. The beam displacers were cut to provide us with a 750 $\mu m$ separation distance between the two beams, as depicted in Figure \ref{fig:bd_diagram}.  In order to avoid optical losses which would destroy the quantum properties, we requested a transmission of at least 98\%, which corresponds to our measured values.
+
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Calcite beam displacer splits the input beam into H and V polarized components, and separates them by 750 $\mu m$.]{
+    \label{fig:bd_side}
+    \includegraphics[width=0.5\textwidth]{figures/bd} }
+  \subfloat[][Beam displacers placed around the MOT allow us to create two atomic ensembles, and thus two memories in one chamber.]{
+    \label{fig:bd_overhead}
+    \includegraphics[width=0.5\textwidth]{figures/mot_ovr} } \\
+     \vspace{20pt}
+  \caption[Beam displacer schematic]{Beam displacers used to create two memories.}
+  \label{fig:bd_diagram}
+\end{figure}  
+     
+
+While a low transmissivity acts as a source of optical losses, we can also experience losses when using the second beam displacer to recombine the two beams after the MOT.  Thus, it is critical that we obtain a high recombination visibility.  Therefore we requested that each beam displacer be cut from the same crystal in order to maximize their optical compatibility, and we mounted each one on an 1800 3-axis prism mount from Melles Griot, and replaced the angular adjustment screw of one mount with a PE4 piezo actuator from Thorlabs.  This allows us to adjust the relative angle between the beam displacers with micrometric precision, and optimize the recombination visibility.  By modulating the piezo with a triangular waveform, we can sweep the relative phases between the two recombining beams, and thus recreate visibility fringes for easier optimization.
+
+
+\subsection{Signal Beam}
+
+
+We begin by locking the Matisse laser onto the 4-4 transition, and sending a
+portion of it to the main table via a fiber optic.  It then either passes
+through the OPO to create our squeezed vacuum state, or arrives at the MOT
+directly in the form of a coherent state.  We will use the coherent signal for
+optimizing the memory before replacing it with the squeezed vacuum.   As we
+want to store pulses of light, we create these pulses by first passing the continuous beam through to a
+separate breadboard which transmits the light through two AOMs arranged in a serial +1/-1 order configuration.  This allows us to deviate the optical path of the beam without changing its frequency when we drive the two AOM's at the same frequency. These AOMs are controlled by a TTL pulse from the FPGA, and we have the possibility of shifting the output signal frequency if desired by driving each AOM with a different RF signal.  These coherent pulses then enter into another fiber, and re-exit at the MOT where their optical path recombines with the mode-matched path of the squeezed vacuum from the OPO.  
+
+As the coherent and squeezed vacuum beams have the same matching, we can
+easily optimize the storage with the coherent pulses and then use the same
+timing parameters to store the squeezed pulses.  The signal beam is focused
+onto a 50 $\mu m$ waist size at the center of the MOT chamber.  Once the
+signal leaves the MOT, it passes by a flip-flop mirror which allows us to send
+it to a fiber optic coupler.  As a first step in determining our memory
+efficiency, we will connect the output of this fiber coupler to an avalanche
+photodiode detector (APD) which will allow us to measure the memory efficiency
+in the pulse counting regime.  After achieving the desired efficiency, we can
+then remove the flip-flop mirror allowing the signal to propagate on to the homodyne detector, where we can carry out the quantum tomography.
+
+
+
+\subsection{Local Oscillator}
+
+A local oscillator from the Matisse arrives on the table via fiber optic, where it is mode-matched and recombined with the signal beam as it leaves the MOT, and then proceeds on towards the homodyne detector.
+
+
+\subsection{Control Beam}
+
+The control beam that we use to open and close the EIT transparency window in the atoms comes from a separate diode laser that is phase locked to the Matisse at a 9.2 GHz frequency offset.  This light arrives from the diode via a fiber optic, and is focused onto the atoms with a 200 $\mu m$ waist.  The control beam and signal beam combine at the atoms with a $1^\circ$ angle between them.  We chose a small angle so that we would avoid diminishing the memory storage time \cite{zhao2008millisecond}.  Once the control beam leaves the MOT, its path continues on to another fiber optic coupler which allows us to send it to a remote photodetector for observation.  
+
+
+\subsection{Auxiliary Beam}
+
+We also provide an auxiliary beam at the red-shifted 4-5 transition which allows us to measure the optical density.  This beam is brought directly from the MOPA output via a fiber optic.  When measuring the optical density, we hook the beam's fiber up to the coherent signal path in order to measure the density as it will be seen by our signal pulse.
+
+
+
+\section{Optical Density Measurements}
+
+As stated earlier, an important property that determines the efficiency of our
+storage is the optical density of the atomic ensemble as seen by our signal
+pulse, which tells us the fraction of light absorbed by the atomic ensemble with
+respect to the total amount of light incident on it.  As the density of the atoms increases, more of our signal is absorbed and stored in the atomic cloud, and the overall efficiency of storage increases.  
+
+We measure the optical density by sending a weak probe beam into the atoms on the 4-5 transition detuned by $\delta=10$ MHz, and measuring the amount of absorption experienced by the beam compared to when the atoms are not present.  When we pass our probe beam through the atoms, the atomic linewidth will undergo a spectral enlargement given by 
+
+
+\begin{equation}
+  \label{eq:spectral_enlargment}
+  \Gamma' = \Gamma \sqrt{1+\frac{I}{I_{sat}}}, 
+\end{equation}
+
+\noindent
+where $I=\frac{P}{4 \pi \omega^2}$, $I_{sat}=2.7 mW/cm^2$, $\Gamma=5.2$ MHz, and P is the beam power.  We can define the attenuation $f$ of the pulse by 
+
+\begin{equation}
+  \label{eq:attenuation}
+  f = \frac{V_{sig}}{V_{ref}},
+\end{equation}
+
+\noindent
+where $V_{sig}$ is the photodetector voltage measured from the attenuated beam, and $V_{ref}$ that for the referenced beam.  Once we have measured this attenuation factor, we can then determine the optical density using the expression 
+
+
+\begin{equation}
+  \label{eq:optical_density}
+  OD = - \frac{\delta^2 + \Gamma'^2 /4}{\Gamma'^2/4} ln(f),
+\end{equation}
+
+
+
+\noindent 
+where $\delta$ is our 10 MHz detuning from resonance.  With this technique, we can measure the optical density at several time points after extinguishing the magnetic field to observe how the density of the atomic cloud evolves in time before dispersing.
+
+
+\subsection{Implementation} 
+
+To carry out these measurements, we need to measure the absorption of the light when atoms are present, and compare this to the amount of light detected when the MOT is empty.  We could simply place a photodiode at the MOT exit, take a reference measurement, empty the MOT, and take a second measurement, however the fluctuations of laser intensity over the course of many measurements could give us a false measure when we average the data.  Therefore to avoid this possibility, we set up photodiodes before and after the MOT and divided the probe beam so that it simultaneously illuminated both detectors, as shown in Figure \ref{fig:od_block}.  This allowed us to simultaneously measure the amplitude of both the reference and signal beams, and obtain a more stable measurement by avoiding any effects from intensity fluctuations in our laser.  
+
+\begin{figure}[!htb]
+ \centering 
+ \includegraphics[width=0.55\textwidth]{figures/od_block} 
+ \caption[Optical density block diagram]{Schematic of the layout for the optical density measurement.  A signal and reference photodiode are digitally calibrated in Labview, and provide the optical density and eliminate laser intensity fluctuations. } 
+ \label{fig:od_block} 
+\end{figure}
+
+We sent 400 $\mu W$ of light from the probe laser along the optical path of the signal for a pulse duration of 10 $\mu s$ for the density measurement.  We needed to adjust the photodetectors to have a high gain and high bandwidth in order for them to detect a clear square signal, as the pulses had a low power, and only lasted for such a short time. Once we were able to detect clean square pulses, we sent the reference and signal photodiode outputs to an NI PCI-MIO-16E-4 acquisition card, where we were able to numerical adjust the offsets, and gains of the acquired trace.  This allowed us to calibrate the light passing through the empty MOT to the light detected directly with the reference photodiode.  Attempts to simply take the maximum and minimum points of our acquisition trace resulted in too noisy data, thus we numerically set thresholds at 120\% of the minimum, and 95\% of the maximum, and averaged all of the points beyond those thresholds in order to more cleanly determine the absorption.  This process was done for each pulse, and 40 pulses were averaged together in order to give a running average for the optical density.  Figure \ref{fig:front_odram} shows that Labview interface that we used to control this measurement.
+
+\begin{figure}[!htb]
+ \centering 
+ \includegraphics[width=0.45\textwidth]{figures/od} 
+ \caption[Optical density measurement]{10 $\mu s$ pulses used to measure optical density show an attenuation by $2/3$ corresponding to an optical density of 20. Single pulse acquisition shown.}
+ \label{fig:od} 
+\end{figure}
+
+With this setup, we managed to observe a maximum optical density of 20 with
+magnetic field active, as plotted in Figure \ref{fig:od}.  This level of optical
+density should allow us to achieve a memory storage efficiency of 10-20\%
+\cite{gorshkov2007photon}.
+
+\begin{sidewaysfigure}
+ \centering 
+ \includegraphics[width=1\textwidth]{figures/front_odram} 
+ \caption[Optical density and Raman spectroscopy Labview interface]{Labview interface used to program the optical density and raman spectroscopy pulses.} 
+ \label{fig:front_odram} 
+\end{sidewaysfigure}
+
+
+\section{Raman Scheme for the Compensation of the Magnetic Field}
+
+Although we can measure the current flowing through the MOT coils to try to evaluate if the B field near the atoms is zero, we are still subject to stray fields that come from the environment that can have strengths of up to several hundred milligauss.  In order to completely remove the effects of these parasitic fields, we installed a set of compensation coils around the MOT which allow us to correct for these environmental fields.  These coils allow us to apply a magnetic field in 3 dimensions independently, with strengths of up to 1 G.  To use these compensation coils, we must be able to determine how exactly we need to apply the field to correct for the magnetic parasites.  Using the atoms themselves as indicators turns out to be the best means of accomplishing this.
+
+\subsection{Raman Spectroscopy} 
+
+In order to determine if a magnetic field is present near the atoms, we will
+use the technique of Raman Spectroscopy which is insensitive to Doppler broadening, but very sensitive to broadening caused by magnetic fields \cite{ringot2001subrecoil}.  This technique connects the
+hyperfine ground states F=3 and F=4 by means of a virtual excited level. This
+transition is far detuned from the F=4 level so that we can prevent any
+resonant transitions to and from the excited F=4 level.  Figure
+\ref{fig:raman_transitions} depicts this transition diagram.  We can also define the Raman detuning as
+
+ 
+\begin{equation}
+  \label{eq:raman}
+  \delta_R = \omega_1 - \omega_2 - \omega_{HF},  
+\end{equation}
+
+
+\noindent
+where $\omega_{HF}$ is the frequency of the hyperfine transition, 9.2 GHz, and
+$\omega_1$ and $\omega_2$ are our laser frequencies.  Depending on the Raman detuning, we can drive atoms from the state F=3 into F'=4 via stimulated emission at frequency $\omega_1$.  When magnetic fields are present, the Zeeman levels are split, and atoms are transferred for several different values of the detuning $\delta_R $.  In the absence of magnetic fields, this transfer only occurs at resonance $\delta_R = 0$. 
+
+
+\begin{figure}[!ht]
+  \centering
+  \subfloat[][Transition diagram for Raman spectroscopy.  The diode and Matisse transfer atoms to F=4 depending on the detuning $\delta_R$, and the raman probe beam measures the absorption.]{
+    \label{fig:raman_transitions}
+    \includegraphics[width=0.4\textwidth]{figures/raman_transitions} }
+  \hspace{5pt}
+  \subfloat[][Zeeman splitting of hyperfine levels due to the presence of a magnetic field.  In the absence of a magnetic field, a transition occurs only at resonance $\delta_R=0$.]{
+    \label{fig:raman_zeeman}
+    \includegraphics[width=0.4\textwidth]{figures/raman_zeeman} } 
+  \hspace{5pt}
+  %% \subfloat[][Timing diagram for Raman pulses and probe beams.  The pulses first transfer the atoms after canceling the B-field,, and the probe measures the absorption.]{
+  %%   \label{fig:raman_timing}
+  %%   \includegraphics[width=0.3\textwidth]{figures/raman_timing} } \\
+  %%  \vspace{-10pt}
+   \caption[Raman spectroscopy transitions]{ }
+  \label{fig:raman_tuning}
+\end{figure}
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.7\textwidth]{figures/raman_timing} 
+ \caption[Raman timing diagram]{Timing diagram for Raman pulses and probe beams.  The pulses first transfer the atoms after canceling the B-field,, and the probe measures the absorption.} 
+ \label{fig:raman_timing} 
+\end{figure}
+
+By sending a probe beam detuned by 10 MHz from the F=4 $\to$ F'=5 transition into the atoms, we can measure the absorption of our probe for different detuning values.  The number of resonances that show absorption and the frequency spacing between them tells us the strength of the magnetic fields present \cite{felinto2005control}.  When we succeed in completely canceling out the magnetic field, we only observe one absorption peak at resonance.  Figure \ref{fig:raman_timing} depicts the timing diagram for this measurement.
+
+ 
+
+
+
+\subsection{Labview Interface} 
+
+As we require a phase coherence between our two Raman beams, we use the
+phase-locked diode and the Matisse laser to probe for the Raman transitions.
+Scanning the laser frequency requires repeated measurements in order to
+extract the signal from the noisy data, thus we developed a Labview program to
+control the scanning rate of our laser and average the results.  It changes
+the Raman detuning by digitally changing the reference frequency for our OPLL.
+The interface for this program is the same as that used for the optical
+density measurements, as shown in Figure \ref{fig:front_odram}.
+
+\begin{sidewaysfigure}[ht] 
+ \centering 
+ \hspace{-8em}
+ \includegraphics[width=1.05\textwidth]{figures/raman_bd} 
+ \caption[Raman detuning scanner block diagram]{Block diagram for program to scan the phase lock frequency and adjust the detuning $\delta_R$} 
+ \label{fig:raman_bd} 
+\end{sidewaysfigure}
+
+Figure \ref{fig:raman_bd} shows a portion of the block diagram that we use to
+scan the Raman laser.  This code is implemented using a Labview instrument
+driver, which is a downloadable preprogrammed interface to our E4420b signal
+generator.  We enter into the front panel the frequency range we would like to
+scan for the Raman detuning, and the number of increments we desire.  The
+program creates an array for each frequency increment, and it iterates through
+the array sending the desired frequency to the Configure Frequency instrument
+driver at each point.  The driver then communicates with the signal generator
+via a GPIB cable, who then changes the OPLL reference frequency to the desired point.  Once we have scanned the entire frequency range, the program resets the reference frequency to its original position.  
+
+While scanning the frequency, we measure the attenuation of the Raman pulses
+using the same reference and signal photodiodes as used for the optical
+density measurements.  This allows us to determine if a certain frequency
+setting leads to a stimulated a Raman emission.  The program acquires the density settings using an acquisition card, and plots the density as a function of frequency at the end of the scan.
+
+
+\section{Conclusion}
+
+The development of this experiment is currently underway, however in this section, we have shown the major advances made in order to carry out the storage and retrieval of squeezed states in cold Cesium atoms.  Now that the major components have been developed, there remains the process of optimizing the MOT, before proceeding to test the memory in the classical domain.
+
+In the next chapter, we will discuss the details of the timing system developed to synchronize and trigger the different aspects of this experiment.
+
+
+
+
+

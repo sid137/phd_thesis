@@ -1,0 +1,671 @@
+\chapter{Continuous Variable Quantum Optics}
+\label{ch:2}
+\minitoc
+
+In this chapter, we will review the foundations of quantum mechanics and
+quantum optics, and explore the different quantum states of the
+electromagnetic field.  We will then examine how to manipulate these quantum
+states to produce non-classical correlations in optical beams.
+
+ 
+\section{Quantum States}
+\label{quantum_states} 
+
+The postulates of quantum mechanics give us a way of
+defining the state of a system and its observable quantities that is
+fundamentally different from that used in
+classical mechanics.  The first axiom
+says that the state of a system at a fixed time is defined by a state vector
+$\ket{\psi}$.  We can represent a state vector as a superposition of basis states by 
+
+
+\begin{eqnarray}
+  \label{eq:quantum_state_decomposition}
+  \ket{\psi} = \sum_{n} c_{n} \ket{n} \quad & \quad p_n = \abs{c_n}^2 =
+\frac{\abs{\braket{n}{\psi}}^2}{\braket{\psi}{\psi}} \quad & \quad \sum \abs{c_n}^2 = 1 ,
+\end{eqnarray}
+
+\noindent
+where each of the $c_n$ coefficients represent a complex amplitude of the eigenvector $\ket{n} $, and the probability amplitudes $\abs{c_n}^2$are subject to a normalization condition.  Upon measurement, we have a probability $p_n$ of detecting the system in the state $\ket{n}$.  Within this framework, observable quantities are represented by Hermitian operators $\hat{O}$, whose expected value can be calculated by
+
+
+\begin{equation}
+  \label{eq:observable}
+  \avg{\hat{O}}_{\ket{n}} = \sum_n c_n \bra{n} \hat{O} \ket{n}.
+\end{equation}
+
+
+When we know for certain that a system exists within a uniquely given state,
+we can refer to this state as a \emph{pure state}, and the state vector
+$\ket{\psi}$ encompasses all of the information that we can obtain about the
+system.   We can, however, imagine a more general case of a system that is
+composed of an ensemble of sub-states $\ket{\psi_n}$, where each sub-state
+appears in the ensemble with a probability $P_n$.  We can thus describe this
+system, as a \emph{statistical mixture} of pure states, or a \emph{mixed
+state}, where
+
+\begin{equation}
+  \label{eq:mixes_states_norm}
+  \sum_i  P_i = 1.
+\end{equation}
+
+
+\subsection{The Density Operator} 
+\label{the_density_operator} 
+
+We can introduce the \emph{density operator} $\hat{\rho}$ as a means of representing a system composed of mixed states, using the expression
+
+\begin{equation}
+  \label{eq:density_operator}
+  \hat{\rho} = \sum_n P_n \proj{\psi_n}.
+\end{equation}
+
+This operator fully describes the quantum state of the system as it
+encompasses the complex coefficients for the pure states available to our
+system, as well as the fact that we only have probabilistic information $P_n$ about precisely which state our system is in.  Furthermore, the density operator allows us to calculate all of the information that quantum mechanics can provide about the system, whether the system be in a precisely known pure state, or in a statistical mixture of states.
+
+
+
+\subsubsection{Properties of the Density Operator}
+\label{properties_of_the_density_operator} 
+
+The density operator has several properties which allow us to make predictive measurements about our system.  If we have an Hermitian observable $\hat{O}$, then we can calculate the expectation value of our observable using \cite{cohen} 
+
+\begin{equation}
+  \label{eq:observable_from_density}
+  \avg{\hat{O}}  = \sum_{n} P_n \matrixel{\psi_n}{\hat{O}}{\psi_n} =
+Tr(\hat{O} \hat{\rho}).
+\end{equation}
+
+\noindent
+The density operator also has the following properties: it is Hermitian, its trace equals 1, and it is positive semi-definite
+
+
+\begin{eqnarray}
+  \label{eq:density_properties}
+  \hat{\rho}^\dagger = \rho \quad & \quad    Tr(\hat{\rho})=1      \quad &
+\quad     \matrixel{\psi}{\hat{\rho}}{\psi}   =  \sum_n P_n
+|\braket{\psi}{\psi_n}|^2  \ge 0.
+\end{eqnarray} 
+
+\noindent
+We can use the density operator to distinguish between pure states and mixed states by using the \emph{purity}, which is given by \cite{gerry2005introductory} 
+
+\begin{equation}
+  \label{eq:purity_density}
+  Tr(\hat{\rho}^2) \quad \quad \text{with } Tr(\hat{\rho}^2) \le 1. 
+\end{equation} 
+
+\noindent
+The equality holds only when the state is a pure state, whereas for mixed
+states, $Tr(\hat{\rho}^2) < 1$.  Furthermore, by using \req{eq:von_neumann} and the system's Hamiltonian $\mathcal{H}$, we can determine the dynamic properties of our system 
+
+\begin{equation}
+  \label{eq:von_neumann}
+  i \hbar \pd{\hat{\rho}}{t} = [\mathcal{H}, \hat{\rho}].
+\end{equation}
+
+\noindent
+A complete specification of $\hat{\rho}$ allows us to determine the values of all measurable quantities allowed by quantum mechanics.  For this reason, we consider the density operator as the most general representation of a quantum state.
+
+
+\subsection{The Wigner Representation}
+\label{the_wigner_representation} 
+
+
+Although the density operator $\hat{\rho}$ provides the most general representation of a quantum state, it still remains an abstract concept which provides us with little intuition about the information contained in a system's state.  We can seek a more illustrative representation of the information contained in the density matrix by using the \emph{Wigner Function} \cite{Wigner32}.
+
+The Wigner function has its conceptual origins in classical and statistical physics, where for a classical statistical ensemble, it is possible to specify the state of the system by precise, simultaneous measurements of its conjugate phase space variables $q$ and $p$ \cite{schleich2001quantum}.  A measurement of these variables would allow us to create a phase-space probability distribution $\wigner$, which would permit the prediction of any other quantities related to the system. 
+
+An attempt to similarly predict the quantities involved with a quantum system
+is not as straightforward however.  Quantum mechanics prevents us from
+carrying out the precise, simultaneous measurement of $q$ and $p$ due to their non-commutativity, thus there is no way to create a \emph{true} quantum phase space distribution for our system.
+
+Instead of using a true phase space distribution, we can suppose that there
+exists a function $\wigner$ which acts like join probability distribution for
+$q$ and $p$.  The Wigner function fits this characteristic, and allows us to relate the system's density matrix to a quasi-probability distribution through the following definition \cite{schleich2001quantum}:
+
+\begin{equation}
+  \label{eq:wigner_function}
+  \wigner = \frac{1}{2\pi \hbar} \intind e^{-\frac{i}{\hbar}p \xi}
+\matrixel{q+\frac{1}{2}\xi}{\hat{\rho}}{q-\frac{1}{2}\xi} d\xi.
+\end{equation}
+
+\noindent
+We can express the Wigner function for a state as a Fourier transform of its density matrix, and in the cases of pure states where $ \dens =  \proj{\psi}$ and given the wavefunction $\psi(x) = \braket{x}{\psi}$, we can express it as a Fourier transform of position-shifted wavefunctions
+
+\begin{equation}
+  \label{eq:wigner_pure}
+  \wigner = \frac{1}{2\pi \hbar} \intind e^{-\frac{i}{\hbar}p \xi} \;
+\psi^*\left(q-\frac{1}{2}\xi\right)\psi \left(q+\frac{1}{2} \xi \right) \;
+d\xi.
+\end{equation}
+
+\noindent 
+We can define the \emph{marginal distributions} as the true probability
+distributions of $q$ and $p$ individually.  By integrating $\wigner$ over $q$
+or $p$, we can obtain these marginal distributions for $q$ and $p$ respectively \cite{leonhardt1997measuring} 
+
+\begin{eqnarray}
+  \label{eq:marginals}
+  W(q) = \intind \wigner \; dp    & \quad \text{and} \quad  &   W(p) = \intind
+\wigner \;   dq.
+\end{eqnarray}
+
+\noindent
+These marginals serve as projections of the Wigner function onto the axis of
+our $q$ and $p$ coordinates, thus while we cannot measure the entire Wigner function at once, we can measure the marginal projections of it.  
+
+\subsubsection{Properties of the Wigner Function}
+\label{properties_of_the_wigner_function} 
+
+The Wigner function has certain properties that make it useful for describing quantum states \cite{schleich2001quantum} .  It acts like a probability distribution through its normalization constraint
+
+\begin{equation}
+  \label{eq:normalized_wigner}
+  \intind \intind \wigner \; dq \; dp = 1,
+\end{equation}
+
+\noindent
+and it is purely real for Hermitian operators $\dens$ , such that
+ \begin{equation}
+   \label{eq:wigner_is_real}
+   \wigner^* = \wigner.
+ \end{equation}
+
+\noindent
+Additionally, $\wigner$ satisfies a trace rule, which allows us to evaluate the overlap of two density operators 
+
+\begin{equation}
+  \label{eq:wigner_overlap}
+  Tr(\dens_1 \dens_2) = 2 \pi \hbar \intind \intind \;
+\mathcal{W}_{\dens_1}(q,p) \; \mathcal{W}_{\dens_2}(q,p) \; dq \; dp.
+\end{equation}
+
+\noindent
+Using this trace rule, we can once again evaluate the expectation value of an operator $\hat{O}$ using
+
+\begin{equation}
+  \label{eq:wigner_expectation}
+  \avg{\hat{O}} =  Tr(\dens \hat{O}) = 2 \pi \hbar \intind \intind \;
+\mathcal{W}_{\dens}(q,p) \; \mathcal{W}_{\hat{O}}(q,p) \; dq \; dp,
+\end{equation}
+
+\noindent
+or similarly, we can determine the purity $Tr(\dens^2)$ of a state by
+
+
+\begin{eqnarray}
+  \label{eq:wigner_purity}
+  Tr(\dens^2) \le 1    & \Rightarrow & 2 \pi \hbar \intind \intind \;
+\mathcal{W}^2_{\dens}(q,p) \; dq \; dp \le 1.
+\end{eqnarray}
+
+\noindent
+The Wigner function is positive when describing Gaussian states, but can take on negative values when we use it to describe non-gaussian states.  When $\wigner < 0$, we interpret this as a strong signature of non-classical behavior.  Because of its ability to take on negative values under certain conditions, we consider it to be a \emph{quasiprobability} distribution as opposed to a true probability distribution.
+
+Finally, the overlap formula allows us to express the density matrix in terms of the Wigner function in a given basis by using the relation shown in \cite{leonhardt1997measuring}
+
+\begin{equation}
+  \label{eq:wigner_to_density}
+  \matrixel{\psi_a}{\dens}{\psi_b} = Tr(\dens \ket{\psi_b}\bra{\psi_a}) = 2
+\pi \hbar \intind \intind \wigner \mathcal{W}_{\psi_a \psi_b}(q,p) \; dq \;
+dp.
+\end{equation}
+
+\noindent
+These properties shows us that we can treat the Wigner function as a true representation of a quantum state, and use it for the calculation of relevant quantities.
+
+
+
+% Electric Field
+\section{Quantum States of the Electric Field} 
+\label{quantum_states_of_the_electric_field} 
+
+Light serves as an extremely useful tool in the study of quantum states, and
+the development of lasers over the last 50 years has allowed us to easily
+create highly coherent sources of light.  By using these light sources, we can
+easily encode information and transmit it over long distances.  Additionally, as light is well understood in the classical domain, by studying its uniquely quantum properties we can further our understanding of quantum mechanics.  
+
+In the previous section, we have reviewed several means of describing the quantum states of a system.  Here, we will begin to apply this formalism to the electromagnetic field.  First, we will begin with a classical description of the electric field, and show how through its quantization, it is possible to produce uniquely quantum states of light whose properties have no classical analogues.  
+
+We begin with the classical expression for a single mode electric field:
+
+\begin{equation}
+  \label{eq:classical_e_field}
+  E(t) = \abs{E_{0}} cos(\omega t + \phi )  = E_1 cos(\omega t) + E_2
+sin( \omega t).
+\end{equation}
+
+\noindent
+Through this description, we see that we have two canonical variables available for describing the E-field: either the field amplitude $E_0$ and phase $\phi$,  or the quadrature components of the field $E_1$, and $E_2$.
+  
+We can develop a similar quantum expression for the E field by replacing the classical quadratures with quantum operators
+
+\begin{equation}
+  \label{eq:quantum_e_field}
+     \hat{E}(t) = \hat{E}_1 \cos(\omega t) + \hat{E}_2 \sin (\omega t).
+\end{equation}
+
+\noindent
+By using the non-commuting photon annihilation and creation operators $\ani$ and $\crea$, we can rewrite these quantum quadrature operators in the form
+
+\begin{eqnarray}
+  \label{eq:quad_bosonic_decomposition}
+  \hat{E}_{1} = \hat{a} + \hat{a}^{\dagger }  \quad  & \quad    \hat{E}_{2} =
+i (\hat{a}^{\dagger } - \hat{a})   \quad  & \quad    [\hat{a},
+\hat{a}^{\dagger }] = 1.
+\end{eqnarray}
+
+\noindent
+When performing measurements on our state, it is useful to specify our measurements in terms of a \emph{generalized quadrature} $\hat{X}_\theta $, which is a linear combination of our two quadrature operators $\hat{E}_{1}$ and $\hat{E}_{2}$ \cite{Fabre90}
+
+\begin{equation}
+  \label{eq:generalized_quadratures}
+  \hat{X}_\theta = \hat{E}_1 cos \theta + \hat{E}_2 sin \theta = \hat{a} e^{-i
+\theta } + \hat{a}^{\dagger} e^{i \theta}.
+\end{equation}
+
+\noindent
+Through the commutation relation of the boson operators given in Equation \ref{eq:quad_bosonic_decomposition}, we can derive the commutation relationship for the field quadratures, and see that they do not commute
+
+\begin{equation}
+  \label{eq:quadrature_commutation}
+  \commutator{\hat{E}_1}{\hat{E}_2}=2i.
+\end{equation}
+
+\noindent
+The non-commutativity of these two quadratures tells us that any simultaneous measurement on them both will only result in a limited precision measurement, which we can quantify by defining the \emph{variance} of our measure as
+
+\begin{equation}
+  \label{eq:variance_definition}
+  \var{\hat{E}_i} = \avg{\hat{E}^2_i} - \avg{\hat{E}_i}^2.
+\end{equation}
+
+\noindent
+We can then use the generalized uncertainty principle given in
+\req{eq:quadrature_commutation} to derive an uncertainty relationship between the two quadrature variances
+
+\begin{equation}
+  \label{eq:HUP}
+  \std{\hat{A}} \std{\hat{B}} \ge \frac{1}{2i} \avg{\commutator{\hat{A}}{\hat{B}}}.
+\end{equation}
+
+\noindent
+Using \req{eq:quadrature_commutation} with this uncertainty relation tells us
+that any simultaneous measurement of the two quadrature components will yield a
+certain amount of imprecision in the measurement.  Thus, the result of our measurement will be subjected to a \emph{quantum noise}.
+
+\begin{equation}
+  \label{eq:quadrature_hup}
+  \std{\hat{E}_1} \std{\hat{E}_2} \ge 1.
+\end{equation}
+
+
+
+%%% Quantum States
+
+% Vacuum
+\subsection{Vacuum States}
+\label{vacuum_states} 
+
+Now that we have a quantum expression for the electric field, we can begin to
+look at the quantum optical states that we can produce.  The most fundamental
+state is the vacuum state $\ket{0}$, which is a purely quantum state that has no classical analogue.  The mean number of photons $\avg{\hat{n}}$ in the vacuum state is $0$, however because we cannot violate the uncertainty principle given above, the variances of the photon number can never go to $0$
+
+\begin{eqnarray}
+  \label{eq:vacuum}
+  \avg{\hat{n}} = \bra{0} \hat{n} \ket{0} = 0   \quad & \text{and} \quad  & \std{\hat{E}_1} = \std{\hat{E}_2} = 1.
+\end{eqnarray}
+
+\noindent
+This restriction tells us that even in the vacuum state with an average photon number of $0$, we observe noise fluctuations in our quadrature measurements.  The vacuum state has symmetric variances in both quadratures, which allows it to satisfy the equality given by \req{eq:quadrature_hup}.  By satisfying this equality, we can call this state a \emph{minimum uncertainty} state whose noise fluctuations are at the \emph{standard quantum limit} (SQL).  We can express the Wigner function for the vacuum state by \cite{leonhardt1997measuring}
+
+\begin{equation}
+  \label{eq:wigner_vacuum}
+  \wigner = \frac{1}{\pi} e^{-q^2-p^2}.
+\end{equation}
+
+
+
+
+% Number
+\subsection{Fock States}
+\label{fock_states} 
+
+The next set of states that we can consider are the Fock or \emph{number} states \cite{fox2006quantum}.  The Fock state represents a state that contains a precisely well-defined number of photons, thus a completely undefined phase. We can define the number operator $\hat{n}$ in terms of the annihilation and creation operators
+
+\begin{equation}
+  \label{eq:number_operator}
+  \hat{n}= \crea \ani.
+\end{equation}
+
+\noindent
+The action of the number operator on a number state vector gives us the number of photons present in that state, and shows us that the variance of the photon number is 0
+
+\begin{eqnarray}
+  \label{eq:n_equation_phase}
+  \hat{n}\ket{n} = n \ket{n}  \quad & \text{and} \quad & \text{Var}(\hat{n}) = 0.
+\end{eqnarray}
+
+\noindent
+Fock states containing photons have symmetric noise variances, but are not minimum uncertainty states
+
+\begin{equation}
+  \label{eq:number_properties}
+  \std{\hat{E}_1} = \std{\hat{E}_2} = \sqrt{2n+1}.
+\end{equation}
+ 
+\noindent
+We can express the Fock state for a given photon number as a series of photon creation operations acting on the vacuum state.
+
+\begin{equation}
+  \label{eq:number_state}
+  \ket{n} = \frac{\hat{a}^{\dagger n}}{\sqrt{n!}}\ket{0}.
+\end{equation}
+
+\noindent
+The Fock states have a Wigner function given by
+
+\begin{equation}
+  \label{eq:wigner_fock}
+  \wigner = \frac{(-1)^n}{\pi} e^{-q^2-p^2}L_n(2q^2+2p^2),
+\end{equation}
+
+\noindent
+where the $L_n(x)$ represent the Laguerre polynomials \cite{leonhardt1997measuring}.
+
+
+
+% Coherent
+\subsection{Coherent States}
+\label{coherent_states} 
+
+Mathematically, we can construct a coherent state by applying the
+\emph{displacement operator} $ \hat{D}(\alpha)$ to the vacuum state $\ket{0}$
+\cite{scully1997quantum}.  Coherent states $\ket{\alpha} $ are considered as quantum states which most closely resemble classical states
+
+\begin{equation}
+  \label{eq:displacment_operator}
+  \hat{D}(\alpha) = e^{\alpha \crea - \alpha^* \ani} = e^{\frac{1}{2}\abs{\alpha}^2 }e^{\alpha \crea}e^{-\alpha^* \ani}
+\end{equation}
+
+
+
+\begin{equation}
+  \label{eq:displaced_vacuum}
+  \hat{D}(\alpha) \ket{0} = \ket{\alpha}.
+\end{equation}
+
+\noindent
+We can use Equation \ref{eq:displacment_operator} to express the coherent states as an expansion of Fock states \cite{Glauber63} 
+
+\begin{equation}
+  \label{eq:coherent_fock_expansion}
+  \ket{\alpha} =  e^{-\frac{\abs{\alpha}^2}{2}} \sum_n \frac{\alpha^n}{\sqrt{n!}} \ket{n}.
+\end{equation}
+ 
+\noindent
+We can also calculate the probability of a coherent state having a given number of photons $P(n)$, and we see that this probability follows \emph{Poisson} statistics \cite{fox2006quantum}.  Thus due to our ability to approximate classical states with coherent states, we can define classical states of light as having Poissonian statistics
+
+\begin{equation}
+  \label{eq:coherent_probability}
+  P(n) = \abs{\braket{n}{\alpha}}^2 = \frac{\abs{\alpha}^{2n}e^{-\abs{\alpha}^2}}{n!}
+\end{equation}
+
+\noindent
+As \req{eq:coherent_equation} shows, we can express coherent states as
+eigenstates of the annihilation operator $\ani$
+
+\begin{equation}
+  \label{eq:coherent_equation}
+  \ani \ket{\alpha} = \alpha \ket{\alpha }.
+\end{equation}
+
+\noindent
+Coherent states have equal variances in their quadratures, and an optical beam composed of coherent states has a mean number of photons that is proportional to its intensity $\abs{\alpha}^2$
+
+\begin{eqnarray}
+  \label{eq:coherent_properties}
+    \std{\hat{E}_1} = \std{\hat{E}_2} = 1   \quad & \quad \std{\hat{n}} =  \abs{\alpha} \quad & \quad \avg{\hat{n}} = \abs{\alpha}^2.
+\end{eqnarray}
+
+\noindent
+The Wigner function of a coherent state is given by \req{eq:wigner_coherent}
+
+\begin{equation}
+  \label{eq:wigner_coherent}
+  \wigner = \frac{1}{\pi} e^{-(q-q_0)^2-(p-p_0)^2}.
+\end{equation}
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.45\textwidth]{figures/wigner_coherent} 
+ \caption[Wigner function for Coherent state]{Wigner function depicting a coherent state} 
+ \label{fig:wigner_coh} 
+\end{figure}
+
+% Squeezed
+\subsection{Squeezed States}
+
+Squeezed states are another example of purely quantum states.  We can create a squeezed state through the action of the squeezing operator \cite{garrison2008quantum}
+
+\begin{equation}
+  \label{eq:squeezing_operator}
+  \hat{S}(\zeta) = e^{\frac{1}{2} (\zeta^* \ani^{2} - \zeta \hat{a}^{\dagger 2}) },
+\end{equation}
+
+\noindent
+where we define $\zeta$ as the squeezing parameter
+
+\begin{equation}
+  \label{eq:squeezing_parameter}
+  \zeta = r e^{i \phi }.
+\end{equation}
+
+\noindent
+Squeezed states respect the uncertainty principle in that the product of the quadrature variances has a minimum value, however, the quadrature variances are not equal.   Thus, we can obtain a variance in one quadrature measurement that goes below the standard quantum limit, at the expense of an increased variance in the other measurement.  Squeezed states have a mean photon number that is a function of the magnitude of squeezing parameter $r$, and $\abs{\alpha}^2$ where $\alpha = \avg{\ani}$ \cite{gerry2005introductory}
+
+
+\begin{eqnarray}
+  \label{eq:squeezed_properties}
+    \std{\hat{E}_1} = e^{-r} \quad & \quad \std{\hat{E}_2} = e^{r}   \quad & \quad  \avg{\hat{n}} = \abs{\alpha}^2 + sinh(r).
+\end{eqnarray}
+
+\noindent
+One important type of squeezed state that we will discuss is the squeezed vacuum, whose Wigner function we can express with \cite{leonhardt1997measuring}
+
+\begin{equation}
+  \label{eq:wigner_squeezed_vacuum}
+  \wigner = \frac{1}{\pi} exp(-e^{2\zeta}q^2-e^{-2\zeta}p^2).
+\end{equation}
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.45\textwidth]{figures/wigner_sqz} 
+ \caption[Wigner of Squeezed State]{Wigner function for a squeezed state
+ representing -2.6 dB of quadrature squeezing} 
+ \label{fig:wigner_sqz} 
+\end{figure}
+
+\subsection{Operator Linearization}  
+\label{sec:linearization}
+
+We can linearize our quantum operators by decomposing them into a steady-state classical term, and a fluctuating term, and assuming that the classical term has a much larger amplitude than the fluctuating term \cite{Fabre90}.  If we take the annihilation and creation operators $ \ani$ and $\crea$ as examples, we can represent them in the following form
+
+\begin{eqnarray}
+  \label{eq:linearized}
+  \ani(t)  & = &  \alpha + \delta \ani(t) \\
+  \crea(t) & = & \alpha^* + \delta \crea(t) \\
+  \abs{\alpha} & \gg & \abs{\delta \ani(t)}.
+\end{eqnarray}
+
+In this decomposition, the first term $\alpha$ represents a classical value, which is the time-averaged value $\avg{\ani}$ of the annihilation operator, and the second term $\delta \ani(t)$ represents the first order fluctuation where we assume that the mean value of the fluctuating term is zero.
+
+This technique provides us with an alternative decomposition of our quantum operators, which can often allow us to solve many problems using analytical approaches.  By using this decomposition, we can express our noise variance directly as a function of our fluctuating term
+
+\begin{equation}
+  \label{eq:noise_fluctuation}
+  \left(\Delta \hat{O} \right)^2 = \avg{(\delta \hat{O})^2}.
+\end{equation}
+
+\subsection{Noise Characterization} 
+\label{noise_characterization} 
+
+One problem with using the variance directly for characterizing noise can arise in a case where the variance diverges, such as when we measure white noise.  This divergence occurs due to high-frequency fluctuations in our signal.  In practice, our measurement of noise takes place over a finite frequency bandwidth which filters our noise spectrum.  We can thus obtain a more precise characterization of our noise for a quadrature $\hat{X}(t)$ by using the autocorrelation function \cite{courty05}
+
+\begin{equation}
+  \label{eq:autocorelation}
+  C_{\hat{X}}(\tau) = \avg{ \delta \hat{X}(t) \delta \hat{X}^\dagger(t')}.
+\end{equation}
+
+\noindent
+When $C(\tau)$ only depends on the time difference between two instants such that $\tau=t-t'$, we can take the Fourier transform of the autocorrelation function to obtain the noise spectral density
+
+\begin{equation}
+  \label{eq:noise_spectral_density}
+  S_{\hat{X}}(\Omega ) = \intind C_{\hat{X}}(\tau) e^{i \Omega \tau}  d\tau.
+\end{equation}
+
+\noindent
+We can relate the autocorrelation function of our Fourier-transformed quadrature to the noise spectral density with 
+
+\begin{equation}
+  \label{eq:noise_spectral_fourier}
+  \avg{ \delta \hat{X}(\Omega ) \delta \hat{X}^\dagger(\Omega')} = 2 \pi S_{\hat{X}}(\Omega ) \delta(\Omega - \Omega' ).
+\end{equation}
+
+
+\section{Quantum Correlations}
+\label{quantum_correlations} 
+
+
+One phenomenon that we can observe in the quantum domain is the existence of non-classical correlations for a system.  The production of purely quantum states of light aides us in the experimental observation of these correlations.  Here we will show how using a simple tool such as a beamsplitter, and squeezed light will allow us to produce two entangled beams that exert non-classical correlations.
+
+\subsection{Separability Criterion} 
+\label{separability_criterion} 
+
+There are many criteria that can be used to determine if correlations between
+quadratures are of quantum origin \cite{treps2005criteria}, such as gemellity
+as shown in \cite{Giacobino87}, quantum non-demolition measurements, inseparability, and EPR criteria \cite{Reid88}.  Of these we will consider the inseparability criterion for our experiment here.
+
+We define two entangled, or inseparable, systems as systems where it is impossible to factor the two states $\dens_{i1}$ and $\dens_{i2}$ into the independent form 
+
+\begin{equation}
+  \label{eq:seperable}
+  \dens = \sum_i p_i \dens_{i1} \otimes  \dens_{i2}
+\end{equation}
+
+\noindent
+Duan \cite{duan} and Simon \cite{simon} established a criterion which allows us to more easily experimentally determine the separability of two states, using 
+
+
+\begin{equation}
+  \label{eq:separability}
+  Var(\hat{X}_1 + \hat{X}_2) + Var(\hat{P}_1 -\hat{P}_2) < 2     ,
+\end{equation}
+
+\noindent
+where $\hat{X}_i$ and $\hat{P}_i$ represent the non-commuting conjugate
+operators of system $i$. If the variances of our operators $\hat{X}_i$ and
+$\hat{P}_i$ satisfy \req{eq:separability}, we can say that the states are inseparable, and thus exhibit quantum correlations between them.  
+
+\subsection{States Incident on a Beamsplitter} 
+\label{states_incident_on_a_beamsplitter} 
+
+With this criterion in place, we can study the properties of two fields incident on a 50/50 beamsplitter.
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.30\textwidth]{figures/correlations} 
+ \caption[Electric fields incident on a beamsplitter]{A squeezed vacuum state
+$\ket{\xi}$, and a vacuum state $\ket{0}$ incident on a 50/50 beamsplitter
+creates two entangled beams at the output.}  
+ \label{fig:beam_splitter_sep} 
+\end{figure}
+
+The reflection and transmission relations for the field give us the following
+field compositions for the output beams $E^+$ and $E^-$, where $E_1$ and $E_2$
+are two different optical modes
+
+\begin{eqnarray}
+  \label{eq:e_beamsplitter}
+  E^+ = \frac{E_1 + E_2}{\sqrt{2}}  & \mathrm{and} & E^- = \frac{E_1 - E_2}{\sqrt{2}}   .
+\end{eqnarray}
+
+\noindent
+We can use the linearization procedure outlined earlier in Section \ref{sec:linearization} to derive the fluctuations on the beamsplitter output ports
+
+\begin{eqnarray}
+  \label{eq:bs_fluctuations}
+  \delta E^+ = \frac{\delta E_1 + \delta E_2}{\sqrt{2}} & \mathrm{and} & \delta E^- = \frac{\delta E_1 - \delta E_2}{\sqrt{2}}  .
+\end{eqnarray}
+
+\noindent
+If our fields $E_1$ and $E_2$ are not correlated, we can then calculate the variances of our fluctuations using $V_i = \avg{\delta E^\dagger_i \delta E_i} $ and obtain the following output port variances 
+
+\begin{equation}
+  \label{eq:bs_vaiances}
+  V^- = V^+ = \frac{V_1 + V_2}{2}   .
+\end{equation}
+
+\noindent
+If we now consider the case where we send a squeezed state $\ket{\xi}$ into path 1, and a vacuum state $\ket{0}$ into path 2, such as shown in Figure \ref{fig:beam_splitter_sep}, the variance of the vacuum state is given by $V=1$ for both quadratures, since it is a minimum uncertainty state.  However for the squeezed quadrature of our squeezed state, we have a variance where $V_{SQZ} < 1$.  By reinserting these quadrature variances into Equation \ref{eq:separability}, we satisfy the criterion for our output beams, thus showing that the two beams are entangled.
+
+\begin{equation}
+  \label{eq:bs_insep}
+  V^- = V^+ = \frac{1 + V_{SQZ}}{2}  < 1 .
+\end{equation}
+
+\noindent
+Although our beam quadratures exhibit quantum correlations, this inseparability
+criterion does not satisfy the requirements for EPR entanglement \cite{Reid88}
+\cite{Reid89}.  EPR correlations are a stronger criterion than the
+inseparability criterion, as all EPR beams are non-separable, whereas not all
+non-separable beams are EPR entangled.  In a system posessing EPR entanglement, the measurements of the
+quadratures of one beam would provide precise information on the quadratures
+for the other beam, this appearing to violate the Heisenberg inequality.
+
+\subsection{Effects of Optical Losses} 
+\label{effects_of_optical_losses} 
+
+While we can use the two output ports of a beamsplitter to detect quantum correlations, we can also use the beamsplitter to model optical losses by only detecting light from a single port, and treating the other port's output as lost information.
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.50\textwidth]{figures/bs-losses}   
+ \caption[Beamsplitter model of optical losses]{We can represent optical
+losses as a vacuum field being mixed with our optical field on a beamsplitter,
+with the undetected information lost to the environment.} 
+ \label{fig:beamsplitter_losses} 
+\end{figure}
+
+We can once again consider our beamsplitter with an input beam $E_{in}$ and a vacuum state input on the second port as shown in Figure \ref{fig:beamsplitter_losses}, with reflection and transmission amplitudes $r$ and $t$, where $t^2+r^2 = 1$.  We can express the transmitted portion of this input beam with
+
+\begin{equation}
+  \label{eq:bs_transmitted}
+  E_{out} = t E_{in} + r E_{vac}.
+\end{equation}
+
+\noindent
+We can also calculate the variances of our beam fluctuations with
+
+\begin{eqnarray}
+  \label{eq:bs_transmitted_variances}
+  (\Delta E_{out})^2 = t^2(\Delta E_{in})^2 + r^2 (\Delta E_{vac})^2 \\  
+  V_{out} = t^2V_{in} + r^2 = TV_{in} + (1- T).
+\end{eqnarray}
+
+\noindent
+If we again consider the case where we send in a squeezed state as our input beam, its variance in one quadrature will be less than the vacuum fluctuations.  We can see from \req{eq:bs_transmitted_variances} that the beam splitter adds the vacuum fluctuations to our squeezed beam fluctuations by mixing the two beams, and thus our output state contains less squeezing than it originally contained on input.  Thus upon detection of our exit beam, if we set $\eta=t^2$ the noise of our squeezed state will be increased to \cite{fabre1989noise} 
+ 
+\begin{equation}
+  \label{eq:sqz_noise_increase}
+  S^{out}_{-}(\Omega ) = S^{in}_{-}(\Omega ) \eta + (1 - \eta).
+\end{equation}
+
+\noindent
+Since we can use a beamsplitter to model optical losses, this shows us that losses destroy squeezing by mixing in vacuum fluctuation.  Thus, we need to minimize these losses in any process aimed to create or manipulate squeezed states.

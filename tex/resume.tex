@@ -1,0 +1,210 @@
+\chapter*{Introduction}
+\addstarredchapter{Introduction}
+\markboth{Introduction}{}
+\label{introduction} 
+
+\section{Quantum Information vs. Classical Information}
+
+The field of Quantum Information has developed rapidly over the last few
+decades.  Quantum Mechanics has allowed us to manipulate light and matter in new ways, permitting us to observe phenomenon that have no classical parallel.  Many of
+these phenomenon arise due to core quantum principles such as the Heisenberg
+Uncertainty Principle, and the superposition of states.  As a result, this has led to a shift from our classical definitions of information towards the concept of quantum information.  The fundamental element at the core of
+quantum information is the quantum bit, or \emph{qubit}.  While classical bits
+allow us to represent information as discrete values of 1 or 0, qubits take
+advantage of quantum superposition, which allows them to represent information as 1, 0, or a superposition of both values.
+
+This characteristic of qubits has led to the development of novel protocols
+concerning information transfer, calculation, and computation that are
+impossible to implement when only considering classical bits of information.  One of the first insights on ways to benefit from using quantum information was proposed by Feynman in 1981, when he suggested that we use a quantum computer to
+simulate the evolution of quantum systems \cite{feynman1982simulating}.
+Shortly afterwards in 1984, Bennett and Brassard developed a protocol to use
+secure quantum channels for the distribution of cryptographic keys
+\cite{Bennett84}.  This was quickly followed by the work of Deutsch, who
+developed the first model of a quantum Turing machine, thus giving us a means to
+analyze quantum algorithms using quantum logic gates \cite{Deutsch85}.
+In 1991, Ekert continued the exploration of quantum information transfer by
+developing a protocol for secure communication based on quantum entanglement
+\cite{Ekert91}.  Research concerning the usage of quantum information for
+calculations continued throughout the 1990s with the development of Shor's
+algorithm in 1994, which provided a means to rapidly factor large numbers
+using a quantum computer \cite{Shor94}, and Grover's algorithm, which provided a
+means of using quantum information to search an unsorted database
+\cite{Grover96}. 
+
+All of these protocols concerning the manipulation of quantum information rest
+on the premise that we preserve the quantum superposition of our qubits.  Preserving the quantum superposition requires us to avoid measuring the value of a qubit, which would force it to take on a well-defined value and destroy its quantum characteristics.  This poses a problem if we approach these protocols with our classical treatment of information, as quantum mechanics imposes a no-cloning theorem which forbids us from making exact copies of unknown quantum states.  This limitation has sparked the need to develop a new means of preserving quantum information for long-term manipulation and storage.
+
+\subsection*{Quantum Memories}
+
+A reversible quantum memory allowing us to store and retrieve quantum
+information serves as a key necessity for implementing many of these quantum
+information protocols.  We could for example, use a quantum memory as a
+deterministic single-photon source, which would serve as an important element
+in optical quantum computing.  Quantum memories would also resolve a critical
+problem with the long-distance transfer of quantum information.  The optical
+propagation of photons in fiber optic cables is subject to losses, which limits the
+distance over which we can transfer optical qubits.  Quantum repeaters could
+be developed to bypass this limitation by entangling photons at both ends of
+our communications chain, but this is only possible if quantum memories are
+used to temporarily store quantum states.  It is this context that has
+motivated our group to work towards the development of a quantum memory.
+
+
+
+\subsection*{Research at the Laboratoire Kastler-Brossel}
+
+Over the last 20 years, the Quantum Optics group at the Laboratoire Kastler-Brossel has focused on studying the quantum-optical effects of light-matter interactions in Cesium atoms.  There have been a variety of experiments carried out to study the quantum noise reduction in cavities and with cold atoms by Laurent Hilico \cite{HilicoPhD}, Astrid Lambrecht \cite{LambrechtPhD}, Thomas Coudreau \cite{CoudreauPhD}, and Vincent Josse \cite{JossePhD}.  The theses of Laurent Vernac \cite{VernacPhD} and Aurelien Dantan \cite{DantanPhD} have developed the theoretical work concerning quantum electromagnetic fluctuations and their transfer towards atoms via light-matter interactions.  Most recently, the work of Jean Cviklinski \cite{CviklinskiPhD} and Jeremie Ortalo \cite{ortalo} has yielded the development and characterization of an atomic memory for coherent states with warm atoms, and an experimental study of electromagnetically-induced transparency in Cesium.
+
+ 
+
+%% \newpage
+%% \section*{Thesis Outline}
+
+%% Part \ref{part:1} of this thesis begins with a theoretical overview of the general quantum optic concepts used to carry out the experimental work shown here.  We define the quantum states of the electromagnetic field, and show how we can represent those states using the density matrix and Wigner function.  We then proceed to discuss the nonlinear optics of light as it passes through a nonlinear material, and show how we can use these interactions to generate squeezed states.
+
+%% In Part \ref{part:2}, we look at the experimental setup used to create an optical parametric oscillator, which allows us to generate squeezed vacuum states resonant with the Cesium D2 line at 852 nm.  We then look at the techniques used to characterize these states using quantum homodyne tomography and iterative maximum likelihood estimation.  We finish by discussing the approaches that we developed to convert our continuous source of squeezed light into pulses compatible with our quantum memory.
+
+%% Finally in Part \ref{part:3}, we look at the development of a new experiment which would allow us to use cold Cesium atoms as a storage medium in our recently developed magneto-optical trap.  As this requires an array of novel tools and experimental techniques, we will discuss the development of these elements, and how they have furthered our progress towards storing quantum states onto our Cesium atoms, and eventually entangling two atomic ensembles.
+\chapter{Motivation for a Quantum Memory}
+%4/5 pg
+\label{ch:1} 
+
+The aim of a quantum memory is to provide a means of storing information encoded into quantum states, and allow a mechanism for reliable, on-demand retrieval.  As light serves as a reliable long-range carrier of quantum information, and atoms offer the possibility of long storage times, current attempts at creating quantum memories focus on the transfer of the quantum fluctuations of light onto atomic coherences.  We can establish a performance metric for a quantum memory by using measurements such as its storage and retrieval efficiency, the conditional or non-conditional fidelity of its output state as a representation of its input state, the overall storage lifetime, and our ability to store arbitrary quantum states in it.  Other considerations for a quantum memory include the wavelength of light to which it responds, the number of modes we can store inside of it simultaneously, and the bandwidth of light it supports.  Despite current attempts at implementing a quantum memory, as of yet there is no system available that shows a high performance with regards to all of these characteristics.
+
+
+\section{Applications of a Quantum Memory}
+
+We can define a quantum memory as a coherent and reversible transfer of qubits to and from a storage medium, such that our retrieved state superposition is a faithful representation of the original stored state.
+
+\begin{eqnarray}
+  \label{eq:qmem}
+  \underbrace{\alpha \ket{0} + \beta \ket{1}}_{\text{Input state}}  \rightarrow \underbrace{\alpha \ket{a} + \beta \ket{b}}_{\text{Stored state}} \rightarrow \underbrace{\alpha \ket{0} + \beta \ket{1}}_{\text{Retrieved state}}.
+\end{eqnarray}
+
+\noindent
+A quantum memory for light is a necessary component in several systems which would permit the advanced manipulation of quantum information.  
+
+One of the simplest usages of a quantum memory is as an on-demand source of  single photons.  If we create a pair of photons simultaneously using a system such as parametric down-conversion, we can store one of the photons in the quantum memory, and use the detection of the second photon to signal that our memory has been \emph{prepared}.  Once the memory is charged with a photon, we can release it on demand with the assurance that it yields a single-photon state.  
+
+Another usage of a quantum memory would be as a component of a quantum computer.  Current quantum algorithms require the manipulation of entangled qubits, which are often processed in parallel for each step in a computation. We can use a quantum memory as a timing mechanism which stores qubits while other steps of the computation are being prepared so they can be processed at the right moment.  In this way, a quantum memory would serve as a synchronizing tool for quantum computations \cite{lvovsky2009optical}. 
+
+We can also envision the usage of a quantum memory for long-range quantum communication.  The promise of unbreakable quantum communications channels depends on protocols such as quantum key distribution, which require the exchange of qubits over long distances.  Fiber optic cables at the telecom 1550 nm wavelength typically have attenuation levels of 0.25 dB/km, and experiments with the detection of entangled photons has resulted in the detection of around 100 qubits/second \cite{Zeilinger07b}.  Due to attenuation losses, transferring quantum states through fiber optic cables is currently limited to a few hundred kilometers.
+
+
+Using a quantum repeater protocol illustrated in Figure \ref{fig:q_rep} would allow us to bypass this limitation \cite{Briegel98}, \cite{Duan01}.  We can begin by defining two points $A_0$ and $A_N$ separated by a distance L, over which we would like to entangle two quantum states.  One way to accomplish this is by fist dividing our distance up into N segments.  At the end of each segment, we can place a twin photon source, which we can use to entangle each segment with its neighboring segment.  By entangling each sub-segment with its neighbor, we can swap entanglement over the entire length L.
+
+One problem with this approach however, is that entangling the path extremities via entanglement swapping is a process that must be properly synchronized, so that the entanglement of every segment node happens simultaneously.  This posses a problem because the probability of experiencing an entanglement error in at least one of the nodes increases exponentially as the number of nodes increase, and as a result, so does the time required to simultaneously entangle all nodes. 
+
+
+\begin{figure}[!ht] 
+ \centering 
+ \includegraphics[width=0.65\textwidth]{figures/q_rep} 
+ \caption[Quantum repeater schematic]{Diagram of the protocol for
+distributing photon entanglement between points $A_0$ and $A_N$.  Length L is
+divided into N segments, which are connected by quantum repeaters.
+Entanglement is shared between segments via entanglement swapping at the
+nodes.  a)  Entanglement swapping along the entire length requires perfect
+synchronization, and a time exponential in the path length.  b)  Placing a
+quantum memory at each node facilitates the synchronization, and reduces the
+time to a polynomial time with path length.} 
+ \label{fig:q_rep} 
+\end{figure}
+
+
+A solution to this would be to place a quantum memory at each node, which would allow us to temporarily store our entangled photons while the other nodes were being prepared, allowing us to independently entangle each segment.  Once all of the nodes were in a prepared state, we could then carry out the entanglement swapping over the entire distance.  This would lower the probability of error to a polynomial order with increasing distance, as opposed to exponential, thus rendering our long-distance communication practical.  As in the case of quantum computation, a quantum memory makes quantum repeaters practical by synchronizing the entanglement of states.
+
+As these applications all show the potential promise of novel ways to manipulate quantum information, they provide a great motivation for the development of a performant quantum memory.
+
+
+
+\section{Research Avenues} 
+
+The last 10 years have seen a large development in the research attempts in constructing a quantum memory.  Numerous methods exist for preserving the quantum state of light, but the most promising techniques for longer storage times are those using large ensembles of atoms.  Work such as that done by \cite{Kuzmich05}, and \cite{Lukin05} have succeeded in the storage and retrieval of single-photon states.  The work of \cite{Polzik04} has shown the ability to use continuous-variable quantum non-demolition techniques to achieve high efficiencies and storage times in Cesium, yet they have only allowed the retrieval of a single quadrature of light.  Photon-echo techniques have also been explored in order to preserve the atomic coherences, and thus extend the overall memory storage time.  Work done by \cite{PhysRevLett.96.043602} in 2006 using Controlled Reversible Inhomogenous Broadening (CRIB) has been applied in solid-state Y$_2$SiO$_5$ crystals cooled to 4 K, however with low efficiency results.  Other photon-echo techniques such as the usage of an Atomic Frequency Comb (AFC) have been demonstrated showing a 9\% storage efficiency of weak photon pulses \cite{chaneliere2010efficient}.  The usage of EIT as a storage mechanism has also yielded results by several groups.  In the work of \cite{choi2008mapping}, entangled states were successfully stored and retrieved from Cesium vapor. Several groups have also succeeded in the storage and retrieval via EIT of coherent states in Cesium vapor \cite{CviklinskiPhD}, and squeezed vacuum states in Rubidium vapor \cite{Lvovsky08}, \cite{Kozuma08}, \cite{Kozuma09}.
+
+
+
+\section{Our Approach}
+
+Our approach towards the construction of a quantum memory focuses on the
+transfer of squeezed vacuum states onto Cesium cloud trapped and cooled in a
+magneto-optical trap (MOT).  We wish to transfer the quadrature fluctuations of the light field onto the collective spin of Cesium atoms stored in an magneto-optical trap, and after the storage time of a few tens of microseconds, re-emit the light to show the preservation of quadrature squeezing.  Once this is accomplished, we aim to carry out the storage in two atomic ensembles, and show the ability of our system to preserve the entanglement of two remote ensembles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{OPO Squeezing}
+
+During the last two decades, a great effort has been dedicated to the generation of non-classical states of light in the continuous variable regime. Very recently, 10 dB of noise reduction was obtained with the goal of surpassing the standard quantum limit for sensitive measurements such as gravitational wave detection \cite{Schnabel}.  Driven by the prospect of interfacing light and matter for quantum networking applications\cite{zoller05,cerf,jeff}, ongoing efforts have also focused on the generation of squezeed light at atomic wavelengths and reaching low noise frequencies to be comptatible with bandwidth-limited interfacing protocols. Results have been obtained on the rubidium $D_1$ line\cite{tanimura,hetet} and squeezed light has been recently stored\cite{honda,appel}. Squeezing resonant with the cesium $D_2$ line was demonstrated already in 1992 but not at low frequency sidebands \cite{polzik}. We describe here the generation of such squeezing compatible with cesium-based bandwidth-limited networking protocols.
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=11.5cm]{opo}
+\end{center}
+\caption{Experimental Setup. A Ti:sapphire laser locked on resonance with the Cesium D2 line is frequency doubled. The second harmonic is then used to pump a doubly resonant optical parametric oscillator below threshold.  The seed beam is used for cavity alignment and blocked during measurements. HWP: Half-wave plate. EOM: electro-optic phase modulator. PZT: piezo-electric transducer. PBS: polarizing beam-splitter. 
+}\label{setup}
+\end{figure}
+
+The experimental setup is sketched in Figure
+\ref{setup}. A continuous-wave
+Ti:Sapphire laser (Spectra Physics-\textit{Matisse}) locked on the cesium $D_2$ line is frequency-doubled  in a bow-tie cavity with
+a type-I 20 mm long periodically-polled KTP crystal (PPKTP, Raicol Crystals Ltd.) \cite{LKB1}, and locked by tilt-locking\cite{tilt}. By supplying 600 mW of light at 852 nm, we obtain 200 mW of 426 nm cw-light. Higher doubling efficiency can be obtained but with lower stability due to thermal effects. This beam pumps a 550 mm long doubly-resonant optical parametric oscillator (OPO), based on
+a 20 mm long PPKTP crystal. The OPO is locked at resonance using the Pound-Drever-Hall technique \cite{PDH} (20 MHz phase modulation), thanks to a 8 mW additional beam injected through a HR mirror and propagating in the opposite direction of the pump beam. The crystal temperatures are
+actively controlled, with residual oscillation of the order of few mK. Both cavities have the same folded-ring design. The crystals are placed between high-reflecting mirrors with a radius of curvature R=100 mm for the OPO, and R=150 mm for the doubler while the other mirrors are flat. The input mirror for the doubler has a transmission of 12$\%$, and the output mirror for the OPO of 7$\%$.  The folding angles are around 10$^{\circ}$, with a cavity length of 55 cm. The waist inside the crystal is around 46 $\mu m$. In this configuration, the OPO threshold is measured to be 90 mW, with a degeneracy temperature at 46.3$^{\circ}C$.  The homodyne detection is based on a pair of balanced high quantum efficiency Si photodiodes (FND-100, quantum efficiency: 90\%) and an Agilent E4411B spectrum analyser. The light from the Ti:Sapphire laser is used after initially being transmitted into a single mode fiber, which improves the matching of the cavities and enables a high contrast for the homodyne detection interference. The fringe visibility
+reaches 0.96. The shot noise level of all measurements is easily
+obtained by blocking the output of the OPO. Let us emphasize that the pump is matched to the OPO cavity by temporarily inserting mirrors reflective at 426 nm and thus creating a cavity resonant for the blue pump. This solution turns out to be very efficient. 
+
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=10cm]{broadband}
+\end{center}
+\caption{Normalized noise variance for the squeezed and anti-squeezed quadratures, from 1 MHz to 5 MHz. The inset gives the noise variance at 1.5 MHz while scanning the phase of the local oscillator. The resolution bandwidth is set to 100 kHz and the video bandwidth to 100
+Hz. 
+}\label{broad}
+\end{figure}
+
+Figure \ref{broad} gives the noise variances of the squeezed and anti-squeezed quadratures for a frequency spectrum from 1 to 5 MHz.  The inset shows the noise variance while
+scanning the local oscillator phase for a fixed noise analysis frequency of 1.5 MHz. For these measurements, the blue pump power was set to 75 mW. 3 dB of
+squeezing is obtained, with an excess noise on the anti-squeezed quadrature around 9 dB.  This noise reduction value has to be compared to the
+theoretical value $V$ given by \cite{fabre,kimble}
+\begin{eqnarray} V=1-\frac{T}{T+L}\frac{4\sigma}{(1+\sigma)^2+4\Omega^2} 
+\end{eqnarray}
+where $T$ is the output coupler transmission, $L$ the additional intra-cavity losses due to absorption or scattering, $\Omega$ the analysis frequency normalized to the cavity bandwidth (10 MHz) and $\sigma$ the amplitude pump power normalized to the threshold. By taking
+$\sigma=0.9$, $\Omega=0.1$, $T=0.07$ and $L=0.03$ (determined by measuring the cavity finesse and mirror transmissions) , the
+expected value before detection produced at the OPO output is $-5$ dB. Let us note that $L$ is mostly due to absorption in PPKTP at this particular wavelength, as no pump-induced losses were measured.  The detector quantum
+efficiency is estimated to be $0.90$, the fringe visibility is $0.96$
+and the propagation efficiency is evaluated to be around $0.95$. These
+values give an overall detection efficiency of $0.9 \cdot
+0.96^{2} \cdot 0.95\simeq0.8$. After detection, the expected squeezing
+is thus reduced to $-3.5$ dB, in good agreement with the experimental values.
+
+
+
+
+
+
+Figure \ref{bf} shows the broadband noise reduction similar to the Figure \ref{broad} insert, but now for a lower frequency range,
+between 0 and 500 kHz. Squeezing is expected to be higher in this range, but technical noise results in its degradation. The stability of the setup and noise of the laser are important parameters here. In particular, the seed beam power needs to be decreased as much as possible to avoid noise coupling into the device. In our setup, squeezing is finally detected down to 25 kHz, and 3$\pm$0.5 dB are observed for the 100-500 kHz frequency range. Measurements are corrected from the electronic dark noise. The presence of low-frequency sideband squeezing is a requisite for future quantum networking applications such as the storage of squeezed light by EIT, where the transparency window width is a limiting factor \cite{honda, appel}.
+
+In conclusion, we have demonstrated the generation of squeezed light locked on the $D_2$ cesium line. More than 3 dB of noise reduction has been obtained and the squeezing is preserved for sideband frequencies down to 25 kHz. This ability opens the way to further investigations of light-matter interface using cesium atomic ensembles, like EIT or Raman storage of non-classical state of light in the continuous variable regime.
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=9cm]{low_freq_db}
+\end{center}
+\caption{Normalized noise variance up to 500
+kHz after correction of the
+electronic noise. The
+resolution bandwidth is set to 30 kHz and the video bandwidth to 36
+Hz.
+}\label{bf}
+\end{figure}
