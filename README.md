@@ -1,12 +1,12 @@
 
 
-# 
+# To Compile
 
 Download source images from:
 
-http://dl.dropbox.com/u/4279504/phd_thesis_source.tar.gz
+    http://dl.dropbox.com/u/4279504/phd_thesis_source.tar.gz
 
-To get updated latex files, copy images to gigt repo, or run
+To get updated latex files, copy images to git repo, or run
 
     git pull
 
